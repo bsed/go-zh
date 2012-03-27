@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+{{with .Title}}
+  <title>{{html .}} - Go 编程语言</title>
+{{else}}
+  <title>Go 编程语言</title>
+{{end}}
+<link type="text/css" rel="stylesheet" href="/doc/style.css">
+<script type="text/javascript" src="/doc/godocs.js"></script>
+{{if .SearchBox}}
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="/opensearch.xml" />
+{{end}}
+</head>
+<body>
+
+<div id="topbar"><div class="container{{if .Title}} wide{{end}}">
+
+<form method="GET" action="/search">
+<div id="menu">
+<a href="/doc/">文档</a>
+<a href="/ref/">参考</a>
+<a href="/pkg/">包</a>
+<a href="/project/">项目</a>
+<a href="/help/">帮助</a>
+<input type="text" id="search" name="q" class="inactive" value="Search">
+</div>
+<div id="heading"><a href="/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+<div id="page"{{if .Title}} class="wide"{{end}}>
+
+{{with .Title}}
+  <div id="plusone"><g:plusone size="small" annotation="none"></g:plusone></div>
+  <h1>{{html .}}</h1>
+{{end}}
+{{with .Subtitle}}
+  <h2>{{html .}}</h2>
+{{end}}
+
+{{/* The Table of Contents is automatically inserted in this <div>.
+     Do not delete this <div>. */}}
+<div id="nav"></div>
+
+{{/* Content is HTML-escaped elsewhere */}}
+{{printf "%s" .Content}}
+
+</div>
+
+<div id="copyright">
+godoc 版本 {{html .Version}}。
+除了特别说明外，本内容使用知识共享-署名 3.0 授权。
+</div>
+
+</body>
+<script type="text/javascript">
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+</script>
+</html>
+
