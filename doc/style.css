@@ -218,7 +218,6 @@ div.left,
 div.right {
 	width: 415px;
 }
-
 div#learn,
 div#about {
 	padding-top: 20px;
@@ -389,3 +388,4 @@ img.gopher {
 }
 h2 { clear: right; }
 
+.invisible_translation { display: none; }
