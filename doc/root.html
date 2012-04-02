@@ -8,8 +8,8 @@
 <img class="icon share" src="/doc/share.png" alt="View full screen" title="View full screen">
 <div class="rootHeading">尝试&nbsp;Go</div>
 <div class="input">
-<textarea spellcheck="false" class="code">// You can edit this code!
-// Click here and start typing.
+<textarea spellcheck="false" class="code">// 你可以编辑这个代码！
+// 点击这里开始录入。
 package main
 
 import "fmt"
@@ -26,7 +26,7 @@ Hello, 世界
 <div class="buttons">
 <a class="run" href="#" title="运行这段代码 [shift-enter]">运行</a>
 <a class="share" href="#" title="分享这段代码">分享</a>
-<a class="tour" href="http://tour.golang.org/" title="在你的浏览器中学习Go">学习教程</a>
+<a class="tour" href="http://go-tour-zh.appsp0t.com/" title="在你的浏览器中学习Go">学习教程</a>
 </div>
 <div class="toys">
 <select>
@@ -67,8 +67,8 @@ Go 是一个开源的编程环境，它能让构造简单、可靠且高效的�
 
 <div id="video">
 <div class="rootHeading">精选视频</div>
-<a class="title" href="http://www.youtube.com/watch?v=Mo1YKpIF1PQ">使用Go和Google云平台构建应用（英文）</a>
-<iframe width="415" height="241" src="http://www.youtube.com/embed/Mo1YKpIF1PQ" frameborder="0" allowfullscreen></iframe>
+<a class="title" href="http://www.tudou.com/programs/view/GbYlY3YdkFY/">使用Go和Google云平台构建应用（英文）</a>
+<iframe width="415" height="241" src="http://www.tudou.com/v/GbYlY3YdkFY/&rpid=69638486&resourceId=69638486_04_05_99/v.swf" frameborder="0" allowfullscreen></iframe>
 </div>
 
 </div>
@@ -106,7 +106,7 @@ function feedLoaded(result) {
 		blog.insertBefore(title, read);
 		var extract = document.createElement("div");
 		extract.className = "extract";
-		extract.innerHTML = entry.contentSnippet;
+                extract.innerHTML = entry.contentSnippet + "<a href='http://translate.google.com.hk/translate?hl=zh-CN&sl=auto&tl=zh-CN&u=" + encodeURIComponent(entry.link) + "' target='_blank'>自动翻译</a>";
 		blog.insertBefore(extract, read);
 		var when = document.createElement("div");
 		when.className = "when";
