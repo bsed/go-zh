@@ -37,7 +37,7 @@ TODO
 <h2 id="Introduction">Introduction</h2>
 </div>
 
-<h2 id="Introduction">前言</h2>
+<h2 id="前言">前言</h2>
 
 <div class="english">
 <p>
@@ -63,8 +63,8 @@ compile/link model to generate executable binaries.
 </div>
 
 <p>
-Go是为系统编程而设计的通用型语言。它是强类型的编程语言，自动垃圾回收并显式支持并发编程。
-程序由<i>包构造</i>，由此提供高效的依赖管理功能。当前Go的实现使用传统的编译/链接模型生成可执行二进制文件。
+Go是通用型编程语言，为系统编程而设计。它是强类型的语言，具有垃圾回收机制并显示支持并发编程。
+程序由 <i>包</i> 构造，以此提供高效的依赖管理功能。当前实现使用传统的 编译/链接 模型生成可执行二进制文件。
 </p>
 
 <div class="english">
@@ -75,27 +75,19 @@ automatic tools such as integrated development environments.
 </div>
 
 <p>
-Go的语法结构紧凑而严谨，便于IDE等自动化工具分析。
+其语法紧凑而严谨，便于IDE等自动化工具分析。
 </p>
 
 <div class="english">
 <h2 id="Notation">Notation</h2>
 </div>
 
-<h2 id="Notation">表示法</h2>
+<h2 id="表示法">表示法</h2>
 
 <div class="english">
 <p>
 The syntax is specified using Extended Backus-Naur Form (EBNF):
 </p>
-</div>
-
-<p>
-其语法使用扩展巴克斯-诺尔范式（EBNF）实现：
-</p>
-
-
-<div class="english">
 <pre class="grammar">
 Production  = production_name "=" [ Expression ] "." .
 Expression  = Alternative { "|" Alternative } .
@@ -107,6 +99,9 @@ Repetition  = "{" Expression "}" .
 </pre>
 </div>
 
+<p>
+语法使用扩展巴克斯-诺尔范式（EBNF）实现：
+</p>
 <pre class="grammar">
 生成式 = 生成式名 "=" [ 表达式 ] "." .
 表达式 = 选择项 { "|" 选择项 } .
@@ -131,7 +126,7 @@ operators, in increasing precedence:
 </div>
 
 <p>
-生成式和表达式由以下术语和运算符构造，自上而下优先级递增（低=>高）：
+生成式由表达式构造，表达式通过术语及以下操作符构成，自上而下优先级递增（低=>高）：
 </p>
 <pre class="grammar">
 |   选择
@@ -174,7 +169,7 @@ language.
 <h2 id="Source_code_representation">Source code representation</h2>
 </div>
 
-<h2 id="Source_code_representation">源代码表示</h2>
+<h2 id="源码的表示">源码的表示</h2>
 
 <div class="english">
 <p>
@@ -199,7 +194,7 @@ compiler may disallow the NUL character (U+0000) in the source text.
 源代码是采用
 <a href="http://en.wikipedia.org/wiki/UTF-8">UTF-8</a>编码的Unicode文本。
 该文本是非商业化的，因此单一的着重号码点不同于结合字母与着重号的字符结构；
-那些应当视为两个代码点。 为简单起见，本文档将使用术语<i>字符</i>替代Unicode码点。
+那些应当视为两个代码点。 为简单起见，本文档将使用术语 <i>字符</i> 替代Unicode码点。
 </p>
 <p>
 每个码点都是不同的；例如，大写与小写的字母就是不同的字符。
@@ -212,7 +207,7 @@ compiler may disallow the NUL character (U+0000) in the source text.
 <h3 id="Characters">Characters</h3>
 </div>
 
-<h3 id="Characters">字符</h3>
+<h3 id="字符">字符</h3>
 
 <div class="english">
 <p>
@@ -256,7 +251,7 @@ and those in category Nd as Unicode digits.
 <h3 id="Letters_and_digits">Letters and digits</h3>
 </div>
 
-<h3 id="Letters_and_digits">字母和数字</h3>
+<h3 id="字母和数字">字母和数字</h3>
 
 <div class="english">
 <p>
@@ -284,7 +279,7 @@ hex_digit     = "0" … "9" | "A" … "F" | "a" … "f" .
 <h2 id="Lexical_elements">Lexical elements</h2>
 </div>
 
-<h2 id="Lexical_elements">词法元素</h2>
+<h2 id="词法元素">词法元素</h2>
 
 <div class="english">
 <h3 id="Comments">Comments</h3>
@@ -319,10 +314,10 @@ like a space.
 
 <ol>
 <li>
-<i>行注释</i>以<code>//</code>开始，至行尾结束。一条行注释视为一个换行符。
+<i>行注释</i> 以<code>//</code> 开始，至行尾结束。一条行注释视为一个换行符。
 </li>
 <li>
-<i>块注释</i>以<code>/*</code>开始，至<code>*/</code>结束。
+<i>块注释</i> 以 <code>/*</code> 开始，至 <code>*/</code> 结束。
 块注释在包含多行时视为一个换行符，否则视为一个空格。
 </li>
 </ol>
@@ -341,7 +336,7 @@ Comments do not nest.
 <h3 id="Tokens">Tokens</h3>
 </div>
 
-<h3 id="Tokens">标记</h3>
+<h3 id="标记">标记</h3>
 
 <div class="english">
 <p>
@@ -363,7 +358,7 @@ valid token.
 标记形成Go语言的词汇。它有4种类型：<i>标识符</i>，<i>关键字</i>，
 <i>运算符与分隔符</i>以及<i>文字</i>。<i>空白部分</i>由空格（U+0020），
 横向制表符（U+0009），回车符（U+000D）和换行符（U+000A）组成，除非其间有分隔标记，
-否则将合并为单个标记。此外，换行符或EOF（文件结束符）会触发<a href="#Semicolons">分号</a>的插入。
+否则将合并为单个标记。此外，换行符或EOF（文件结束符）会触发<a href="#分号">分号</a>的插入。
 当中断输入标记时，可形成有效标记的最长字符序列将作为下一个标记。
 </p>
 
@@ -371,7 +366,7 @@ valid token.
 <h3 id="Semicolons">Semicolons</h3>
 </div>
 
-<h3 id="Semicolons">分号</h3>
+<h3 id="分号">分号</h3>
 
 <div class="english">
 <p>
@@ -382,7 +377,7 @@ using the following two rules:
 </div>
 
 <p>
-正式语法使用分号<code>";"</code>作为一些生成式的结尾。Go程序会使用以下两条规则来省略大多数分号：
+正式语法使用分号 <code>";"</code> 作为一些生成式的结尾。Go程序会使用以下两条规则来省略大多数分号：
 </p>
 
 <div class="english">
@@ -437,25 +432,25 @@ may be omitted before a closing <code>")"</code> or <code>"}"</code>.
 </p>
 <ul>
 	<li>
-	    <a href="#Identifiers">标识符</a>
+	    <a href="#标识符">标识符</a>
 	</li>
 
 	<li>
-	    <a href="#Integer_literals">整数</a>,
-	    <a href="#Floating-point_literals">浮点数</a>,
-	    <a href="#Imaginary_literals">虚数</a>,
-	    <a href="#Character_literals">字符</a>或
-	    <a href="#String_literals">字符串</a>文字
+	    <a href="#整数">整数</a>,
+	    <a href="#浮点数">浮点数</a>,
+	    <a href="#虚数">虚数</a>,
+	    <a href="#字符">字符</a>或
+	    <a href="#字符串">字符串</a>文字
 	</li>
 
-	<li><a href="#Keywords">关键字</a>
+	<li><a href="#关键字">关键字</a>
 	    <code>break</code>,
 	    <code>continue</code>,
 	    <code>fallthrough</code>或
 	    <code>return</code>
 	</li>
 
-	<li><a href="#Operators_and_Delimiters">运算符与分隔符</a>
+	<li><a href="#运算符与分隔符">运算符与分隔符</a>
 	    <code>++</code>,
 	    <code>--</code>,
 	    <code>)</code>,
@@ -466,7 +461,7 @@ may be omitted before a closing <code>")"</code> or <code>"}"</code>.
 </li>
 
 <li>
-为允许复合语句占据单行，分号会在终止符<code>")"</code>或<code>"}"</code>之后被省略。
+为允许复合语句占据单行，分号会在终止符 <code>")"</code> 或 <code>"}"</code> 之后被省略。
 </li>
 </ol>
 
@@ -486,7 +481,7 @@ using these rules.
 <h3 id="Identifiers">Identifiers</h3>
 </div>
 
-<h3 id="Identifiers">标识符</h3>
+<h3 id="标识符">标识符</h3>
 
 <div class="english">
 <p>
@@ -496,12 +491,6 @@ The first character in an identifier must be a letter.
 </p>
 <pre class="ebnf">
 identifier = letter { letter | unicode_digit } .
-</pre>
-<pre>
-a
-_x9
-ThisVariableIsExported
-αβ
 </pre>
 </div>
 
@@ -526,15 +515,26 @@ Some identifiers are <a href="#Predeclared_identifiers">predeclared</a>.
 </div>
 
 <p>
-一些标识符是<a href="#Predeclared_identifiers">预声明</a>的。
+一些标识符是<a href="#预声明">预声明</a>的。
 </p>
 
 
+<div class="english">
 <h3 id="Keywords">Keywords</h3>
+</div>
 
+<h3 id="关键字">关键字</h3>
+
+<div class="english">
 <p>
 The following keywords are reserved and may not be used as identifiers.
 </p>
+</div>
+
+<p>
+以下为保留关键字，不能用作标识符。
+</p>
+
 <pre class="grammar">
 break        default      func         interface    select
 case         defer        go           map          struct
@@ -543,11 +543,22 @@ const        fallthrough  if           range        type
 continue     for          import       return       var
 </pre>
 
+<div class="english">
 <h3 id="Operators_and_Delimiters">Operators and Delimiters</h3>
+</div>
 
+<h3 id="运算符与分隔符">运算符与分隔符</h3>
+
+<div class="english">
 <p>
 The following character sequences represent <a href="#Operators">operators</a>, delimiters, and other special tokens:
 </p>
+</div>
+
+<p>
+以下字符序列表示<a href="#运算符">运算符</a>，分隔符和其他特殊标记：
+</p>
+
 <pre class="grammar">
 +    &amp;     +=    &amp;=     &amp;&amp;    ==    !=    (    )
 -    |     -=    |=     ||    &lt;     &lt;=    [    ]
@@ -557,8 +568,13 @@ The following character sequences represent <a href="#Operators">operators</a>, 
      &amp;^          &amp;^=
 </pre>
 
+<div class="english">
 <h3 id="Integer_literals">Integer literals</h3>
+</div>
 
+<h3 id="整数字面">整数字面</h3>
+
+<div class="english">
 <p>
 An integer literal is a sequence of digits representing an
 <a href="#Constants">integer constant</a>.
@@ -572,6 +588,19 @@ decimal_lit = ( "1" … "9" ) { decimal_digit } .
 octal_lit   = "0" { octal_digit } .
 hex_lit     = "0" ( "x" | "X" ) hex_digit { hex_digit } .
 </pre>
+</div>
+
+<p>
+整数字面由数字序列组成，代表<a href="#常量">整数常量</a> 。非十进制数由这些前缀定义：
+<code>0</code> 为八进制数前缀，<code>0x</code> 或 <code>0X</code>为十六进制数前缀。
+在十六进制数字面中，字母 <code>a-f</code> 或 <code>A-F</code> 表示值10到15。
+</p>
+<pre class="ebnf">
+整数字面      = 十进制数字面 | 八进制数字面 | 十六进制数字面 .
+十进制数字面   = ( "1" … "9" ) { 十进制数字 } .
+八进制数字面   = "0" { 八进制数字 } .
+十六进制数字面 = "0" ( "x" | "X" ) 十六进制数字 { 十六进制数字 } .
+</pre>
 
 <pre>
 42
@@ -580,6 +609,7 @@ hex_lit     = "0" ( "x" | "X" ) hex_digit { hex_digit } .
 170141183460469231731687303715884105727
 </pre>
 
+<div class="english">
 <h3 id="Floating-point_literals">Floating-point literals</h3>
 <p>
 A floating-point literal is a decimal representation of a
@@ -598,6 +628,22 @@ float_lit = decimals "." [ decimals ] [ exponent ] |
 decimals  = decimal_digit { decimal_digit } .
 exponent  = ( "e" | "E" ) [ "+" | "-" ] decimals .
 </pre>
+</div>
+
+<h3 id="浮点数字面">浮点数字面</h3>
+<p>
+浮点数字面由十进制<a href="#常量">浮点常量</a>表示。
+它由整数部分，小数点，小数部分和指数部分构成。整数部分与小数部分由十进制数字组成；
+指数部分由一个 <code>e</code> 或 <code>E</code> 紧跟一个带可选正负号的十进制指数构成。
+整数部分或小数部分可以省略；小数点或指数亦可省略。
+</p>
+<pre class="ebnf">
+浮点数字面   = 十进制数 "." [ 十进制数 ] [ 指数 ] |
+           十进制指数 |
+           "." 十进制数 [ 指数 ] .
+十进制数 = 十进制数字 { 十进制数字 } .
+指数     = （ "e" | "E" ） [ "+" | "-" ] 十进制数 .
+</pre>
 
 <pre>
 0.
@@ -611,7 +657,13 @@ exponent  = ( "e" | "E" ) [ "+" | "-" ] decimals .
 .12345E+5
 </pre>
 
+<div class="english">
 <h3 id="Imaginary_literals">Imaginary literals</h3>
+</div>
+
+<h3 id="虚数字面">叙述字面</h3>
+
+<div class="english">
 <p>
 An imaginary literal is a decimal representation of the imaginary part of a
 <a href="#Constants">complex constant</a>.
@@ -622,6 +674,15 @@ by the lower-case letter <code>i</code>.
 </p>
 <pre class="ebnf">
 imaginary_lit = (decimals | float_lit) "i" .
+</pre>
+</div>
+
+<p>
+虚数字面由十进制<a href="#常量">复数常量</a>的虚部表示。它由
+<a href="#浮点数字面">浮点数字面</a>或十进制整数紧跟小写字母 <code>i</code> 构成。
+</p>
+<pre class="ebnf">
+虚数字面 = (十进制数 | 浮点数字面) "i" .
 </pre>
 
 <pre>
@@ -637,8 +698,13 @@ imaginary_lit = (decimals | float_lit) "i" .
 </pre>
 
 
+<div class="english">
 <h3 id="Character_literals">Character literals</h3>
+</div>
 
+<h3 id="字符字面">字符字面</h3>
+
+<div class="english">
 <p>
 A character literal represents a <a href="#Constants">character constant</a>,
 typically a Unicode code point, as one or more characters enclosed in single
@@ -647,6 +713,15 @@ quote and newline. A single quoted character represents itself,
 while multi-character sequences beginning with a backslash encode
 values in various formats.
 </p>
+</div>
+
+<p>
+字符字面由一个<a href="#常量">字符常量</a>表示，通常一个Unicode码点作为一个或更多字符围绕在单引号中。
+在引号内，除单引号和换行符外的任何字符都可出现。
+单引号内的字符通常代表其自身，而以反斜杠开头的多字符序列则会编码为不同的形式。
+</p>
+
+<div class="english">
 <p>
 The simplest form represents the single character within the quotes;
 since Go source text is Unicode characters encoded in UTF-8, multiple
@@ -656,6 +731,17 @@ a literal <code>a</code>, Unicode U+0061, value <code>0x61</code>, while
 <code>'ä'</code> holds two bytes (<code>0xc3</code> <code>0xa4</code>) representing
 a literal <code>a</code>-dieresis, U+00E4, value <code>0xe4</code>.
 </p>
+</div>
+
+<p>
+最简单的形式就是引号内只有一个字符；由于Go源码文本是UTF-8编码的Unicode字符，
+因此多个UTF-8编码的字节可能只表示一个单一的整数值。例如，字面 <code>'a'</code> 包含一个字节，
+表示一个字面 <code>a</code>，Unicode字符U+0061，值 <code>0x61</code>，而 <code>'ä'</code>
+则包含两个字节（<code>0xc3</code> <code>0xa4</code>），表示一个字面 <code>a</code> 及其分音符，
+Unicode字符U+00E4，值 <code>0xe4</code>。
+</p>
+
+<div class="english">
 <p>
 Several backslash escapes allow arbitrary values to be represented
 as ASCII text.  There are four ways to represent the integer value
@@ -666,6 +752,16 @@ plain backslash <code>\</code> followed by exactly three octal digits.
 In each case the value of the literal is the value represented by
 the digits in the corresponding base.
 </p>
+</div>
+
+<p>
+反斜杠转义允许用ASCII文本来表示任意值。将整数值表示为数字常量有4种方法：
+<code>\x</code> 紧跟2个十六进制数字；<code>\u</code> 紧跟4个十六进制数字；
+<code>\U</code> 紧跟8个十六进制数字；单个<code>\</code>紧跟3个八进制数字。
+在任何情况下，字面的值都是其相应的基数值。
+</p>
+
+<div class="english">
 <p>
 Although these representations all result in an integer, they have
 different valid ranges.  Octal escapes must represent a value between
@@ -674,6 +770,15 @@ by construction. The escapes <code>\u</code> and <code>\U</code>
 represent Unicode code points so within them some values are illegal,
 in particular those above <code>0x10FFFF</code> and surrogate halves.
 </p>
+</div>
+
+<p>
+尽管这些表示方式的值都是整数，其有效范围却不相同。八进制转义只能表示 0 到 255 之间的值。
+十六进制转义则视其结构而定。转义符 <code>\u</code> 和 <code>\U</code> 表示Unicode码点，
+因此其中的一些值是非法的，特别是那些大于 <code>0x10FFFF</code> 的值和半替代值。
+</p>
+
+<div class="english">
 <p>
 After a backslash, certain single-character escapes represent special values:
 </p>
@@ -689,6 +794,25 @@ After a backslash, certain single-character escapes represent special values:
 \'   U+0027 single quote  (valid escape only within character literals)
 \"   U+0022 double quote  (valid escape only within string literals)
 </pre>
+</div>
+
+<p>
+在反斜杠后，某些单字符转义表示特殊值：
+</p>
+<pre class="grammar">
+\a   U+0007 警报或铃声
+\b   U+0008 退格
+\f   U+000C 换页
+\n   U+000A 换行
+\r   U+000D 回车
+\t   U+0009 横向制表
+\v   U+000b 纵向制表
+\\   U+005c 反斜杠
+\'   U+0027 单引号(仅在字符字面中有效)
+\"   U+0022 双引号(仅在字符串字面中有效)
+</pre>
+
+<div class="english">
 <p>
 All other sequences starting with a backslash are illegal inside character literals.
 </p>
@@ -702,6 +826,22 @@ little_u_value   = `\` "u" hex_digit hex_digit hex_digit hex_digit .
 big_u_value      = `\` "U" hex_digit hex_digit hex_digit hex_digit
                            hex_digit hex_digit hex_digit hex_digit .
 escaped_char     = `\` ( "a" | "b" | "f" | "n" | "r" | "t" | "v" | `\` | "'" | `"` ) .
+</pre>
+</div>
+
+<p>
+在字符字面中，所有以反斜杠开始的序列都是非法的。
+</p>
+<pre class="ebnf">
+字符字面       = "'" ( Unicode值 | 字节值 ) "'" .
+Unicode值  = Unicode字符 | 小Unicode值 | 大Unicode值 | 转义字符 .
+字节值      = 八进制字节值 | 十六进制字节值 .
+八进制字节值 = `\` 八进制数字 八进制数字 八进制数字 .
+十六进制字节值 = `\` "x" 十六进制数字 十六进制数字 .
+小Unicode值 = `\` "u" 十六进制数字 十六进制数字 十六进制数字 十六进制数字 .
+大Unicode值 = `\` "U" 十六进制数字 十六进制数字 十六进制数字 十六进制数字
+                      十六进制数字 十六进制数字 十六进制数字 十六进制数字 .
+转义字符    = `\` ( "a" | "b" | "f" | "n" | "r" | "t" | "v" | `\` | "'" | `"` ) .
 </pre>
 
 <pre>
@@ -719,13 +859,26 @@ escaped_char     = `\` ( "a" | "b" | "f" | "n" | "r" | "t" | "v" | `\` | "'" | `
 </pre>
 
 
+<div class="english">
 <h3 id="String_literals">String literals</h3>
+</div>
 
+<h3 id="字符串字面">字符串字面</h3>
+
+<div class="english">
 <p>
 A string literal represents a <a href="#Constants">string constant</a>
 obtained from concatenating a sequence of characters. There are two forms:
 raw string literals and interpreted string literals.
 </p>
+</div>
+
+<p>
+字符串字面由通过连结字符序列所得的<a href="#常量">字符串常量</a>表示。
+它有两种形式：原始字符串字面和解译字符串字面。
+</p>
+
+<div class="english">
 <p>
 Raw string literals are character sequences between back quotes
 <code>``</code>.  Within the quotes, any character is legal except
@@ -736,6 +889,15 @@ contain newlines.
 Carriage returns inside raw string literals
 are discarded from the raw string value.
 </p>
+</div>
+
+<p>
+原始字符串字面为反引号 <code>``</code> 之间的字符序列。在该引号内，
+除反引号外的任何字符都是合法的。原始字符串字面的值为此引号之间的无解译字符组成的字符串；
+另外，反斜杠没有特殊意义且字符串可包含换行符。原始字符串字面中的回车符将会被原始字符串值丢弃。
+</p>
+
+<div class="english">
 <p>
 Interpreted string literals are character sequences between double
 quotes <code>&quot;&quot;</code>. The text between the quotes,
@@ -752,7 +914,20 @@ a single byte of value <code>0xFF</code>=255, while <code>ÿ</code>,
 the two bytes <code>0xc3</code> <code>0xbf</code> of the UTF-8 encoding of character
 U+00FF.
 </p>
+</div>
 
+<p>
+解译字符串字面为双引号 <code>&quot;&quot;</code> 之间的字符序列。
+在该引号内，文本不可包含换行符，形成字面的值，由反斜杠转义解释为字符字面
+（其中<code>\'</code>是非法的，而 <code>\"</code> 是合法的）。
+3位八进制（<code>\</code><i>nnn</i>）和2位十六进制（<code>\x</code><i>nn</i>）
+转义表示个别字符串值的 <i>字节</i> ；其它转义符表示（可多字节）UTF-8编码的个别 <i>字符</i>。
+因此在字符串字面中，<code>\377</code> 和 <code>\xFF</code> 表示值为 <code>0xFF</code>=255的单个字节，
+而<code>ÿ</code>、<code>\u00FF</code>、<code>\U000000FF</code> 和 <code>\xc3\xbf</code>
+则表示UTF-8编码的字符U+00FF的两个字节<code>0xc3</code> <code>0xbf</code>。
+</p>
+
+<div class="english">
 <pre class="ebnf">
 string_lit             = raw_string_lit | interpreted_string_lit .
 raw_string_lit         = "`" { unicode_char | newline } "`" .
@@ -770,7 +945,27 @@ interpreted_string_lit = `"` { unicode_value | byte_value } `"` .
 "\u65e5本\U00008a9e"
 "\xff\u00FF"
 </pre>
+</div>
 
+<pre class="ebnf">
+字符串字面     = 原始字符串字面 | 解译字符串字面 .
+原始字符串字面 = "`" { Unicode字符 | 换行符 } "`" .
+解译字符串字面 = `"` { Unicode值 | 字节值 } `"` .
+</pre>
+
+<pre>
+`abc`  // 等价于 "abc"
+`\n
+\n`    // 等价于 "\\n\n\\n"
+"\n"
+""
+"Hello, world!\n"
+"日本語"
+"\u65e5本\U00008a9e"
+"\xff\u00FF"
+</pre>
+
+<div class="english">
 <p>
 These examples all represent the same string:
 </p>
@@ -782,7 +977,21 @@ These examples all represent the same string:
 "\U000065e5\U0000672c\U00008a9e"        // The explicit Unicode code points
 "\xe6\x97\xa5\xe6\x9c\xac\xe8\xaa\x9e"  // The explicit UTF-8 bytes
 </pre>
+</div>
 
+<p>
+这些例子都表示相同的字符串：
+</p>
+
+<pre>
+"日本語"                                // UTF-8输入的文本
+`日本語`                                // UTF-8输入的原始字面文本
+"\u65e5\u672c\u8a9e"                    // 显式的Unicode码点
+"\U000065e5\U0000672c\U00008a9e"        // 显式的Unicode码点
+"\xe6\x97\xa5\xe6\x9c\xac\xe8\xaa\x9e"  // 显式的UTF-8字节
+</pre>
+
+<div class="english">
 <p>
 If the source code represents a character as two code points, such as
 a combining form involving an accent and a letter, the result will be
@@ -790,7 +999,12 @@ an error if placed in a character literal (it is not a single code
 point), and will appear as two code points if placed in a string
 literal.
 </p>
+</div>
 
+<p>
+如果源码将两个码点表示为一个字符，例如包含着重号和字母的结合形式，那么放置在
+（非单一码点的）字符字面中就会产生一个错误，而放置在字符串字面中则会显示为两个码点。
+</p>
 
 <h2 id="Constants">Constants</h2>
 
@@ -2936,7 +3150,7 @@ back to the calling function when the function returns.
 </p>
 
 <p>
-Calling a <code>nil</code> function value 
+Calling a <code>nil</code> function value
 causes a <a href="#Run_time_panics">run-time panic</a>.
 </p>
 
@@ -3307,29 +3521,29 @@ These terms and the result of the comparisons are defined as follows:
 	<li>
 	Integer values are comparable and ordered, in the usual way.
 	</li>
-	
+
 	<li>
 	Floating point values are comparable and ordered,
 	as defined by the IEEE-754 standard.
 	</li>
-	
+
 	<li>
 	Complex values are comparable.
 	Two complex values <code>u</code> and <code>v</code> are
 	equal if both <code>real(u) == real(v)</code> and
 	<code>imag(u) == imag(v)</code>.
 	</li>
-	
+
 	<li>
 	String values are comparable and ordered, lexically byte-wise.
 	</li>
-	
+
 	<li>
 	Pointer values are comparable.
 	Two pointer values are equal if they point to the same variable or if both have value <code>nil</code>.
 	Pointers to distinct <a href="#Size_and_alignment_guarantees">zero-size</a> variables may or may not be equal.
 	</li>
-	
+
 	<li>
 	Channel values are comparable.
 	Two channel values are equal if they were created by the same call to <code>make</code>
@@ -3342,7 +3556,7 @@ These terms and the result of the comparisons are defined as follows:
 	Two interface values are equal if they have <a href="#Type_identity">identical</a> dynamic types
 	and equal dynamic values or if both have value <code>nil</code>.
 	</li>
-	
+
 	<li>
 	A value <code>x</code> of non-interface type <code>X</code> and
 	a value <code>t</code> of interface type <code>T</code> are comparable when values
@@ -3357,7 +3571,7 @@ These terms and the result of the comparisons are defined as follows:
 	Two struct values are equal if their corresponding
 	non-<a href="#Blank_identifier">blank</a> fields are equal.
 	</li>
-	
+
 	<li>
 	Array values are comparable if values of the array element type are comparable.
 	Two array values are equal if their corresponding elements are equal.
