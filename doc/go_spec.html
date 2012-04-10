@@ -88,6 +88,7 @@ automatic tools such as integrated development environments.
 <p>
 The syntax is specified using Extended Backus-Naur Form (EBNF):
 </p>
+
 <pre class="grammar">
 Production  = production_name "=" [ Expression ] "." .
 Expression  = Alternative { "|" Alternative } .
@@ -611,6 +612,11 @@ hex_lit     = "0" ( "x" | "X" ) hex_digit { hex_digit } .
 
 <div class="english">
 <h3 id="Floating-point_literals">Floating-point literals</h3>
+</div>
+
+<h3 id="浮点数字面">浮点数字面</h3>
+
+<div class="english">
 <p>
 A floating-point literal is a decimal representation of a
 <a href="#Constants">floating-point constant</a>.
@@ -630,7 +636,6 @@ exponent  = ( "e" | "E" ) [ "+" | "-" ] decimals .
 </pre>
 </div>
 
-<h3 id="浮点数字面">浮点数字面</h3>
 <p>
 浮点数字面由十进制<a href="#常量">浮点常量</a>表示。
 它由整数部分，小数点，小数部分和指数部分构成。整数部分与小数部分由十进制数字组成；
@@ -661,7 +666,7 @@ exponent  = ( "e" | "E" ) [ "+" | "-" ] decimals .
 <h3 id="Imaginary_literals">Imaginary literals</h3>
 </div>
 
-<h3 id="虚数字面">叙述字面</h3>
+<h3 id="虚数字面">虚数字面</h3>
 
 <div class="english">
 <p>
@@ -1006,8 +1011,13 @@ literal.
 （非单一码点的）字符字面中就会产生一个错误，而放置在字符串字面中则会显示为两个码点。
 </p>
 
+<div class="english">
 <h2 id="Constants">Constants</h2>
+</div>
 
+<h2 id="常量">常量</h2>
+
+<div class="english">
 <p>There are <i>boolean constants</i>,
 <i>character constants</i>,
 <i>integer constants</i>,
@@ -1016,7 +1026,16 @@ and <i>string constants</i>. Character, integer, floating-point,
 and complex constants are
 collectively called <i>numeric constants</i>.
 </p>
+</div>
 
+<p>
+常量包含<i>布尔常量</i>，<i>字符常量</i>，
+<i>整数常量</i>，<i>浮点数常量</i>，
+<i>复数常量</i>和<i>字符串常量</i>。
+字符，整数，浮点数和复数常量统称为<i>数值常量</i>.
+</p>
+
+<div class="english">
 <p>
 A constant value is represented by a
 <a href="#Character_literals">character</a>,
@@ -1038,24 +1057,66 @@ The boolean truth values are represented by the predeclared constants
 <code>true</code> and <code>false</code>. The predeclared identifier
 <a href="#Iota">iota</a> denotes an integer constant.
 </p>
+</div>
 
+<p>
+常量的值可由
+<a href="#字符字面">字符</a>，
+<a href="#整数字面">整数</a>，
+<a href="#浮点数字面">浮点数</a>，
+<a href="#虚数字面">虚数</a>或
+<a href="#字符串字面">字符串</a>字面表示，
+一个标识符可代表一个常量，一个<a href="#常量表达式">常量表达式</a>，
+一个结果为常量的<a href="#强制转换">强制转换</a>，或一些内建函数所产生的值。
+例如 <code>unsafe.Sizeof</code> 作用于任何值时产生的值，
+<code>cap</code> 或 <code>len</code> 作用于
+<a href="#长度与容量">一些表达式</a>，时产生的值，
+<code>real</code> 和 <code>imag</code> 作用于复数常量时产生的值，以及
+<code>complex</code> 作用于数值常量所产生的值。
+布尔值由预声明的常量 <code>true</code> 和 <code>false</code> 来表示。
+预声明标识符 <a href="#Iota">iota</a> 表示一个整数常量。
+</p>
+
+<div class="english">
 <p>
 In general, complex constants are a form of
 <a href="#Constant_expressions">constant expression</a>
 and are discussed in that section.
 </p>
+</div>
 
+<p>
+通常，复数常量的形式为
+<a href="#常量表达式">常量表达式</a>，这一点将在该节中讨论。
+</p>
+
+<div class="english">
 <p>
 Numeric constants represent values of arbitrary precision and do not overflow.
 </p>
+</div>
 
+<p>
+数值常量可表示任意精度的值而不会溢出。
+</p>
+
+<div class="english">
 <p>
 Constants may be <a href="#Types">typed</a> or untyped.
 Literal constants, <code>true</code>, <code>false</code>, <code>iota</code>,
 and certain <a href="#Constant_expressions">constant expressions</a>
 containing only untyped constant operands are untyped.
 </p>
+</div>
 
+<p>
+常量可以是<a href="#类型">有类型声明</a>的或无类型声明的。
+字面常量，<code>true</code>，<code>false</code>，<code>iota</code>
+和确定的<a href="#常量表达式">常量表达式</a>
+只包含无类型声明常量和无类型声明操作数。
+</p>
+
+<div class="english">
 <p>
 A constant may be given a type explicitly by a <a href="#Constant_declarations">constant declaration</a>
 or <a href="#Conversions">conversion</a>, or implicitly when used in a
@@ -1069,7 +1130,18 @@ floating-point type, while <code>2147483648.0</code> (equal to <code>1&lt;&lt;31
 can be given the types <code>float32</code>, <code>float64</code>, or <code>uint32</code> but
 not <code>int32</code> or <code>string</code>.
 </p>
+</div>
 
+<p>
+常量可由<a href="#常量声明">常量声明</a>或<a href="#强制转换">强制转换</a>显式地赋予其类型，
+也可由<a href="#变量声明">变量声明</a>或<a href="#赋值操作">赋值操作</a>以及作为
+<a href="#表达式">表达式</a>中的操作数隐式地赋予其类型。若常量的值不能由其类型表示就会产生一个错误。
+例如，<code>3.0</code> 可赋予任何整数或浮点数类型的常量，而 <code>2147483648.0</code>
+（等价于 <code>1&lt;&lt;31</code>）则只能赋予 <code>float32</code>, <code>float64</code>
+或 <code>uint32</code> 类型的常量，而不能赋予 <code>int32</code> 或 <code>string</code>类型的常量。
+</p>
+
+<div class="english">
 <p>
 There are no constants denoting the IEEE-754 infinity and not-a-number values,
 but the <a href="/pkg/math/"><code>math</code> package</a>'s
@@ -1079,7 +1151,19 @@ but the <a href="/pkg/math/"><code>math</code> package</a>'s
 <a href="/pkg/math/#IsNaN">IsNaN</a>
 functions return and test for those values at run time.
 </p>
+</div>
 
+<p>
+Go语言中没有代表 IEEE-754 无穷大和 NaN 值（非数值）的常量，然而
+<a href="/pkg/math/"> <code>math</code> 包</a>中的
+<a href="/pkg/math/#Inf">Inf</a>，
+<a href="/pkg/math/#NaN">NaN</a>，
+<a href="/pkg/math/#IsInf">IsInf</a> 和
+<a href="/pkg/math/#IsNaN">IsNaN</a>
+函数会在运行时返回并检验这些值。
+</p>
+
+<div class="english">
 <p>
 Implementation restriction: Although numeric constants have arbitrary
 precision in the language, a compiler may implement them using an
@@ -1108,23 +1192,66 @@ These requirements apply both to literal constants and to the result
 of evaluating <a href="#Constant_expressions">constant
 expressions</a>.
 </p>
+</div>
 
+<p>
+实现限制：尽管数值常量在该语言中可拥有任意精度，
+但编译器可能使用其有限精度的内部表示来实现它们。即，每个实现必须：
+</p>
+<ul>
+	<li>使用至少256位表示整数常量。</li>
+
+	<li>使用至少256位表示浮点常量，包括复数常量及尾数部分；
+		使用至少32位表示指数符号。</li>
+
+	<li>若无法精确表示一个整数常量，则给出一个错误。</li>
+
+	<li>若由于溢出而无法表示一个浮点或复数常量，则给出一个错误。</li>
+
+	<li>若由于精度限制而无法表示一个浮点或复数常量，则舍入为最近似的可表示常量。</li>
+</ul>
+<p>
+这些要求适用于字面常量和<a href="#常量表达式">常量表达式</a>的求值结果。
+</p>
+
+<div class="english">
 <h2 id="Types">Types</h2>
+</div>
 
+<h2 id="类型">类型</h2>
+
+<div class="english">
 <p>
 A type determines the set of values and operations specific to values of that
 type.  A type may be specified by a (possibly qualified) <i>type name</i>
 (§<a href="#Qualified_identifiers">Qualified identifier</a>, §<a href="#Type_declarations">Type declarations</a>) or a <i>type literal</i>,
 which composes a new type from previously declared types.
 </p>
+</div>
 
+<p>
+类型决定值的集合与该类型值的具体操作。类型可（有限制地）通过<i>类型名</i>
+（§<a href="#限定标识符">限定标识符</a>， §<a href="#类型声明">类型声明</a>）
+或<i>类型字面</i>指定，它将根据之前声明的类型组成新的类型。
+</p>
+
+<div class="english">
 <pre class="ebnf">
 Type      = TypeName | TypeLit | "(" Type ")" .
 TypeName  = QualifiedIdent .
 TypeLit   = ArrayType | StructType | PointerType | FunctionType | InterfaceType |
 	    SliceType | MapType | ChannelType .
 </pre>
+</div>
 
+<pre class="ebnf">
+类型     = 类型名 | 类型字面 | "(" 类型 ")" .
+类型名   = 限定标识符 .
+类型字面 = 数组类型 | 结构类型 | 指针类型 | 函数类型 | 接口类型 |
+           切片类型 | 映射类型 | 信道类型 .
+</pre>
+
+<div class="english">
 <p>
 Named instances of the boolean, numeric, and string types are
 <a href="#Predeclared_identifiers">predeclared</a>.
@@ -1132,7 +1259,14 @@ Named instances of the boolean, numeric, and string types are
 interface, slice, map, and channel types&mdash;may be constructed using
 type literals.
 </p>
+</div>
 
+<p>
+布尔值，数值与字符串类型的实例的命名是<a href="#预声明标识符">预声明</a>的。
+数组，结构，指针，函数，接口，切片，映射和信道这些<i>复合类型</i>可由类型字面构造。
+</p>
+
+<div class="english">
 <p>
 The <i>static type</i> (or just <i>type</i>) of a variable is the
 type defined by its declaration.  Variables of interface type
@@ -1142,6 +1276,14 @@ The dynamic type may vary during execution but is always
 <a href="#Assignability">assignable</a>
 to the static type of the interface variable.  For non-interface
 types, the dynamic type is always the static type.
+</p>
+</div>
+
+<p>
+变量的<i>静态类型</i>（或<i>类型</i>）是通过其声明定义的类型。
+接口类型的变量也有一个独特的<i>动态类型</i>，这是在运行时存储在变量中的值的实际类型。
+动态类型在执行过程中可能会有所不同，但接口变量的静态类型总是<a href="#可分配性">可分配</a>的。
+对于非接口类型，其动态类型始终为其静态类型。
 </p>
 
 <p>
@@ -1165,7 +1307,12 @@ is <code>string</code>. The underlying type of <code>[]T1</code>, <code>T3</code
 and <code>T4</code> is <code>[]T1</code>.
 </p>
 
+<div class="english">
 <h3 id="Method_sets">Method sets</h3>
+</div>
+
+<h3 id="方法集">方法集</h3>
+
 <p>
 A type may have a <i>method set</i> associated with it
 (§<a href="#Interface_types">Interface types</a>, §<a href="#Method_declarations">Method declarations</a>).
@@ -1187,7 +1334,11 @@ and the methods that can be <a href="#Calls">called</a>
 using a receiver of that type.
 </p>
 
+<div class="english">
 <h3 id="Boolean_types">Boolean types</h3>
+</div>
+
+<h3 id="布尔类型">布尔类型</h3>
 
 <p>
 A <i>boolean type</i> represents the set of Boolean truth values
@@ -1195,7 +1346,11 @@ denoted by the predeclared constants <code>true</code>
 and <code>false</code>. The predeclared boolean type is <code>bool</code>.
 </p>
 
+<div class="english">
 <h3 id="Numeric_types">Numeric types</h3>
+</div>
+
+<h3 id="数值类型">数值类型</h3>
 
 <p>
 A <i>numeric type</i> represents sets of integer or floating-point values.
@@ -1248,8 +1403,11 @@ or assignment. For instance, <code>int32</code> and <code>int</code>
 are not the same type even though they may have the same size on a
 particular architecture.
 
-
+<div class="english">
 <h3 id="String_types">String types</h3>
+</div>
+
+<h3 id="字符串类型">字符串类型</h3>
 
 <p>
 A <i>string type</i> represents the set of string values.
@@ -1269,7 +1427,11 @@ is a string literal.
 </p>
 
 
+<div class="english">
 <h3 id="Array_types">Array types</h3>
+</div>
+
+<h3 id="数组类型">数组类型</h3>
 
 <p>
 An array is a numbered sequence of elements of a single
@@ -1303,7 +1465,11 @@ multi-dimensional types.
 [2][2][2]float64  // same as [2]([2]([2]float64))
 </pre>
 
+<div class="english">
 <h3 id="Slice_types">Slice types</h3>
+</div>
+
+<h3 id="切片类型">切片类型</h3>
 
 <p>
 A slice is a reference to a contiguous segment of an array and
@@ -1381,7 +1547,11 @@ however with slices of slices (or arrays of slices), the lengths may vary dynami
 Moreover, the inner slices must be allocated individually (with <code>make</code>).
 </p>
 
+<div class="english">
 <h3 id="Struct_types">Struct types</h3>
+</div>
+
+<h3 id="结构类型">结构类型</h3>
 
 <p>
 A struct is a sequence of named elements, called fields, each of which has a
@@ -1486,7 +1656,11 @@ struct {
 }
 </pre>
 
+<div class="english">
 <h3 id="Pointer_types">Pointer types</h3>
+</div>
+
+<h3 id="指针类型">指针类型</h3>
 
 <p>
 A pointer type denotes the set of all pointers to variables of a given
@@ -1504,7 +1678,11 @@ BaseType = Type .
 *[4]int
 </pre>
 
+<div class="english">
 <h3 id="Function_types">Function types</h3>
+</div>
+
+<h3 id="函数类型">函数类型</h3>
 
 <p>
 A function type denotes the set of all functions with the same parameter
@@ -1549,7 +1727,11 @@ func(n int) func(p *T)
 </pre>
 
 
+<div class="english">
 <h3 id="Interface_types">Interface types</h3>
+</div>
+
+<h3 id="接口类型">接口类型</h3>
 
 <p>
 An interface type specifies a <a href="#Method_sets">method set</a> called its <i>interface</i>.
@@ -1676,7 +1858,11 @@ type Bad2 interface {
 }
 </pre>
 
+<div class="english">
 <h3 id="Map_types">Map types</h3>
+</div>
+
+<h3 id="映射类型">映射类型</h3>
 
 <p>
 A map is an unordered group of elements of one type, called the
@@ -1734,7 +1920,11 @@ stored in them, with the exception of <code>nil</code> maps.
 A <code>nil</code> map is equivalent to an empty map except that no elements
 may be added.
 
+<div class="english">
 <h3 id="Channel_types">Channel types</h3>
+</div>
+
+<h3 id="信道类型">信道类型</h3>
 
 <p>
 A channel provides a mechanism for two concurrently executing functions
@@ -1802,9 +1992,17 @@ multi-valued assignment form of the
 tests whether a channel has been closed.
 </p>
 
+<div class="english">
 <h2 id="Properties_of_types_and_values">Properties of types and values</h2>
+</div>
 
+<h2 id="类型与值的性质">类型与值的性质</h2>
+
+<div class="english">
 <h3 id="Type_identity">Type identity</h3>
+</div>
+
+<h3 id="类型标识">类型标识</h3>
 
 <p>
 Two types are either <i>identical</i> or <i>different</i>.
@@ -1881,7 +2079,11 @@ is different from <code>[]string</code>.
 </p>
 
 
+<div class="english">
 <h3 id="Assignability">Assignability</h3>
+</div>
+
+<h3 id="可分配性">可分配性</h3>
 
 <p>
 A value <code>x</code> is <i>assignable</i> to a variable of type <code>T</code>
@@ -1921,7 +2123,11 @@ Any value may be assigned to the <a href="#Blank_identifier">blank identifier</a
 </p>
 
 
+<div class="english">
 <h2 id="Blocks">Blocks</h2>
+</div>
+
+<h2 id="块">块</h2>
 
 <p>
 A <i>block</i> is a sequence of declarations and statements within matching
@@ -1957,7 +2163,11 @@ Blocks nest and influence <a href="#Declarations_and_scope">scoping</a>.
 </p>
 
 
+<div class="english">
 <h2 id="Declarations_and_scope">Declarations and scope</h2>
+</div>
+
+<h2 id="声明与作用域">声明与作用域</h2>
 
 <p>
 A declaration binds a non-<a href="#Blank_identifier">blank</a>
@@ -2018,7 +2228,11 @@ declarations.
 </p>
 
 
+<div class="english">
 <h3 id="Label_scopes">Label scopes</h3>
+</div>
+
+<h3 id="标签作用域">标签作用域</h3>
 
 <p>
 Labels are declared by <a href="#Labeled_statements">labeled statements</a> and are
@@ -2032,7 +2246,11 @@ the body of any nested function.
 </p>
 
 
+<div class="english">
 <h3 id="Blank_identifier">Blank identifier</h3>
+</div>
+
+<h3 id="空白标识符">空白标识符</h3>
 
 <p>
 The <i>blank identifier</i>, represented by the underscore character <code>_</code>, may be used in a declaration like
@@ -2040,7 +2258,11 @@ any other identifier but the declaration does not introduce a new binding.
 </p>
 
 
+<div class="english">
 <h3 id="Predeclared_identifiers">Predeclared identifiers</h3>
+</div>
+
+<h3 id="预声明标识符">预声明标识符</h3>
 
 <p>
 The following identifiers are implicitly declared in the
@@ -2064,7 +2286,11 @@ Functions:
 </pre>
 
 
+<div class="english">
 <h3 id="Exported_identifiers">Exported identifiers</h3>
+</div>
+
+<h3 id="已导入标识符">已导入标识符</h3>
 
 <p>
 An identifier may be <i>exported</i> to permit access to it from another package.
@@ -2082,7 +2308,11 @@ All other identifiers are not exported.
 </p>
 
 
+<div class="english">
 <h3 id="Uniqueness_of_identifiers">Uniqueness of identifiers</h3>
+</div>
+
+<h3 id="标识符唯一性">标识符唯一性</h3>
 
 <p>
 Given a set of identifiers, an identifier is called <i>unique</i> if it is
@@ -2092,7 +2322,11 @@ appear in different <a href="#Packages">packages</a> and are not
 <a href="Exported_identifiers">exported</a>. Otherwise, they are the same.
 </p>
 
+<div class="english">
 <h3 id="Constant_declarations">Constant declarations</h3>
+</div>
+
+<h3 id="常量声明">常量声明</h3>
 
 <p>
 A constant declaration binds a list of identifiers (the names of
@@ -2213,7 +2447,11 @@ last non-empty expression list.
 </p>
 
 
+<div class="english">
 <h3 id="Type_declarations">Type declarations</h3>
+</div>
+
+<h3 id="类型声明">类型声明</h3>
 
 <p>
 A type declaration binds an identifier, the <i>type name</i>, to a new type
@@ -2297,7 +2535,11 @@ func (tz TimeZone) String() string {
 </pre>
 
 
+<div class="english">
 <h3 id="Variable_declarations">Variable declarations</h3>
+</div>
+
+<h3 id="变量声明">变量声明</h3>
 
 <p>
 A variable declaration creates a variable, binds an identifier to it and
@@ -2346,7 +2588,11 @@ inside a <a href="#Function_declarations">function body</a> if the variable is
 never used.
 </p>
 
+<div class="english">
 <h3 id="Short_variable_declarations">Short variable declarations</h3>
+</div>
+
+<h3 id="短变量声明">短变量声明</h3>
 
 <p>
 A <i>short variable declaration</i> uses the syntax:
@@ -2394,7 +2640,11 @@ In some contexts such as the initializers for <code>if</code>,
 they can be used to declare local temporary variables (§<a href="#Statements">Statements</a>).
 </p>
 
+<div class="english">
 <h3 id="Function_declarations">Function declarations</h3>
+</div>
+
+<h3 id="函数声明">函数声明</h3>
 
 <p>
 A function declaration binds an identifier, the <i>function name</i>,
@@ -2423,7 +2673,11 @@ func min(x int, y int) int {
 func flushICache(begin, end uintptr)  // implemented externally
 </pre>
 
+<div class="english">
 <h3 id="Method_declarations">Method declarations</h3>
+</div>
+
+<h3 id="方法声明">方法声明</h3>
 
 <p>
 A method is a function with a <i>receiver</i>.
@@ -2494,14 +2748,22 @@ However, a function declared this way is not a method.
 </p>
 
 
+<div class="english">
 <h2 id="Expressions">Expressions</h2>
+</div>
+
+<h2 id="表达式">表达式</h2>
 
 <p>
 An expression specifies the computation of a value by applying
 operators and functions to operands.
 </p>
 
+<div class="english">
 <h3 id="Operands">Operands</h3>
+</div>
+
+<h3 id="操作数">操作数</h3>
 
 <p>
 Operands denote the elementary values in an expression.
@@ -2514,7 +2776,11 @@ BasicLit   = int_lit | float_lit | imaginary_lit | char_lit | string_lit .
 </pre>
 
 
+<div class="english">
 <h3 id="Qualified_identifiers">Qualified identifiers</h3>
+</div>
+
+<h3 id="限定标识符">限定标识符</h3>
 
 <p>
 A qualified identifier is a non-<a href="#Blank_identifier">blank</a> identifier
@@ -2536,7 +2802,11 @@ declared in the <a href="#Blocks">package block</a> of that package.
 math.Sin	// denotes the Sin function in package math
 </pre>
 
+<div class="english">
 <h3 id="Composite_literals">Composite literals</h3>
+</div>
+
+<h3 id="复合字面">复合字面</h3>
 
 <p>
 Composite literals construct values for structs, arrays, slices, and maps
@@ -2726,7 +2996,11 @@ noteFrequency := map[string]float32{
 </pre>
 
 
+<div class="english">
 <h3 id="Function_literals">Function literals</h3>
+</div>
+
+<h3 id="函数字面">函数字面</h3>
 
 <p>
 A function literal represents an anonymous function.
@@ -2758,7 +3032,11 @@ as they are accessible.
 </p>
 
 
+<div class="english">
 <h3 id="Primary_expressions">Primary expressions</h3>
+</div>
+
+<h3 id="主表达式">主表达式</h3>
 
 <p>
 Primary expressions are the operands for unary and binary expressions.
@@ -2798,7 +3076,11 @@ f.p[i].x()
 </pre>
 
 
+<div class="english">
 <h3 id="Selectors">Selectors</h3>
+</div>
+
+<h3 id="选择器">选择器</h3>
 
 <p>
 A primary expression of the form
@@ -2911,8 +3193,18 @@ TODO: Specify what happens to receivers.
 </span>
 -->
 
+<!--
+<span class="alert">
+TODO: 详述接收器会发生什么事。
+</span>
+-->
 
+
+<div class="english">
 <h3 id="Indexes">Indexes</h3>
+</div>
+
+<h3 id="下标">下标</h3>
 
 <p>
 A primary expression of the form
@@ -3000,7 +3292,11 @@ Assigning to an element of a <code>nil</code> map causes a
 </p>
 
 
+<div class="english">
 <h3 id="Slices">Slices</h3>
+</div>
+
+<h3 id="切片">切片</h3>
 
 <p>
 For a string, array, pointer to array, or slice <code>a</code>, the primary expression
@@ -3059,7 +3355,11 @@ and the result of the slice operation is a slice with the same element type as t
 </p>
 
 
+<div class="english">
 <h3 id="Type_assertions">Type assertions</h3>
+</div>
+
+<h3 id="类型断言">类型断言</h3>
 
 <p>
 For an expression <code>x</code> of <a href="#Interface_types">interface type</a>
@@ -3111,7 +3411,11 @@ returning a value and a boolean indicating success.  (§<a href="#Assignments">A
 </p>
 
 
+<div class="english">
 <h3 id="Calls">Calls</h3>
+</div>
+
+<h3 id="调用">调用</h3>
 
 <p>
 Given an expression <code>f</code> of function type
@@ -3199,7 +3503,11 @@ p.Scale(3.5)
 There is no distinct method type and there are no method literals.
 </p>
 
+<div class="english">
 <h3 id="Passing_arguments_to_..._parameters">Passing arguments to <code>...</code> parameters</h3>
+</div>
+
+<h3 id="传递实参至...形参">传递实参至...形参</h3>
 
 <p>
 If <code>f</code> is variadic with final parameter type <code>...T</code>,
@@ -3246,7 +3554,11 @@ with the same underlying array.
 </p>
 
 
+<div class="english">
 <h3 id="Operators">Operators</h3>
+</div>
+
+<h3 id="操作符">操作符</h3>
 
 <p>
 Operators combine operands into expressions.
@@ -3302,7 +3614,12 @@ var v float32 = 1&lt;&lt;s   // illegal: 1 has type float32, cannot shift
 var w int64 = 1.0&lt;&lt;33  // 1.0&lt;&lt;33 is a constant shift expression
 </pre>
 
+<div class="english">
 <h3 id="Operator_precedence">Operator precedence</h3>
+</div>
+
+<h3 id="操作符优先级">操作符优先级</h3>
+
 <p>
 Unary operators have the highest precedence.
 As the  <code>++</code> and <code>--</code> operators form
@@ -3340,7 +3657,12 @@ x == y+1 &amp;&amp; &lt;-chanPtr &gt; 0
 </pre>
 
 
+<div class="english">
 <h3 id="Arithmetic_operators">Arithmetic operators</h3>
+</div>
+
+<h3 id="算数操作符">算数操作符</h3>
+
 <p>
 Arithmetic operators apply to numeric values and yield a result of the same
 type as the first operand. The four standard arithmetic operators (<code>+</code>,
@@ -3462,7 +3784,11 @@ IEEE-754 standard; whether a <a href="#Run_time_panics">run-time panic</a>
 occurs is implementation-specific.
 </p>
 
+<div class="english">
 <h3 id="Integer_overflow">Integer overflow</h3>
+</div>
+
+<h3 id="整数溢出">整数溢出</h3>
 
 <p>
 For unsigned integer values, the operations <code>+</code>,
@@ -3483,7 +3809,11 @@ not occur. For instance, it may not assume that <code>x &lt; x + 1</code> is alw
 </p>
 
 
+<div class="english">
 <h3 id="Comparison_operators">Comparison operators</h3>
+</div>
+
+<h3 id="比较操作符">比较操作符</h3>
 
 <p>
 Comparison operators compare two operands and yield a boolean value.
@@ -3611,7 +3941,11 @@ var (
 )
 </pre>
 
+<div class="english">
 <h3 id="Logical_operators">Logical operators</h3>
+</div>
+
+<h3 id="逻辑操作符">逻辑操作符</h3>
 
 <p>
 Logical operators apply to <a href="#Boolean_types">boolean</a> values
@@ -3626,7 +3960,11 @@ The right operand is evaluated conditionally.
 </pre>
 
 
+<div class="english">
 <h3 id="Address_operators">Address operators</h3>
+</div>
+
+<h3 id="地址操作符">地址操作符</h3>
 
 <p>
 For an operand <code>x</code> of type <code>T</code>, the address operation
@@ -3654,7 +3992,11 @@ will cause a <a href="#Run_time_panics">run-time panic</a>.
 </pre>
 
 
+<div class="english">
 <h3 id="Receive_operator">Receive operator</h3>
+</div>
+
+<h3 id="接收操作符">接收操作符</h3>
 
 <p>
 For an operand <code>ch</code> of <a href="#Channel_types">channel type</a>,
@@ -3696,8 +4038,20 @@ need to be presented regarding send, receive, select, and goroutines.</span>
 </p>
 -->
 
+<!--
+<p>
+<span class="alert">
+TODO: 或许在单独的章节中，通信语义需要就发送、接收、选择和够程介绍一下。
+</span>
+</p>
+-->
 
+
+<div class="english">
 <h3 id="Method_expressions">Method expressions</h3>
+</div>
+
+<h3 id="方法表达式">方法表达式</h3>
 
 <p>
 If <code>M</code> is in the <a href="#Method_sets">method set</a> of type <code>T</code>,
@@ -3814,7 +4168,11 @@ It is legal to derive a function value from a method of an interface type.
 The resulting function takes an explicit receiver of that interface type.
 </p>
 
+<div class="english">
 <h3 id="Conversions">Conversions</h3>
+</div>
+
+<h3 id="强制转换">强制转换</h3>
 
 <p>
 Conversions are expressions of the form <code>T(x)</code>
@@ -3922,7 +4280,11 @@ implements this functionality under
 restricted circumstances.
 </p>
 
+<div class="english">
 <h4>Conversions between numeric types</h4>
+</div>
+
+<h4>数值类型间的转换</h4>
 
 <p>
 For the conversion of non-constant numeric values, the following rules apply:
@@ -3958,7 +4320,11 @@ if the result type cannot represent the value the conversion
 succeeds but the result value is implementation-dependent.
 </p>
 
+<div class="english">
 <h4 id="Conversions_to_and_from_a_string_type">Conversions to and from a string type</h4>
+</div>
+
+<h4 id="字符串类型的转换">字符串类型的转换</h4>
 
 <ol>
 <li>
@@ -4025,7 +4391,11 @@ MyRunes("白鵬翔")           // []rune{0x767d, 0x9d6c, 0x7fd4}
 </ol>
 
 
+<div class="english">
 <h3 id="Constant_expressions">Constant expressions</h3>
+</div>
+
+<h3 id="常量表达式">常量表达式</h3>
 
 <p>
 Constant expressions may contain only <a href="#Constants">constant</a>
@@ -4143,7 +4513,20 @@ overflow etc. errors being caught.
 </p>
 -->
 
+<!--
+<p>
+<span class="alert">
+TODO: 也许 ^ 应当禁止用于非无符号整数，而不是采取二进制补码。
+它可能会使有类型声明的常量更像变量，以更小的代价捕获溢出等错误。
+</span>
+</p>
+-->
+
+<div class="english">
 <h3 id="Order_of_evaluation">Order of evaluation</h3>
+</div>
+
+<h3 id="求值顺序">求值顺序</h3>
 
 <p>
 When evaluating the elements of an assignment or expression,
@@ -4175,7 +4558,11 @@ In the expression <code>x + (y + z)</code> the addition <code>y + z</code>
 is performed before adding <code>x</code>.
 </p>
 
+<div class="english">
 <h2 id="Statements">Statements</h2>
+</div>
+
+<h2 id="">语句</h2>
 
 <p>
 Statements control execution.
@@ -4192,7 +4579,11 @@ SimpleStmt = EmptyStmt | ExpressionStmt | SendStmt | IncDecStmt | Assignment | S
 </pre>
 
 
+<div class="english">
 <h3 id="Empty_statements">Empty statements</h3>
+</div>
+
+<h3 id="空语句">空语句</h3>
 
 <p>
 The empty statement does nothing.
@@ -4203,7 +4594,11 @@ EmptyStmt = .
 </pre>
 
 
+<div class="english">
 <h3 id="Labeled_statements">Labeled statements</h3>
+</div>
+
+<h3 id="已标签语句">已标签语句</h3>
 
 <p>
 A labeled statement may be the target of a <code>goto</code>,
@@ -4220,7 +4615,11 @@ Error: log.Panic("error encountered")
 </pre>
 
 
+<div class="english">
 <h3 id="Expression_statements">Expression statements</h3>
+</div>
+
+<h3 id="表达式语句">表达式语句</h3>
 
 <p>
 Function calls, method calls, and receive operations
@@ -4239,7 +4638,11 @@ f.Close()
 </pre>
 
 
+<div class="english">
 <h3 id="Send_statements">Send statements</h3>
+</div>
+
+<h3 id="发送语句">发送语句</h3>
 
 <p>
 A send statement sends a value on a channel.
@@ -4267,7 +4670,11 @@ ch &lt;- 3
 </pre>
 
 
+<div class="english">
 <h3 id="IncDec_statements">IncDec statements</h3>
+</div>
+
+<h3 id="递增递减语句">递增递减语句</h3>
 
 <p>
 The "++" and "--" statements increment or decrement their operands
@@ -4292,7 +4699,12 @@ x--                 x -= 1
 </pre>
 
 
+
+<div class="english">
 <h3 id="Assignments">Assignments</h3>
+</div>
+
+<h3 id="分配">分配</h3>
 
 <pre class="ebnf">
 Assignment = ExpressionList assign_op ExpressionList .
@@ -4397,7 +4809,11 @@ boolean, character, integer, floating-point, complex, or string constant.
 </p>
 
 
+<div class="english">
 <h3 id="If_statements">If statements</h3>
+</div>
+
+<h3 id="If语句">If语句</h3>
 
 <p>
 "If" statements specify the conditional execution of two branches
@@ -4432,7 +4848,11 @@ if x := f(); x &lt; y {
 </pre>
 
 
+<div class="english">
 <h3 id="Switch_statements">Switch statements</h3>
+</div>
+
+<h3 id="Switch语句">Switch语句</h3>
 
 <p>
 "Switch" statements provide multi-way execution.
@@ -4453,7 +4873,11 @@ In a type switch, the cases contain types that are compared against the
 type of a specially annotated switch expression.
 </p>
 
+<div class="english">
 <h4 id="Expression_switches">Expression switches</h4>
+</div>
+
+<h4 id="表达式选择">表达式选择</h4>
 
 <p>
 In an expression switch,
@@ -4510,7 +4934,11 @@ case x == 4: f3()
 }
 </pre>
 
+<div class="english">
 <h4 id="Type_switches">Type switches</h4>
+</div>
+
+<h4 id="类型选择">类型选择</h4>
 
 <p>
 A type switch compares types rather than values. It is otherwise similar
@@ -4604,7 +5032,11 @@ executes before the guard is evaluated.
 The "fallthrough" statement is not permitted in a type switch.
 </p>
 
+<div class="english">
 <h3 id="For_statements">For statements</h3>
+</div>
+
+<h3 id="For语句">For语句</h3>
 
 <p>
 A "for" statement specifies repeated execution of a block. The iteration is
@@ -4791,7 +5223,11 @@ for w := range ch {
 </pre>
 
 
+<div class="english">
 <h3 id="Go_statements">Go statements</h3>
+</div>
+
+<h3 id="Go语句">Go语句</h3>
 
 <p>
 A "go" statement starts the execution of a function or method call
@@ -4823,7 +5259,11 @@ go func(ch chan&lt;- bool) { for { sleep(10); ch &lt;- true; }} (c)
 </pre>
 
 
+<div class="english">
 <h3 id="Select_statements">Select statements</h3>
+</div>
+
+<h3 id="Select语句">Select语句</h3>
 
 <p>
 A "select" statement chooses which of a set of possible communications
@@ -4901,7 +5341,11 @@ select {}  // block forever
 </pre>
 
 
+<div class="english">
 <h3 id="Return_statements">Return statements</h3>
+</div>
+
+<h3 id="Return语句">Return语句</h3>
 
 <p>
 A "return" statement terminates execution of the containing function
@@ -4986,7 +5430,19 @@ TODO: Define when return is required.<br />
 </p>
 -->
 
+<!--
+<p>
+<span class="alert">
+TODO: 定义什么时候需要返回。<br />
+</span>
+</p>
+-->
+
+<div class="english">
 <h3 id="Break_statements">Break statements</h3>
+</div>
+
+<h3 id="Break语句">Break语句</h3>
 
 <p>
 A "break" statement terminates execution of the innermost
@@ -5014,7 +5470,11 @@ L:
 	}
 </pre>
 
+<div class="english">
 <h3 id="Continue_statements">Continue statements</h3>
+</div>
+
+<h3 id="Continue语句">Continue语句</h3>
 
 <p>
 A "continue" statement begins the next iteration of the
@@ -5032,7 +5492,11 @@ advances
 (§<a href="#For_statements">For statements</a>).
 </p>
 
+<div class="english">
 <h3 id="Goto_statements">Goto statements</h3>
+</div>
+
+<h3 id="Goto语句">Goto语句</h3>
 
 <p>
 A "goto" statement transfers control to the statement with the corresponding label.
@@ -5086,7 +5550,11 @@ is erroneous because the label <code>L1</code> is inside
 the "for" statement's block but the <code>goto</code> is not.
 </p>
 
+<div class="english">
 <h3 id="Fallthrough_statements">Fallthrough statements</h3>
+</div>
+
+<h3 id="Fallthrough语句">Fallthrough语句</h3>
 
 <p>
 A "fallthrough" statement transfers control to the first statement of the
@@ -5100,7 +5568,11 @@ FallthroughStmt = "fallthrough" .
 </pre>
 
 
+<div class="english">
 <h3 id="Defer_statements">Defer statements</h3>
+</div>
+
+<h3 id="Defer语句">Defer语句</h3>
 
 <p>
 A "defer" statement invokes a function whose execution is deferred to the moment
@@ -5148,7 +5620,11 @@ func f() (result int) {
 }
 </pre>
 
+<div class="english">
 <h2 id="Built-in_functions">Built-in functions</h2>
+</div>
+
+<h2 id="内建函数">内建函数</h2>
 
 <p>
 Built-in functions are
@@ -5168,7 +5644,11 @@ BuiltinCall = identifier "(" [ BuiltinArgs [ "," ] ] ")" .
 BuiltinArgs = Type [ "," ExpressionList ] | ExpressionList .
 </pre>
 
+<div class="english">
 <h3 id="Close">Close</h3>
+</div>
+
+<h3 id="关闭">关闭</h3>
 
 <p>
 For a channel <code>c</code>, the built-in function <code>close(c)</code>
@@ -5184,7 +5664,11 @@ returns a received value along with an indication of whether the channel is clos
 </p>
 
 
+<div class="english">
 <h3 id="Length_and_capacity">Length and capacity</h3>
+</div>
+
+<h3 id="长度与容量">长度与容量</h3>
 
 <p>
 The built-in functions <code>len</code> and <code>cap</code> take arguments
@@ -5261,7 +5745,11 @@ and returns a value of type <code>*S</code> containing the address
 of the memory.
 </p>
 
+<div class="english">
 <h3 id="Making_slices_maps_and_channels">Making slices, maps and channels</h3>
+</div>
+
+<h3 id="创建切片、映射与信道">创建切片、映射与信道</h3>
 
 <p>
 Slices, maps and channels are reference types that do not require the
@@ -5303,7 +5791,11 @@ m := make(map[string]int, 100)  // map with initial space for 100 elements
 </pre>
 
 
+<div class="english">
 <h3 id="Appending_and_copying_slices">Appending to and copying slices</h3>
+</div>
+
+<h3 id="合并与复制切片">合并与复制切片</h3>
 
 <p>
 Two built-in functions assist in common slice operations.
@@ -5380,7 +5872,11 @@ n3 := copy(b, "Hello, World!")  // n3 == 5, b == []byte("Hello")
 </pre>
 
 
+<div class="english">
 <h3 id="Deletion_of_map_elements">Deletion of map elements</h3>
+</div>
+
+<h3 id="映射元素的删除">映射元素的删除</h3>
 
 <p>
 The built-in function <code>delete</code> removes the element with key
@@ -5400,7 +5896,11 @@ a no-op. Calling <code>delete</code> with a nil map causes a
 </p>
 
 
+<div class="english">
 <h3 id="Complex_numbers">Manipulating complex numbers</h3>
+</div>
+
+<h3 id="操作复数">复数操作</h3>
 
 <p>
 Three functions assemble and disassemble complex numbers.
@@ -5442,7 +5942,11 @@ var im = imag(b)                   // float64
 var rl = real(c64)                 // float32
 </pre>
 
+<div class="english">
 <h3 id="Handling_panics">Handling panics</h3>
+</div>
+
+<h3 id="异常处理">异常处理</h3>
 
 <p> Two built-in functions, <code>panic</code> and <code>recover</code>,
 assist in reporting and handling <a href="#Run_time_panics">run-time panics</a>
@@ -5507,7 +6011,11 @@ func protect(g func()) {
 </pre>
 
 
+<div class="english">
 <h3 id="Bootstrapping">Bootstrapping</h3>
+</div>
+
+<h3 id="引导">引导</h3>
 
 <p>
 Current implementations provide several built-in functions useful during
@@ -5523,7 +6031,11 @@ println    like print but prints spaces between arguments and a newline at the e
 </pre>
 
 
+<div class="english">
 <h2 id="Packages">Packages</h2>
+</div>
+
+<h2 id="包">包</h2>
 
 <p>
 Go programs are constructed by linking together <i>packages</i>.
@@ -5534,7 +6046,11 @@ of the same package. Those elements may be
 <a href="#Exported_identifiers">exported</a> and used in another package.
 </p>
 
+<div class="english">
 <h3 id="Source_file_organization">Source file organization</h3>
+</div>
+
+<h3 id="">源文件组织</h3>
 
 <p>
 Each source file consists of a package clause defining the package
@@ -5548,7 +6064,11 @@ types, variables, and constants.
 SourceFile       = PackageClause ";" { ImportDecl ";" } { TopLevelDecl ";" } .
 </pre>
 
+<div class="english">
 <h3 id="Package_clause">Package clause</h3>
+</div>
+
+<h3 id="包子句">包子句</h3>
 
 <p>
 A package clause begins each source file and defines the package
@@ -5573,7 +6093,11 @@ A set of files sharing the same PackageName form the implementation of a package
 An implementation may require that all source files for a package inhabit the same directory.
 </p>
 
+<div class="english">
 <h3 id="Import_declarations">Import declarations</h3>
+</div>
+
+<h3 id="导入声明">导入声明</h3>
 
 <p>
 An import declaration states that the source file containing the declaration
@@ -5651,7 +6175,11 @@ import _ "lib/math"
 </pre>
 
 
+<div class="english">
 <h3 id="An_example_package">An example package</h3>
+</div>
+
+<h3 id="一个例子包">一个例子包</h3>
 
 <p>
 Here is a complete Go package that implements a concurrent prime sieve.
@@ -5697,9 +6225,18 @@ func main() {
 }
 </pre>
 
+<div class="english">
 <h2 id="Program_initialization_and_execution">Program initialization and execution</h2>
+</div>
 
+<h2 id="程序初始化与执行">程序初始化与执行</h2>
+
+<div class="english">
 <h3 id="The_zero_value">The zero value</h3>
+</div>
+
+<h3 id="零值">零值</h3>
+
 <p>
 When memory is allocated to store a value, either through a declaration
 or a call of <code>make</code> or <code>new</code>,
@@ -5747,7 +6284,12 @@ The same would also be true after
 var t T
 </pre>
 
+<div class="english">
 <h3 id="Program_execution">Program execution</h3>
+</div>
+
+<h3 id="程序执行">程序执行</h3>
+
 <p>
 A package with no imports is initialized by assigning initial values to
 all its package-level variables
@@ -5829,7 +6371,11 @@ the <code>init</code> functions: it will not start the next
 the previous one has returned.
 </p>
 
+<div class="english">
 <h2 id="Errors">Errors</h2>
+</div>
+
+<h2 id="错误">错误</h2>
 
 <p>
 The predeclared type <code>error</code> is defined as
@@ -5851,7 +6397,11 @@ For instance, a function to read data from a file might be defined:
 func Read(f *File, b []byte) (n int, err error)
 </pre>
 
+<div class="english">
 <h2 id="Run_time_panics">Run-time panics</h2>
+</div>
+
+<h2 id="运行时异常">运行时异常</h2>
 
 <p>
 Execution errors such as attempting to index an array out
@@ -5873,9 +6423,17 @@ type Error interface {
 }
 </pre>
 
+<div class="english">
 <h2 id="System_considerations">System considerations</h2>
+</div>
 
+<h2 id="系统考虑">系统考虑</h2>
+
+<div class="english">
 <h3 id="Package_unsafe">Package <code>unsafe</code></h3>
+</div>
+
+<h3 id="包unsafe">包 <code>unsafe</code> </h3>
 
 <p>
 The built-in package <code>unsafe</code>, known to the compiler,
@@ -5934,7 +6492,11 @@ Calls to <code>Alignof</code>, <code>Offsetof</code>, and
 </p>
 <p>
 
+<div class="english">
 <h3 id="Size_and_alignment_guarantees">Size and alignment guarantees</h3>
+</div>
+
+<h3 id="大小与对齐保证">大小与对齐保证</h3>
 
 <p>
 For the numeric types (§<a href="#Numeric_types">Numeric types</a>), the following sizes are guaranteed:
