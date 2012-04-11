@@ -647,7 +647,7 @@ exponent  = ( "e" | "E" ) [ "+" | "-" ] decimals .
            十进制指数 |
            "." 十进制数 [ 指数 ] .
 十进制数 = 十进制数字 { 十进制数字 } .
-指数     = （ "e" | "E" ） [ "+" | "-" ] 十进制数 .
+指数     = ( "e" | "E" ) [ "+" | "-" ] 十进制数 .
 </pre>
 
 <pre>
@@ -1390,13 +1390,6 @@ and <code>false</code>. The predeclared boolean type is <code>bool</code>.
 </div>
 
 <h3 id="数值类型">数值类型</h3>
-
-<div class="english">
-<p>
-A <i>numeric type</i> represents sets of integer or floating-point values.
-The predeclared architecture-independent numeric types are:
-</p>
-</div>
 
 <p>
 <i>数值类型</i> 表示整数值和浮点数值的集。
@@ -3201,14 +3194,14 @@ Given a set of identifiers, an identifier is called <i>unique</i> if it is
 <i>different</i> from every other in the set.
 Two identifiers are different if they are spelled differently, or if they
 appear in different <a href="#Packages">packages</a> and are not
-<a href="#Exported_identifiers">exported</a>. Otherwise, they are the same.
+<a href="Exported_identifiers">exported</a>. Otherwise, they are the same.
 </p>
 </div>
 
 <p>
 给定一个标识符集，若其中一个标识符<i>不同于</i>该集中的任一标识符，那么它就是<i>唯一的</i>。
 若两个标识符拼写不同，或它们出现在不同的<a href="#包">包</a>中且未
-<a href="#已导出标识符">导出</a>，那么它们就是不同的。否则，它们就是相同的。
+<a href="已导出标识符">导出</a>，那么它们就是不同的。否则，它们就是相同的。
 </p>
 
 <div class="english">
@@ -3809,7 +3802,7 @@ they can be used to declare local temporary variables (§<a href="#Statements">S
 <p>
 短变量声明只能出现在函数内部。在某些情况下，例如初始化 <code>if</code>、
 <code>for</code>、或 <code>switch</code> 语句时，它们可用来声明局部临时变量
-（§<a href="#语句">语句</a>)。
+（§<a href="#语句">语句</a>）。
 </p>
 
 <div class="english">
