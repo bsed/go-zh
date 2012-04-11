@@ -21,8 +21,8 @@ TODO
 <!--
 TODO
 [ ] 需要语言中关于函数/方法调用和参数传递的规则
-[ ] #分配（常量推广）的最后一段应在别处
-    且应在空接口中提及分配。
+[ ] #赋值（常量推广）的最后一段应在别处
+    且应在空接口中提及赋值。
 [ ] 需要说一些关于选择器“作用域”的事？
 [ ] 阐明在结构声明中什么是字段名
     (struct{T} 与 struct {T T} 与 struct {t T})
@@ -162,7 +162,7 @@ language.
 
 <p>
 形式 <code>a … b</code> 表示把从 <code>a</code> 到 <code>b</code>的字符集作为选择项。
-横向的省略号 <code>…</code> 也在本文档的其他地方非正式地表示各种列举或简略的代码片断。
+横向的省略号 <code>…</code> 也在本文档的其它地方非正式地表示各种列举或简略的代码片断。
 单个字符 <code>…</code>（不同于三个字符 <code>...</code>）并非Go语言本身的标记。
 </p>
 
@@ -201,7 +201,7 @@ compiler may disallow the NUL character (U+0000) in the source text.
 每个码点都是不同的；例如，大写与小写的字母就是不同的字符。
 </p>
 <p>
-实现限制：为兼容其他工具，编译器会阻止字符NUL（U+0000）出现在源代码文本中。
+实现限制：为兼容其它工具，编译器会阻止字符NUL（U+0000）出现在源代码文本中。
 </p>
 
 <div class="english">
@@ -286,7 +286,7 @@ hex_digit     = "0" … "9" | "A" … "F" | "a" … "f" .
 <h3 id="Comments">Comments</h3>
 </div>
 
-<h3 id="Comments">注释</h3>
+<h3 id="注释">注释</h3>
 
 <div class="english">
 <p>
@@ -557,7 +557,7 @@ The following character sequences represent <a href="#Operators">operators</a>, 
 </div>
 
 <p>
-以下字符序列表示<a href="#运算符">运算符</a>，分隔符和其他特殊标记：
+以下字符序列表示<a href="#运算符">运算符</a>，分隔符和其它特殊标记：
 </p>
 
 <pre class="grammar">
@@ -1134,7 +1134,7 @@ not <code>int32</code> or <code>string</code>.
 
 <p>
 常量可由<a href="#常量声明">常量声明</a>或<a href="#强制转换">强制转换</a>显式地赋予其类型，
-也可由<a href="#变量声明">变量声明</a>或<a href="#赋值操作">赋值操作</a>以及作为
+也可由<a href="#变量声明">变量声明</a>或<a href="#赋值">赋值</a>以及作为
 <a href="#表达式">表达式</a>中的操作数隐式地赋予其类型。若常量的值不能由其类型表示就会产生一个错误。
 例如，<code>3.0</code> 可赋予任何整数或浮点数类型的常量，而 <code>2147483648.0</code>
 （等价于 <code>1&lt;&lt;31</code>）则只能赋予 <code>float32</code>, <code>float64</code>
@@ -1282,16 +1282,24 @@ types, the dynamic type is always the static type.
 <p>
 变量的<i>静态类型</i>（或<i>类型</i>）是通过其声明定义的类型。
 接口类型的变量也有一个独特的<i>动态类型</i>，这是在运行时存储在变量中的值的实际类型。
-动态类型在执行过程中可能会有所不同，但接口变量的静态类型总是<a href="#可分配性">可分配</a>的。
+动态类型在执行过程中可能会有所不同，但接口变量的静态类型总是<a href="#可赋值性">可赋值</a>的。
 对于非接口类型，其动态类型始终为其静态类型。
 </p>
 
+<div class="english">
 <p>
 Each type <code>T</code> has an <i>underlying type</i>: If <code>T</code>
 is a predeclared type or a type literal, the corresponding underlying
 type is <code>T</code> itself. Otherwise, <code>T</code>'s underlying type
 is the underlying type of the type to which <code>T</code> refers in its
 <a href="#Type_declarations">type declaration</a>.
+</p>
+</div>
+
+<p>
+每个类型 <code>T</code> 都有一个 <i>基本类型</i>：若 <code>T</code> 为预声明类型或类型字面，
+其相应的基本类型为 <code>T</code> 本身。否则，<code>T</code>的基本类型为其
+<a href="#类型声明">声明</a>类型的基本类型。
 </p>
 
 <pre>
@@ -1301,10 +1309,17 @@ is the underlying type of the type to which <code>T</code> refers in its
    type T4 T3
 </pre>
 
+<div class="english">
 <p>
 The underlying type of <code>string</code>, <code>T1</code>, and <code>T2</code>
 is <code>string</code>. The underlying type of <code>[]T1</code>, <code>T3</code>,
 and <code>T4</code> is <code>[]T1</code>.
+</p>
+</div>
+
+<p>
+以上 <code>string</code>，<code>T1</code> 和 <code>T2</code> 的基本类型为 <code>string</code>。
+<code>[]T1</code>，<code>T3</code> 和 <code>T4</code> 的基本类型为 <code>[]T1</code> 。
 </p>
 
 <div class="english">
@@ -1313,6 +1328,7 @@ and <code>T4</code> is <code>[]T1</code>.
 
 <h3 id="方法集">方法集</h3>
 
+<div class="english">
 <p>
 A type may have a <i>method set</i> associated with it
 (§<a href="#Interface_types">Interface types</a>, §<a href="#Method_declarations">Method declarations</a>).
@@ -1326,12 +1342,28 @@ Any other type has an empty method set.
 In a method set, each method must have a
 <a href="#Uniqueness_of_identifiers">unique</a> <a href="#MethodName">method name</a>.
 </p>
+</div>
 
+<p>
+类型可拥有一个与其相关联的 <i>方法集</i>（§<a href="#接口类型">接口类型</a>，§<a href="#方法声明">方法声明</a>）。
+<a href="#接口类型">接口类型</a>的方法集为其接口。其它命名为类型 <code>T</code> 的方法集由所有带接收器类型
+<code>T</code> 的方法组成。与指针类型 <code>*T</code> 相应的方法集为所有带接收器 <code>*T</code> 或 <code>T</code>
+的方法的集（就是说，它也包含 <code>T</code> 的方法集）。任何类型都有一个空方法集。
+在方法集中，每个方法都必须有<a href="#标识符的唯一性">唯一</a>的<a href="#方法名">方法名</a>。
+</p>
+
+<div class="english">
 <p>
 The method set of a type determines the interfaces that the
 type <a href="#Interface_types">implements</a>
 and the methods that can be <a href="#Calls">called</a>
 using a receiver of that type.
+</p>
+</div>
+
+<p>
+方法集的类型决定了其接口的类型<a href="#接口类型">实现</a>
+与可使用该类型接收器<a href="#调用">调用</a>的方法。
 </p>
 
 <div class="english">
@@ -1340,10 +1372,17 @@ using a receiver of that type.
 
 <h3 id="布尔类型">布尔类型</h3>
 
+<div class="english">
 <p>
 A <i>boolean type</i> represents the set of Boolean truth values
 denoted by the predeclared constants <code>true</code>
 and <code>false</code>. The predeclared boolean type is <code>bool</code>.
+</p>
+</div>
+
+<p>
+<i>布尔类型</i> 表示由预声明常量 <code>true</code> 和 <code>false</code>所代表的布尔值的集。
+预声明的布尔类型为 <code>bool</code>。
 </p>
 
 <div class="english">
@@ -1352,11 +1391,19 @@ and <code>false</code>. The predeclared boolean type is <code>bool</code>.
 
 <h3 id="数值类型">数值类型</h3>
 
+<div class="english">
 <p>
 A <i>numeric type</i> represents sets of integer or floating-point values.
 The predeclared architecture-independent numeric types are:
 </p>
+</div>
 
+<p>
+<i>数值类型</i> 表示整数值和浮点数值的集。
+架构中立的预声明数值类型为：
+</p>
+
+<div class="english">
 <pre class="grammar">
 uint8       the set of all unsigned  8-bit integers (0 to 255)
 uint16      the set of all unsigned 16-bit integers (0 to 65535)
@@ -1377,22 +1424,66 @@ complex128  the set of all complex numbers with float64 real and imaginary parts
 byte        alias for uint8
 rune        alias for int32
 </pre>
+</div>
 
+<pre class="grammar">
+uint8       所有无符号 8位整数集（0 到 255）
+uint16      所有无符号16位整数集（0 到 65535）
+uint32      所有无符号32位整数集（0 到 4294967295）
+uint64      所有无符号64位整数集（0 到 18446744073709551615）
+
+int8        所有带符号 8位整数集（-128 到 127）
+int16       所有带符号16位整数集（-32768 到 32767）
+int32       所有带符号32位整数集（-2147483648 到 2147483647）
+int64       所有带符号64位整数集（-9223372036854775808 到 9223372036854775807）
+
+float32     所有IEEE-754 32位浮点数集
+float64     所有IEEE-754 64位浮点数集
+
+complex64   所有带float32实部和虚部的复数集
+complex128  所有带float64实部和虚部的复数集
+
+byte        uint8的别名
+rune        int32的别名
+</pre>
+
+<div class="english">
 <p>
 The value of an <i>n</i>-bit integer is <i>n</i> bits wide and represented using
 <a href="http://en.wikipedia.org/wiki/Two's_complement">two's complement arithmetic</a>.
 </p>
+</div>
 
+<p>
+<i>n</i> 位的整数值由 <i>n</i> 位宽的
+<a href="http://en.wikipedia.org/wiki/Two's_complement">二进制补码运算</a>表示。
+</p>
+
+<div class="english">
 <p>
 There is also a set of predeclared numeric types with implementation-specific sizes:
 </p>
+</div>
 
+<p>
+取决于具体实现的预声明数值类型的集：
+</p>
+
+<div class="english">
 <pre class="grammar">
 uint     either 32 or 64 bits
 int      same size as uint
 uintptr  an unsigned integer large enough to store the uninterpreted bits of a pointer value
 </pre>
+</div>
 
+<pre class="grammar">
+uint     32或64位
+int      大小与uint相同
+uintptr  大到足以存储指针值无解释位的无符号整数
+</pre>
+
+<div class="english">
 <p>
 To avoid portability issues all numeric types are distinct except
 <code>byte</code>, which is an alias for <code>uint8</code>, and
@@ -1402,6 +1493,16 @@ are required when different numeric types are mixed in an expression
 or assignment. For instance, <code>int32</code> and <code>int</code>
 are not the same type even though they may have the same size on a
 particular architecture.
+</p>
+</div>
+
+<p>
+为避免可移植性问题，除 <code>byte</code> 为 <code>uint8</code> 的别名以及
+<code>rune</code> 为 <code>int32</code> 的别名外，所有数值类型都是不同的。
+当不同的数值类型混合在一个表达式或赋值操作中时，必须进行强制转换。
+例如，<code>int32</code> 与 <code>int</code> 是不同的类型，
+尽管它们在特定架构上可能有相同的大小。
+</p>
 
 <div class="english">
 <h3 id="String_types">String types</h3>
@@ -1409,12 +1510,21 @@ particular architecture.
 
 <h3 id="字符串类型">字符串类型</h3>
 
+<div class="english">
 <p>
 A <i>string type</i> represents the set of string values.
 Strings behave like slices of bytes but are immutable: once created,
 it is impossible to change the contents of a string.
 The predeclared string type is <code>string</code>.
+</p>
+</div>
 
+<p>
+<i>字符串类型</i> 表示字符串值的集。字符串的行为类似于字节数组，但它是不可变的：
+一旦被创建，字符串的内容就不能更改。预声明的字符串类型为 <code>string</code>。
+</p>
+
+<div class="english">
 <p>
 The elements of strings have type <code>byte</code> and may be
 accessed using the usual <a href="#Indexes">indexing operations</a>.  It is
@@ -1425,6 +1535,14 @@ string, <code>&amp;s[i]</code> is invalid.  The length of string
 <code>len</code>. The length is a compile-time constant if <code>s</code>
 is a string literal.
 </p>
+</div>
+
+<p>
+字符串元素的类型为 <code>byte</code>，通常使用<a href="#下标">下标操作</a>访问。
+要获取这种元素的地址是非法的；若 <code>s[i]</code> 为字符串中的第 <i>i</i>个字节，
+<code>&amp;s[i]</code> 操作是无效的。字符串 <code>s</code> 的长度可使用内建函数
+<code>len</code>获取。若 <code>s</code> 为一个字符串字面，其长度则为一个编译时常量。
+</p>
 
 
 <div class="english">
@@ -1433,19 +1551,34 @@ is a string literal.
 
 <h3 id="数组类型">数组类型</h3>
 
+<div class="english">
 <p>
 An array is a numbered sequence of elements of a single
 type, called the element type.
 The number of elements is called the length and is never
 negative.
 </p>
+</div>
 
+<p>
+数组是单类型元素的编号序列，称为元素类型。元素的数量称为长度且为非负数。
+</p>
+
+<div class="english">
 <pre class="ebnf">
 ArrayType   = "[" ArrayLength "]" ElementType .
 ArrayLength = Expression .
 ElementType = Type .
 </pre>
+</div>
 
+<pre class="ebnf">
+数组类型 = "[" 数组长度 "]" 元素类型 .
+数组长度 = 表达式 .
+元素类型 = 类型 .
+</pre>
+
+<div class="english">
 <p>
 The length is part of the array's type and must be a
 <a href="#Constant_expressions">constant expression</a> that evaluates to a non-negative
@@ -1456,13 +1589,31 @@ indices 0 through <code>len(a)-1</code> (§<a href="#Indexes">Indexes</a>).
 Array types are always one-dimensional but may be composed to form
 multi-dimensional types.
 </p>
+</div>
 
+<p>
+长度是数组类型的一部分，且必须是求值结果为非负整数值的<a href="#常量表达式">常量表达式</a>。
+数组 <code>a</code> 的长度可使用内建函数 <a href="#长度与容量"><code>len(a)</code></a>获取，
+其元素可通过整数下标 0 到 <code>len(a)-1</code> 索引（§<a href="#下标">下标</a>）。
+数组类型总是一维的，但可组成多维形式的类型。
+</p>
+
+<div class="english">
 <pre>
 [32]byte
 [2*N] struct { x, y int32 }
 [1000]*float64
 [3][5]int
 [2][2][2]float64  // same as [2]([2]([2]float64))
+</pre>
+</div>
+
+<pre>
+[32]byte
+[2*N] struct { x, y int32 }
+[1000]*float64
+[3][5]int
+[2][2][2]float64  // 等价于[2]([2]([2]float64))
 </pre>
 
 <div class="english">
@@ -1471,17 +1622,31 @@ multi-dimensional types.
 
 <h3 id="切片类型">切片类型</h3>
 
+<div class="english">
 <p>
 A slice is a reference to a contiguous segment of an array and
 contains a numbered sequence of elements from that array.  A slice
 type denotes the set of all slices of arrays of its element type.
 The value of an uninitialized slice is <code>nil</code>.
 </p>
+</div>
 
+<p>
+切片是数组连续段的引用及包含此数组的元素的编号序列。
+切片类型表示数组元素类型所有切片的集。未初始化切片的值为 <code>nil</code>。
+</p>
+
+<div class="english">
 <pre class="ebnf">
 SliceType = "[" "]" ElementType .
 </pre>
+</div>
 
+<pre class="ebnf">
+切片类型 = "[" "]" 元素类型 .
+</pre>
+
+<div class="english">
 <p>
 Like arrays, slices are indexable and have a length.  The length of a
 slice <code>s</code> can be discovered by the built-in function
@@ -1491,12 +1656,31 @@ through <code>len(s)-1</code> (§<a href="#Indexes">Indexes</a>).  The slice ind
 given element may be less than the index of the same element in the
 underlying array.
 </p>
+</div>
+
+<p>
+类似于数组，切片是可索引的且拥有一个长度。切片 <code>s</code> 的长度可通过内建函数
+<a href="#长度与容量"><code>len(s)</code></a>获取；不同于数组的是，切片可在执行过程中被改变，
+其元素可通过整数下标 0 到 <code>len(s)-1</code> 寻址（§<a href="#下标">下标</a>）。
+给定元素的切片下标可能小于它在其基本数组中的下标。
+</p>
+
+<div class="english">
 <p>
 A slice, once initialized, is always associated with an underlying
 array that holds its elements.  A slice therefore shares storage
 with its array and with other slices of the same array; by contrast,
 distinct arrays always represent distinct storage.
 </p>
+</div>
+
+<p>
+切片一旦初始化，就总是伴随着一个包含其元素的基本数组。
+因此，切片与其数组及其它本数组的切片共享存储器；
+与此相反，不同的数组总是表示其不同的存储器。
+</p>
+
+<div class="english">
 <p>
 The array underlying a slice may extend past the end of the slice.
 The <i>capacity</i> is a measure of that extent: it is the sum of
@@ -1506,7 +1690,16 @@ one from the original slice (§<a href="#Slices">Slices</a>).
 The capacity of a slice <code>a</code> can be discovered using the
 built-in function <a href="#Length_and_capacity"><code>cap(a)</code></a>.
 </p>
+</div>
 
+<p>
+切片的基本数组可扩展其原先的结尾。<i>容量</i> 是其大小的量度：
+它是切片的长度和切片往后数组的长度之和；长度达到其容量的切片可通过从原切片
+（§<a href="#Slices">Slices</a>）‘切下’一个新的来创建。
+切片 <code>a</code> 的容量可使用内建函数 <a href="#长度与容量"><code>cap(a)</code></a> 获取。
+</p>
+
+<div class="english">
 <p>
 A new, initialized slice value for a given element type <code>T</code> is
 made using the built-in function
@@ -1514,24 +1707,43 @@ made using the built-in function
 which takes a slice type
 and parameters specifying the length and optionally the capacity:
 </p>
+</div>
+
+<p>
+给定元素类型 <code>T</code> 的一个新的，已初始化的切片值使用内建函数
+<a href="#创建切片、映射与信道"><code>make</code></a>创建，
+它需要一个切片类型和具体长度参数以及可选的容量：
+</p>
 
 <pre>
 make([]T, length)
 make([]T, length, capacity)
 </pre>
 
+<div class="english">
 <p>
 A call to <code>make</code> allocates a new, hidden array to which the returned
 slice value refers. That is, executing
+</p>
+</div>
+
+<p>
+返回切片值的 <code>make</code>调用将分配一个新的，隐藏的数组。即，执行
 </p>
 
 <pre>
 make([]T, length, capacity)
 </pre>
 
+<div class="english">
 <p>
 produces the same slice as allocating an array and slicing it, so these two examples
 result in the same slice:
+</p>
+</div>
+
+<p>
+分配一个数组和切下它将产生相同的切片，因此这两个例子的结果为相同的切片：
 </p>
 
 <pre>
@@ -1539,12 +1751,21 @@ make([]int, 50, 100)
 new([100]int)[0:50]
 </pre>
 
+<div class="english">
 <p>
 Like arrays, slices are always one-dimensional but may be composed to construct
 higher-dimensional objects.
 With arrays of arrays, the inner arrays are, by construction, always the same length;
 however with slices of slices (or arrays of slices), the lengths may vary dynamically.
 Moreover, the inner slices must be allocated individually (with <code>make</code>).
+</p>
+</div>
+
+<p>
+类似于数组，切片总是一维的，但可构造更高维的对象。元素为数组的数组，
+其内部数组，因其结构，长度始终相同；
+然而元素为切片的切片（或元素为数组的切片），其长度会动态地改变。
+此外，其内部的切片必须单独地（通过 <code>make</code>）分配。
 </p>
 
 <div class="english">
@@ -1553,6 +1774,7 @@ Moreover, the inner slices must be allocated individually (with <code>make</code
 
 <h3 id="结构类型">结构类型</h3>
 
+<div class="english">
 <p>
 A struct is a sequence of named elements, called fields, each of which has a
 name and a type. Field names may be specified explicitly (IdentifierList) or
@@ -1560,14 +1782,31 @@ implicitly (AnonymousField).
 Within a struct, non-<a href="#Blank_identifier">blank</a> field names must
 be <a href="#Uniqueness_of_identifiers">unique</a>.
 </p>
+</div>
 
+<p>
+结构是已命名的元素序列，被称为字段，其中每一个元素都有一个名字和类型。
+字段名可显示地指定（标识符列表）或隐式地指定（匿名字段）。
+在结构中，非<a href="#空白标识符">空白</a>字段名必须是<a href="#标识符的唯一性">唯一</a>的。
+</p>
+
+<div class="english">
 <pre class="ebnf">
 StructType     = "struct" "{" { FieldDecl ";" } "}" .
 FieldDecl      = (IdentifierList Type | AnonymousField) [ Tag ] .
 AnonymousField = [ "*" ] TypeName .
 Tag            = string_lit .
 </pre>
+</div>
 
+<pre class="ebnf">
+结构类型 = "struct" "{" { 字段声明 ";" } "}" .
+字段声明 = (标识符列表 类型 | 匿名字段) [ 标签 ] .
+匿名字段 = [ "*" ] 类型名 .
+标签     = 字符串字面 .
+</pre>
+
+<div class="english">
 <pre>
 // An empty struct.
 struct {}
@@ -1581,7 +1820,23 @@ struct {
 	F func()
 }
 </pre>
+</div>
 
+<pre>
+// 空结构.
+struct {}
+
+// 带6个字段的结构
+struct {
+	x, y int
+	u float32
+	_ float32  // 填充
+	A *[]int
+	F func()
+}
+</pre>
+
+<div class="english">
 <p>
 A field declared with a type but no explicit field name is an <i>anonymous field</i>,
 also called an <i>embedded</i> field or an embedding of the type in the struct.
@@ -1590,7 +1845,15 @@ a type name <code>T</code> or as a pointer to a non-interface type name <code>*T
 and <code>T</code> itself may not be
 a pointer type. The unqualified type name acts as the field name.
 </p>
+</div>
 
+<p>
+有类型无显式字段名的已声明字段为 <i>匿名字段</i>，亦称为 <i>嵌入式</i> 字段或该结构中此种类型的嵌入。
+这种字段类型必须作为一个类型名 <code>T</code> 或一个非接口类型名的指针 <code>*T</code>来实现，
+且 <code>T</code> 本身不能为指针类型。未限定类型名的行为类似于字段名。
+</p>
+
+<div class="english">
 <pre>
 // A struct with four anonymous fields of type T1, *T2, P.T3 and *P.T4
 struct {
@@ -1601,12 +1864,31 @@ struct {
 	x, y int  // field names are x and y
 }
 </pre>
+</div>
 
+<pre>
+// 带类型为T1，*T2，P.T3和*P.T4的4个匿名字段的结构
+struct {
+	T1        // 字段名为T1
+	*T2       // 字段名为T2
+	P.T3      // 字段名为T3
+	*P.T4     // 字段名为T4
+	x, y int  // 字段名为x和y
+}
+</pre>
+
+<div class="english">
 <p>
 The following declaration is illegal because field names must be unique
 in a struct type:
 </p>
+</div>
 
+<p>
+以下为非法声明，因为字段名在结构类型中必须是唯一的：
+</p>
+
+<div class="english">
 <pre>
 struct {
 	T     // conflicts with anonymous field *T and *P.T
@@ -1614,7 +1896,17 @@ struct {
 	*P.T  // conflicts with anonymous field T and *T
 }
 </pre>
+</div>
 
+<pre>
+struct {
+	T     // 与匿名字段*T及*P.T相冲突
+	*T    // 与匿名字段T及*P.T相冲突
+	*P.T  // 与匿名字段T及*T相冲突
+}
+</pre>
+
+<div class="english">
 <p>
 Fields and methods (§<a href="#Method_declarations">Method declarations</a>) of an anonymous field are
 promoted to be ordinary fields and methods of the struct (§<a href="#Selectors">Selectors</a>).
@@ -1638,6 +1930,29 @@ a type named <code>T</code>:
 	    set of <code>T</code>).
 	</li>
 </ul>
+</div>
+
+<p>
+匿名字段的字段和方法（§<a href="#方法声明">方法声明</a>）
+可升级为结构的普通字段和方法（§<a href="#选择器">选择器</a>）。
+以下规则适用于名为 <code>S</code> 的结构类型和名为 <code>T</code> 的类型：
+</p>
+<ul>
+	<li>若 <code>S</code> 包含一个匿名字段 <code>T</code>，
+		则<a href="#方法集">方法集</a> <code>S</code> 包含方法集 <code>T</code>。
+	</li>
+
+	<li>若 <code>S</code> 包含一个匿名字段 <code>*T</code>，
+		则方法集 <code>S</code> 包含方法集 <code>*T</code>
+	    （它本身就包含方法集 <code>T</code>）。
+	</li>
+
+	<li>若 <code>S</code> 包含一个匿名字段 <code>T</code> 或 <code>*T</code>，
+		则方法集 <code>*S</code> 包含方法集 <code>*T</code> (它本身就包含方法集 <code>T</code>）。
+	</li>
+</ul>
+
+<div class="english">
 <p>
 A field declaration may be followed by an optional string literal <i>tag</i>,
 which becomes an attribute for all the fields in the corresponding
@@ -1645,10 +1960,28 @@ field declaration. The tags are made
 visible through a <a href="#Package_unsafe">reflection interface</a>
 but are otherwise ignored.
 </p>
+</div>
 
+<p>
+字段声明可后跟一个可选的字符串字面 <i>tag</i>，成为所有相应字段声明中字段的标志。
+标签可通过 <a href="#包unsafe">反射接口</a> 获得，否则就会被忽略。
+</p>
+
+<div class="english">
 <pre>
 // A struct corresponding to the TimeStamp protocol buffer.
 // The tag strings define the protocol buffer field numbers.
+struct {
+	microsec  uint64 "field 1"
+	serverIP6 uint64 "field 2"
+	process   string "field 3"
+}
+</pre>
+</div>
+
+<pre>
+// 一个对应于时间戳协议缓冲区的结构.
+// 标签字符串定义了协议缓冲区的字段号.
 struct {
 	microsec  uint64 "field 1"
 	serverIP6 uint64 "field 2"
@@ -1662,15 +1995,29 @@ struct {
 
 <h3 id="指针类型">指针类型</h3>
 
+<div class="english">
 <p>
 A pointer type denotes the set of all pointers to variables of a given
 type, called the <i>base type</i> of the pointer.
 The value of an uninitialized pointer is <code>nil</code>.
 </p>
+</div>
 
+<p>
+指针类型表示一个所有给定类型变量的指针的集，称为指针的 <i>基础类型</i>。
+未初始化的指针的值为 <code>nil</code>。
+</p>
+
+<div class="english">
 <pre class="ebnf">
 PointerType = "*" BaseType .
 BaseType = Type .
+</pre>
+</div>
+
+<pre class="ebnf">
+指针类型 = "*" 基础类型 .
+基础类型 = 类型 .
 </pre>
 
 <pre>
@@ -1684,12 +2031,19 @@ BaseType = Type .
 
 <h3 id="函数类型">函数类型</h3>
 
+<div class="english">
 <p>
 A function type denotes the set of all functions with the same parameter
 and result types. The value of an uninitialized variable of function type
 is <code>nil</code>.
 </p>
+</div>
 
+<p>
+函数类型表示所有带相同参数和值的类型的集。未初始化的函数类型变量的的值为 <code>nil</code>。
+</p>
+
+<div class="english">
 <pre class="ebnf">
 FunctionType   = "func" Signature .
 Signature      = Parameters [ Result ] .
@@ -1698,7 +2052,18 @@ Parameters     = "(" [ ParameterList [ "," ] ] ")" .
 ParameterList  = ParameterDecl { "," ParameterDecl } .
 ParameterDecl  = [ IdentifierList ] [ "..." ] Type .
 </pre>
+</div>
 
+<pre class="ebnf">
+函数类型 = "func" 签名 .
+签名     = 参数 [ 值 ] .
+值       = 参数 | 类型 .
+参数     = "(" [ 参数列表 [ "," ] ] ")" .
+参数列表 = 参数声明 { "," 参数声明 } .
+参数声明 = [ 标识符列表 ] [ "..." ] 类型 .
+</pre>
+
+<div class="english">
 <p>
 Within a list of parameters or results, the names (IdentifierList)
 must either all be present or all be absent. If present, each name
@@ -1707,12 +2072,27 @@ type stands for one item of that type.  Parameter and result
 lists are always parenthesized except that if there is exactly
 one unnamed result it may be written as an unparenthesized type.
 </p>
+</div>
 
+<p>
+在参数或值的列表中，其名称（标识符列表）必须都存在或都不存在。
+若存在，则每个名称代表一个指定类型的项（参数或结果），
+若不存在，则每个类型代表一个此类型的项。若恰好有一个未命名的值，它可能写作一个不加括号的类型，
+除此之外，参数和值的列表总是在括号中。
+</p>
+
+<div class="english">
 <p>
 The final parameter in a function signature may have
 a type prefixed with <code>...</code>.
 A function with such a parameter is called <i>variadic</i> and
 may be invoked with zero or more arguments for that parameter.
+</p>
+</div>
+
+<p>
+函数标记中的最后一个参数可能有一个带 <code>...</code> 前缀的类型。
+带这样参数的函数被称为 <i>variadic</i> 且可带零个或多个参数的函数。
 </p>
 
 <pre>
@@ -1733,6 +2113,7 @@ func(n int) func(p *T)
 
 <h3 id="接口类型">接口类型</h3>
 
+<div class="english">
 <p>
 An interface type specifies a <a href="#Method_sets">method set</a> called its <i>interface</i>.
 A variable of interface type can store a value of any type with a method set
@@ -1740,19 +2121,42 @@ that is any superset of the interface. Such a type is said to
 <i>implement the interface</i>.
 The value of an uninitialized variable of interface type is <code>nil</code>.
 </p>
+</div>
 
+<p>
+接口类型指定一个称为 <i>接口</i> 的 <a href="#方法集">方法集</a>。
+接口类型变量可存储任何带方法集类型的值，该方法集为此接口的超集。
+这种类型表示 <i>实现此接口</i>。未初始化的接口类型变量的值为 <code>nil</code>。
+</p>
+
+<div class="english">
 <pre class="ebnf">
 InterfaceType      = "interface" "{" { MethodSpec ";" } "}" .
 MethodSpec         = MethodName Signature | InterfaceTypeName .
 MethodName         = identifier .
 InterfaceTypeName  = TypeName .
 </pre>
+</div>
 
+<pre class="ebnf">
+接口类型   = "interface" "{" { 方法实现 ";" } "}" .
+方法实现   = 方法名 签名 | 接口类型名 .
+方法名     = 标识符 .
+接口类型名 = 类型名 .
+</pre>
+
+<div class="english">
 <p>
 As with all method sets, in an interface type, each method must have a
 <a href="#Uniqueness_of_identifiers">unique</a> name.
 </p>
+</div>
 
+<p>
+对于所有的方法集，在一个接口类型中，每个方法必须有<a href="#标识符的唯一性">唯一的</a>名字。
+</p>
+
+<div class="english">
 <pre>
 // A simple File interface
 interface {
@@ -1761,11 +2165,27 @@ interface {
 	Close()
 }
 </pre>
+</div>
 
+<pre>
+// 一个简单的File接口
+interface {
+	Read(b Buffer) bool
+	Write(b Buffer) bool
+	Close()
+}
+</pre>
+
+<div class="english">
 <p>
 More than one type may implement an interface.
 For instance, if two types <code>S1</code> and <code>S2</code>
 have the method set
+</p>
+</div>
+
+<p>
+不止一个类型可实现同一接口。例如，若两个类型 <code>S1</code> 和 <code>S2</code> 拥有方法集
 </p>
 
 <pre>
@@ -1774,27 +2194,49 @@ func (p T) Write(b Buffer) bool { return … }
 func (p T) Close() { … }
 </pre>
 
+<div class="english">
 <p>
 (where <code>T</code> stands for either <code>S1</code> or <code>S2</code>)
 then the <code>File</code> interface is implemented by both <code>S1</code> and
 <code>S2</code>, regardless of what other methods
 <code>S1</code> and <code>S2</code> may have or share.
 </p>
+</div>
 
+<p>
+（其中 <code>T</code> 代表 <code>S1</code> 或 <code>S2</code>）
+那么 <code>File</code> 接口都将被 <code>S1</code> 和 <code>S2</code>所实现，
+不论如何，方法 <code>S1</code> 和 <code>S2</code> 都会拥有或共享它。
+</p>
+
+<div class="english">
 <p>
 A type implements any interface comprising any subset of its methods
 and may therefore implement several distinct interfaces. For
 instance, all types implement the <i>empty interface</i>:
+</p>
+</div>
+
+<p>
+类型可实现任何接口，包括任何其方法的子集，因此可能实现几个不同的接口。
+例如，所有类型都实现了 <i>空接口</i>：
 </p>
 
 <pre>
 interface{}
 </pre>
 
+<div class="english">
 <p>
 Similarly, consider this interface specification,
 which appears within a <a href="#Type_declarations">type declaration</a>
 to define an interface called <code>Lock</code>:
+</p>
+</div>
+
+<p>
+同样，考虑此接口的实现，它出现在<a href="#类型声明">类型声明</a>
+中以定义一个名为 <code>Lock</code> 的接口：
 </p>
 
 <pre>
@@ -1804,8 +2246,14 @@ type Lock interface {
 }
 </pre>
 
+<div class="english">
 <p>
 If <code>S1</code> and <code>S2</code> also implement
+</p>
+</div>
+
+<p>
+若 <code>S1</code> 和 <code>S2</code> 也实现
 </p>
 
 <pre>
@@ -1813,10 +2261,18 @@ func (p T) Lock() { … }
 func (p T) Unlock() { … }
 </pre>
 
+<div class="english">
 <p>
 they implement the <code>Lock</code> interface as well
 as the <code>File</code> interface.
 </p>
+</div>
+
+<p>
+它们不仅会实现 <code>Lock</code> 还会实现 <code>File</code> 接口
+</p>
+
+<div class="english">
 <p>
 An interface may use an interface type name <code>T</code>
 in place of a method specification.
@@ -1824,7 +2280,14 @@ The effect, called embedding an interface,
 is equivalent to enumerating the methods of <code>T</code> explicitly
 in the interface.
 </p>
+</div>
 
+<p>
+一个接口可通过包含一个名为 <code>T</code> 的接口类型来代替一个方法的实现。
+这称之为嵌入接口，其效果等价于在接口中显式枚举出 <code>T</code> 中的方法。
+</p>
+
+<div class="english">
 <pre>
 type ReadWrite interface {
 	Read(b Buffer) bool
@@ -1837,12 +2300,33 @@ type File interface {
 	Close()
 }
 </pre>
+</div>
 
+<pre>
+type ReadWrite interface {
+	Read(b Buffer) bool
+	Write(b Buffer) bool
+}
+
+type File interface {
+	ReadWrite  // 等价于枚举ReadWrite中的方法
+	Lock       // 等价于枚举Lock中的方法
+	Close()
+}
+</pre>
+
+<div class="english">
 <p>
 An interface type <code>T</code> may not embed itself
 or any interface type that embeds <code>T</code>, recursively.
 </p>
+</div>
 
+<p>
+接口类型 <code>T</code> 不能嵌入其自身或任何递归地嵌入 <code>T</code> 的接口类型。
+</p>
+
+<div class="english">
 <pre>
 // illegal: Bad cannot embed itself
 type Bad interface {
@@ -1857,6 +2341,22 @@ type Bad2 interface {
 	Bad1
 }
 </pre>
+</div>
+
+<pre>
+// 非法：Bad不能嵌入其自身
+type Bad interface {
+	Bad
+}
+
+// 非法：Bad1不能通过Bad2嵌入其自身
+type Bad1 interface {
+	Bad2
+}
+type Bad2 interface {
+	Bad1
+}
+</pre>
 
 <div class="english">
 <h3 id="Map_types">Map types</h3>
@@ -1864,18 +2364,34 @@ type Bad2 interface {
 
 <h3 id="映射类型">映射类型</h3>
 
+<div class="english">
 <p>
 A map is an unordered group of elements of one type, called the
 element type, indexed by a set of unique <i>keys</i> of another type,
 called the key type.
 The value of an uninitialized map is <code>nil</code>.
 </p>
+</div>
 
+<p>
+映射是一个同种类型元素的无序组，该类型称为元素类型；
+映射通过另一类型唯一的 <i>键</i> 集索引，该类型称为键类型。
+未初始化的映射值为 <code>nil</code>。
+</p>
+
+<div class="english">
 <pre class="ebnf">
 MapType     = "map" "[" KeyType "]" ElementType .
 KeyType     = Type .
 </pre>
+</div>
 
+<pre class="ebnf">
+映射类型    = "map" "[" 键类型 "]" 元素类型 .
+键类型      = 类型 .
+</pre>
+
+<div class="english">
 <p>
 The comparison operators <code>==</code> and <code>!=</code>
 (§<a href="#Comparison_operators">Comparison operators</a>) must be fully defined
@@ -1886,6 +2402,14 @@ comparison operators must be defined for the dynamic key values;
 failure will cause a <a href="#Run_time_panics">run-time panic</a>.
 
 </p>
+</div>
+
+<p>
+比较操作符 <code>==</code> 和 <code>!=</code>
+（§<a href="#比较操作符">比较操作符</a>）必须由键类型的操作数完全定义；
+因此键类型不能是函数，映射或切片。若该键类型为接口类型，这些比较运算符必须由动态键值定义；
+失败将导致一个 <a href="#运行时异常">运行时异常</a>.
+</p>
 
 <pre>
 map[string]int
@@ -1893,6 +2417,7 @@ map[*T]struct{ x, y float64 }
 map[string]interface{}
 </pre>
 
+<div class="english">
 <p>
 The number of map elements is called its length.
 For a map <code>m</code>, it can be discovered using the
@@ -1902,10 +2427,27 @@ using <a href="#Assignments">assignments</a> and retrieved with
 <a href="#Indexes">index</a> expressions; they may be removed with the
 <a href="#Deletion_of_map_elements"><code>delete</code></a> built-in function.
 </p>
+</div>
+
+<p>
+元素的数量称为长度。
+对于映射 <code>m</code>，其长度可使用内建函数 <a href="#长度与容量"><code>len(m)</code></a>
+获取并可在执行时更改。元素可在执行时使用<a href="#赋值">赋值</a>来添加并通过
+<a href="#索引">索引</a> 表达式来检索；它们也可通过内建函数
+<a href="#映射元素的删除"><code>delete</code></a> 删除。
+</p>
+
+<div class="english">
 <p>
 A new, empty map value is made using the built-in
 function <a href="#Making_slices_maps_and_channels"><code>make</code></a>,
 which takes the map type and an optional capacity hint as arguments:
+</p>
+</div>
+
+<p>
+一个新的，空的映射值使用内建函数 <a href="#创建切片、映射与信道"><code>make</code></a> 创建，
+它使该映射类型和可选容量作为参数提示：
 </p>
 
 <pre>
@@ -1913,12 +2455,20 @@ make(map[string]int)
 make(map[string]int, 100)
 </pre>
 
+<div class="english">
 <p>
 The initial capacity does not bound its size:
 maps grow to accommodate the number of items
 stored in them, with the exception of <code>nil</code> maps.
 A <code>nil</code> map is equivalent to an empty map except that no elements
 may be added.
+</p>
+</div>
+
+<p>
+初始容量不能限定它的大小：映射通过增长来适应存储在其中的条目数量，包括 <code>nil</code> 映射的异常。
+一个 <code>nil</code> 映射等价于一个空映射除非它没有元素被添加。
+</p>
 
 <div class="english">
 <h3 id="Channel_types">Channel types</h3>
@@ -1926,17 +2476,31 @@ may be added.
 
 <h3 id="信道类型">信道类型</h3>
 
+<div class="english">
 <p>
 A channel provides a mechanism for two concurrently executing functions
 to synchronize execution and communicate by passing a value of a
 specified element type.
 The value of an uninitialized channel is <code>nil</code>.
 </p>
+</div>
 
+<p>
+信道提供一种机制使两个并发执行的函数同步执行，并通过传递具体元素类型的值来通信。
+未初始化的信道值为 <code>nil</code>。
+</p>
+
+<div class="english">
 <pre class="ebnf">
 ChannelType = ( "chan" [ "&lt;-" ] | "&lt;-" "chan" ) ElementType .
 </pre>
+</div>
 
+<pre class="ebnf">
+信道类型 = ( "chan" [ "&lt;-" ] | "&lt;-" "chan" ) 元素类型 .
+</pre>
+
+<div class="english">
 <p>
 The <code>&lt;-</code> operator specifies the channel <i>direction</i>,
 <i>send</i> or <i>receive</i>. If no direction is given, the channel is
@@ -1944,36 +2508,74 @@ The <code>&lt;-</code> operator specifies the channel <i>direction</i>,
 A channel may be constrained only to send or only to receive by
 <a href="#Conversions">conversion</a> or <a href="#Assignments">assignment</a>.
 </p>
+</div>
 
+<p>
+<code>&lt;-</code> 操作符指定信道的 <i>方向</i>，<i>发送</i> 或 <i>接收</i>。
+若没有给定方向，那么该信道就是 <i>双向的</i>。
+信道可通过<a href="#强制转换">强制转换</a> 或 <a href="#赋值">赋值</a>被强制为只发送或只接收。
+</p>
+
+<div class="english">
 <pre>
 chan T          // can be used to send and receive values of type T
 chan&lt;- float64  // can only be used to send float64s
 &lt;-chan int      // can only be used to receive ints
 </pre>
+</div>
 
+<pre>
+chan T          // 可以被用来发送和接收类型T的值
+chan&lt;- float64  // 只能被用来发送浮点数
+&lt;-chan int      // 只能被用来接收整数
+</pre>
+
+<div class="english">
 <p>
 The <code>&lt;-</code> operator associates with the leftmost <code>chan</code>
 possible:
 </p>
+</div>
 
+<p>
+<code>&lt;-</code> 操作符结合最左边的 <code>chan</code> 可能的方式：
+</p>
+
+<div class="english">
 <pre>
 chan&lt;- chan int    // same as chan&lt;- (chan int)
 chan&lt;- &lt;-chan int  // same as chan&lt;- (&lt;-chan int)
 &lt;-chan &lt;-chan int  // same as &lt;-chan (&lt;-chan int)
 chan (&lt;-chan int)
 </pre>
+</div>
 
+<pre>
+chan&lt;- chan int    // 等价于 chan&lt;- (chan int)
+chan&lt;- &lt;-chan int  // 等价于 chan&lt;- (&lt;-chan int)
+&lt;-chan &lt;-chan int  // 等价于 &lt;-chan (&lt;-chan int)
+chan (&lt;-chan int)
+</pre>
+
+<div class="english">
 <p>
 A new, initialized channel
 value can be made using the built-in function
 <a href="#Making_slices_maps_and_channels"><code>make</code></a>,
 which takes the channel type and an optional capacity as arguments:
 </p>
+</div>
+
+<p>
+一个新的，已初始化的信道值可使用内建函数 <a href="#创建切片、映射与信道"><code>make</code></a> 创建，
+它接受信道类型和一个可选的容量作为参数：
+</p>
 
 <pre>
 make(chan int, 100)
 </pre>
 
+<div class="english">
 <p>
 The capacity, in number of elements, sets the size of the buffer in the channel. If the
 capacity is greater than zero, the channel is asynchronous: communication operations
@@ -1983,13 +2585,28 @@ If the capacity is zero or absent, the communication succeeds only when both a s
 receiver are ready.
 A <code>nil</code> channel is never ready for communication.
 </p>
+</div>
 
+<p>
+容量根据元素的数量设置信道中缓冲区的大小。若容量大于零，则信道是异步的：
+若缓冲区未满（发送）或非空（接收），则通信操作无阻塞成功，且元素在发送序列中被接收。
+若容量为零或无，则只有当发送器和接收器都做好准备时通信才会成功。
+<code>nil</code> 信道永远不会准备好通信。
+</p>
+
+<div class="english">
 <p>
 A channel may be closed with the built-in function
 <a href="#Close"><code>close</code></a>; the
 multi-valued assignment form of the
 <a href="#Receive_operator">receive operator</a>
 tests whether a channel has been closed.
+</p>
+</div>
+
+<p>
+信道可通过内建函数<a href="#关闭"><code>close</code></a>关闭；
+<a href="#接收操作符">接收操作符</a>的多值赋值形式可测试信道是否关闭。
 </p>
 
 <div class="english">
@@ -2004,10 +2621,17 @@ tests whether a channel has been closed.
 
 <h3 id="类型标识">类型标识</h3>
 
+<div class="english">
 <p>
 Two types are either <i>identical</i> or <i>different</i>.
 </p>
+</div>
 
+<p>
+两个类型若非 <i>相同</i> 即为 <i>不同</i>。
+</p>
+
+<div class="english">
 <p>
 Two named types are identical if their type names originate in the same
 <a href="#Type_declarations">TypeSpec</a>.
@@ -2015,7 +2639,15 @@ A named and an unnamed type are always different. Two unnamed types are identica
 if the corresponding type literals are identical, that is, if they have the same
 literal structure and corresponding components have identical types. In detail:
 </p>
+</div>
 
+<p>
+若两个已命名类型的类型名源自相同的<a href="#类型声明">类型声明</a>。
+一个已命名类型和一个未命名类型总不相同。若两个未命名类型其相应的类型字面相同，那么它们的类型相同，
+即，它们的字面结构是否相同且其相应的组件类型是否相同。细节详述：
+</p>
+
+<div class="english">
 <ul>
 	<li>Two array types are identical if they have identical element types and
 	    the same array length.</li>
@@ -2044,9 +2676,37 @@ literal structure and corresponding components have identical types. In detail:
 	<li>Two channel types are identical if they have identical value types and
 	    the same direction.</li>
 </ul>
+</div>
 
+<ul>
+	<li>若两个数组类型其元素类型相同且长度相同，那么它们的类型相同。</li>
+
+	<li>若两个切片类型其元素类型相同，那么它们的类型相同。</li>
+
+	<li>若两个结构类型其字段序列相同，相应字段名相同，类型相同，标签相同，那么它们的类型相同。
+		两个匿名字段其名字被认为相同。出自不同包的小写字段名总不相同。</li>
+
+	<li>若两个指针类型其基本类型相同，那么它们的类型相同。</li>
+
+	<li>若两个函数类型其参数数目相同，返回值相同，相应参数类型相同，返回值类型相同，
+		两函数都可变或都不可变，那么它们的类型相同。参数和返回值名无需匹配。</li>
+
+	<li>若两个接口类型其方法集相同，名字相同，函数类型相同，那么它们的类型相同。
+		出自不同包的小写方法名总不相同。两接口类型是否相同与方法的次序无关。</li>
+
+	<li>若两个映射类型其键值类型相同，那么它们的类型相同。</li>
+
+	<li>若两个信道类型其值类型相同，方向相同，那么他们的类型相同。</li>
+</ul>
+
+<div class="english">
 <p>
 Given the declarations
+</p>
+</div>
+
+<p>
+给定声明
 </p>
 
 <pre>
@@ -2060,22 +2720,45 @@ type (
 )
 </pre>
 
+<div class="english">
 <p>
 these types are identical:
 </p>
+</div>
 
+<p>
+这些类型是相同的：
+</p>
+
+<div class="english">
 <pre>
 T0 and T0
 []int and []int
 struct{ a, b *T5 } and struct{ a, b *T5 }
 func(x int, y float64) *[]string and func(int, float64) (result *[]string)
 </pre>
+</div>
 
+<pre>
+T0 和 T0
+[]int 和 []int
+struct{ a, b *T5 } 和 struct{ a, b *T5 }
+func(x int, y float64) *[]string 和 func(int, float64) (result *[]string)
+</pre>
+
+<div class="english">
 <p>
 <code>T0</code> and <code>T1</code> are different because they are named types
 with distinct declarations; <code>func(int, float64) *T0</code> and
 <code>func(x int, y float64) *[]string</code> are different because <code>T0</code>
 is different from <code>[]string</code>.
+</p>
+</div>
+
+<p>
+<code>T0</code> 和 <code>T1</code> 是不同的，因为它们由不同声明的类型命名；
+<code>func(int, float64) *T0</code> 和 <code>func(x int, y float64) *[]string</code> 是不同的，
+因为 <code>T0</code> 不同于 <code>[]string</code>。
 </p>
 
 
@@ -2083,13 +2766,21 @@ is different from <code>[]string</code>.
 <h3 id="Assignability">Assignability</h3>
 </div>
 
-<h3 id="可分配性">可分配性</h3>
+<h3 id="可赋值性">可赋值性</h3>
 
+<div class="english">
 <p>
 A value <code>x</code> is <i>assignable</i> to a variable of type <code>T</code>
 ("<code>x</code> is assignable to <code>T</code>") in any of these cases:
 </p>
+</div>
 
+<p>
+在下列情况下，值 <code>x</code> <i>可赋予</i> 类型为 <code>T</code> 的变量
+（"<code>x</code> 可赋予 <code>T</code>"）：
+</p>
+
+<div class="english">
 <ul>
 <li>
 <code>x</code>'s type is identical to <code>T</code>.
@@ -2117,9 +2808,40 @@ is a pointer, function, slice, map, channel, or interface type.
 by a value of type <code>T</code>.
 </li>
 </ul>
+</div>
 
+<ul>
+<li>
+当 <code>x</code> 的类型和 <code>T</code> 相同时。
+</li>
+<li>
+当 <code>x</code> 的类型 <code>V</code> 和 <code>T</code> 有相同的
+<a href="#类型">基本类型</a> 且在 <code>V</code> 或 <code>T</code> 中至少有一个不是已命名类型时。
+<li>
+当 <code>T</code> 为接口类型且 <code>x</code> <a href="#接口类型">实现</a>了 <code>T</code>时。
+</li>
+<li>
+当 <code>x</code> 为双向信道值、<code>T</code> 为信道类型、
+<code>x</code> 的类型 <code>V</code> 和 <code>T</code> 的元素类型相同且在
+<code>V</code> 或 <code>T</code> 中至少有一个不是已命名类型时。
+</li>
+<li>
+当 <code>x</code> 为预声明标识符 <code>nil</code> 且 <code>T</code>
+为指针、函数、切片、映射、通道或接口类型时。
+</li>
+<li>
+当 <code>x</code> 无类型声明的，可通过类型 <code>T</code> 的值来表示的 <a href="#常量">常量</a>时。
+</li>
+</ul>
+
+<div class="english">
 <p>
 Any value may be assigned to the <a href="#Blank_identifier">blank identifier</a>.
+</p>
+</div>
+
+<p>
+任何类型都可赋予<a href="#空白标识符">空白标识符</a>.
 </p>
 
 
@@ -2129,19 +2851,38 @@ Any value may be assigned to the <a href="#Blank_identifier">blank identifier</a
 
 <h2 id="块">块</h2>
 
+<div class="english">
 <p>
 A <i>block</i> is a sequence of declarations and statements within matching
 brace brackets.
 </p>
+</div>
 
+<p>
+<i>块</i> 为一对大括号括起的声明和语句。
+</p>
+
+<div class="english">
 <pre class="ebnf">
 Block = "{" { Statement ";" } "}" .
 </pre>
+</div>
 
+<pre class="ebnf">
+块 = "{" { 语句 ";" } "}" .
+</pre>
+
+<div class="english">
 <p>
 In addition to explicit blocks in the source code, there are implicit blocks:
 </p>
+</div>
 
+<p>
+除显式源码块外，还有隐式块：
+</p>
+
+<div class="english">
 <ol>
 	<li>The <i>universe block</i> encompasses all Go source text.</li>
 
@@ -2157,9 +2898,29 @@ In addition to explicit blocks in the source code, there are implicit blocks:
 	<li>Each clause in a <code>switch</code> or <code>select</code> statement
 	    acts as an implicit block.</li>
 </ol>
+</div>
 
+<ol>
+	<li><i>全域块</i> 包含所有的Go源码文本。</li>
+
+	<li>每个<a href="#包">包</a>都有包含其所有Go源码文本的 <i>包块</i>。</li>
+
+	<li>每个文件都有包含其所有Go源码文本的 <i>文件块</i>。</li>
+
+	<li>每个 <code>if</code>、<code>for</code> 和
+		<code>switch</code> 语句都被视为处于其自身的隐式块中。</li>
+
+	<li>每个 <code>switch</code> 或 <code>select</code> 语句中的子句其行为如同隐式块。</li>
+</ol>
+
+<div class="english">
 <p>
 Blocks nest and influence <a href="#Declarations_and_scope">scoping</a>.
+</p>
+</div>
+
+<p>
+块嵌套并影响 <a href="#声明与作用域">作用域</a>。
 </p>
 
 
@@ -2169,6 +2930,7 @@ Blocks nest and influence <a href="#Declarations_and_scope">scoping</a>.
 
 <h2 id="声明与作用域">声明与作用域</h2>
 
+<div class="english">
 <p>
 A declaration binds a non-<a href="#Blank_identifier">blank</a>
 identifier to a constant, type, variable, function, or package.
@@ -2176,21 +2938,47 @@ Every identifier in a program must be declared.
 No identifier may be declared twice in the same block, and
 no identifier may be declared in both the file and package block.
 </p>
+</div>
 
+<p>
+声明可将非<a href="#空白标识符">空白</a>标识符绑定到一个常量、类型、变量、函数或包。
+在程序中，每个标识符都必须被声明。同一标识符不能在同一块中声明两次，且在文件与包块中不能同时声明。
+</p>
+
+<div class="english">
 <pre class="ebnf">
 Declaration   = ConstDecl | TypeDecl | VarDecl .
 TopLevelDecl  = Declaration | FunctionDecl | MethodDecl .
 </pre>
+</div>
 
+<pre class="ebnf">
+声明 = 常量声明 | 类型声明 | 变量声明 .
+顶级声明 = 声明 | 函数声明 | 方法声明 .
+</pre>
+
+<div class="english">
 <p>
 The <i>scope</i> of a declared identifier is the extent of source text in which
 the identifier denotes the specified constant, type, variable, function, or package.
 </p>
+</div>
 
+<p>
+已声明标识符的 <i>作用域</i> 即为该标识符所表示的具体常量、类型、变量、函数或包在源文本中的作用范围。
+</p>
+
+<div class="english">
 <p>
 Go is lexically scoped using blocks:
 </p>
+</div>
 
+<p>
+Go使用块表示词法作用域：
+</p>
+
+<div class="english">
 <ol>
 	<li>The scope of a predeclared identifier is the universe block.</li>
 
@@ -2213,18 +3001,50 @@ Go is lexically scoped using blocks:
 	    begins at the identifier in the TypeSpec
 	    and ends at the end of the innermost containing block.</li>
 </ol>
+</div>
 
+<ol>
+	<li>预声明标识符的作用域为全域块。</li>
+
+	<li>在顶级（即在任何函数之外）声明的表示常量、类型、变量或函数
+		（而非方法）的标识符其作用域为该包块。</li>
+
+	<li>已导入包的标识符其作用域为包含导入声明的文件块。</li>
+
+	<li>表示函数参数或返回值变量的标识符其作用域为该函数体。</li>
+
+	<li>在函数中声明为常量或变量的标识符，其作用域始于该函数中具体常量实现或变量实现
+		（ShortVarDecl表示短变量声明）的结尾，止于最内部包含块的结尾。</li>
+
+	<li>在函数中声明为类型的标识符，其作用域始于该函数中具体类型实现的标识符，
+		止于最内部包含块的结尾。</li>
+</ol>
+
+<div class="english">
 <p>
 An identifier declared in a block may be redeclared in an inner block.
 While the identifier of the inner declaration is in scope, it denotes
 the entity declared by the inner declaration.
 </p>
+</div>
 
+<p>
+在块中声明的标识符可在其内部块中重新声明。
+当其内部声明的标识符在作用域中时，即表示其实体在该内部声明中声明。
+</p>
+
+<div class="english">
 <p>
 The <a href="#Package_clause">package clause</a> is not a declaration; the package name
 does not appear in any scope. Its purpose is to identify the files belonging
 to the same <a href="#Packages">package</a> and to specify the default package name for import
 declarations.
+</p>
+</div>
+
+<p>
+<a href="#包子句">包子句</a>并非声明；包名不会出现在任何作用域中。
+其目的是为了识别该文件是否属于相同的<a href="#包">包</a>并为导入声明指定默认包名。
 </p>
 
 
@@ -2234,6 +3054,7 @@ declarations.
 
 <h3 id="标签作用域">标签作用域</h3>
 
+<div class="english">
 <p>
 Labels are declared by <a href="#Labeled_statements">labeled statements</a> and are
 used in the <code>break</code>, <code>continue</code>, and <code>goto</code>
@@ -2244,6 +3065,15 @@ not conflict with identifiers that are not labels. The scope of a label
 is the body of the function in which it is declared and excludes
 the body of any nested function.
 </p>
+</div>
+
+<p>
+标签通过<a href="#标签语句">标签语句</a>声明，并用于 <code>break</code>、<code>continue</code>
+和 <code>goto</code> 语句（§<a href="#Break语句">Break语句</a>,
+§<a href="#Continue语句">Continue语句</a>, §<a href="#Goto语句">Goto语句</a>）。
+定义不会使用的标签是非法的。与其它标识符相反，标签并不限定作用域且与非标签标识符并不冲突。
+标签的作用域为除任何嵌套函数体外其声明的函数体。
+</p>
 
 
 <div class="english">
@@ -2252,9 +3082,16 @@ the body of any nested function.
 
 <h3 id="空白标识符">空白标识符</h3>
 
+<div class="english">
 <p>
 The <i>blank identifier</i>, represented by the underscore character <code>_</code>, may be used in a declaration like
 any other identifier but the declaration does not introduce a new binding.
+</p>
+</div>
+
+<p>
+<i>空白标识符</i> 通过下划线字符 <code>_</code> 表示，
+它可像其它标识符一样用于声明，但该标识符不能传入一个新的绑定。
 </p>
 
 
@@ -2264,10 +3101,18 @@ any other identifier but the declaration does not introduce a new binding.
 
 <h3 id="预声明标识符">预声明标识符</h3>
 
+<div class="english">
 <p>
 The following identifiers are implicitly declared in the
 <a href="#Blocks">universe block</a>:
 </p>
+</div>
+
+<p>
+在<a href="#块">全域块</a>中，以下标识符是隐式声明的：
+</p>
+
+<div class="english">
 <pre class="grammar">
 Types:
 	bool byte complex64 complex128 error float32 float64
@@ -2284,18 +3129,44 @@ Functions:
 	append cap close complex copy delete imag len
 	make new panic print println real recover
 </pre>
+</div>
+
+<pre class="grammar">
+类型：
+	bool byte complex64 complex128 error float32 float64
+	int int8 int16 int32 int64 rune string
+	uint uint8 uint16 uint32 uint64 uintptr
+
+常量：
+	true false iota
+
+零值：
+	nil
+
+函数：
+	append cap close complex copy delete imag len
+	make new panic print println real recover
+</pre>
 
 
 <div class="english">
 <h3 id="Exported_identifiers">Exported identifiers</h3>
 </div>
 
-<h3 id="已导入标识符">已导入标识符</h3>
+<h3 id="已导出标识符">已导出标识符</h3>
 
+<div class="english">
 <p>
 An identifier may be <i>exported</i> to permit access to it from another package.
 An identifier is exported if both:
 </p>
+</div>
+
+<p>
+标识符可被 <i>导出</i> 以允许从另一个包访问。同时符合以下条件即为已导出标识符：
+</p>
+
+<div class="english">
 <ol>
 	<li>the first character of the identifier's name is a Unicode upper case
 	letter (Unicode class "Lu"); and</li>
@@ -2306,20 +3177,38 @@ An identifier is exported if both:
 <p>
 All other identifiers are not exported.
 </p>
+</div>
+
+<ol>
+	<li>标识符名的第一个字符为Unicode大写字母（Unicode类别“Lu”）；且</li>
+	<li>该标识符在<a href="#块">包块</a>中已声明或为<a href="#结构类型">字段名</a>或
+	<a href="#方法名">方法名</a>。</li>
+</ol>
+<p>
+其它所有标识符均为未导出的。
+</p>
 
 
 <div class="english">
 <h3 id="Uniqueness_of_identifiers">Uniqueness of identifiers</h3>
 </div>
 
-<h3 id="标识符唯一性">标识符唯一性</h3>
+<h3 id="标识符的唯一性">标识符的唯一性</h3>
 
+<div class="english">
 <p>
 Given a set of identifiers, an identifier is called <i>unique</i> if it is
 <i>different</i> from every other in the set.
 Two identifiers are different if they are spelled differently, or if they
 appear in different <a href="#Packages">packages</a> and are not
-<a href="Exported_identifiers">exported</a>. Otherwise, they are the same.
+<a href="#Exported_identifiers">exported</a>. Otherwise, they are the same.
+</p>
+</div>
+
+<p>
+给定一个标识符集，若其中一个标识符<i>不同于</i>该集中的任一标识符，那么它就是<i>唯一的</i>。
+若两个标识符拼写不同，或它们出现在不同的<a href="#包">包</a>中且未
+<a href="#已导出标识符">导出</a>，那么它们就是不同的。否则，它们就是相同的。
 </p>
 
 <div class="english">
@@ -2328,6 +3217,7 @@ appear in different <a href="#Packages">packages</a> and are not
 
 <h3 id="常量声明">常量声明</h3>
 
+<div class="english">
 <p>
 A constant declaration binds a list of identifiers (the names of
 the constants) to the values of a list of <a href="#Constant_expressions">constant expressions</a>.
@@ -2336,7 +3226,14 @@ to the number of expressions, and the <i>n</i>th identifier on
 the left is bound to the value of the <i>n</i>th expression on the
 right.
 </p>
+</div>
 
+<p>
+常量声明将一个标识符（即常量名）列表绑定至一个<a href="#常量表达式">常量表达式</a>列表的值。
+标识符的数量必须与表达式的数量相等，且左边第 <i>n</i> 个标识符会绑定至右边的第 <i>n</i> 个表达式的值。
+</p>
+
+<div class="english">
 <pre class="ebnf">
 ConstDecl      = "const" ( ConstSpec | "(" { ConstSpec ";" } ")" ) .
 ConstSpec      = IdentifierList [ [ Type ] "=" ExpressionList ] .
@@ -2344,7 +3241,17 @@ ConstSpec      = IdentifierList [ [ Type ] "=" ExpressionList ] .
 IdentifierList = identifier { "," identifier } .
 ExpressionList = Expression { "," Expression } .
 </pre>
+</div>
 
+<pre class="ebnf">
+常量声明   = "const" ( 常量实现 | "(" { 常量实现 ";" } ")" ) .
+常量实现   = 标识符列表 [ [ 类型 ] "=" 表达式列表 ] .
+
+标识符列表 = 标识符 { "," 标识符 } .
+表达式列表 = 表达式 { "," 表达式 } .
+</pre>
+
+<div class="english">
 <p>
 If the type is present, all constants take the type specified, and
 the expressions must be <a href="#Assignability">assignable</a> to that type.
@@ -2356,7 +3263,16 @@ denote the constant values. For instance, if the expression is a
 floating-point literal, the constant identifier denotes a floating-point
 constant, even if the literal's fractional part is zero.
 </p>
+</div>
 
+<p>
+若该类型存在，所有常量都将获得该类型实现，且该表达式对于该类型必须是
+<a href="#可赋值性">可赋值</a>的。若该类型被省略，则该常量将获得其对应表达式的具体类型。
+若该表达式值为无类型声明<a href="#常量">常量</a>，则其余已声明无类型常量与该常量标识符表示其常量值。
+例如，若该表达式为浮点数字面，则该常量标识符表示一个浮点数常量，即使该字面的小数部分为零。
+</p>
+
+<div class="english">
 <pre>
 const Pi float64 = 3.14159265358979323846
 const zero = 0.0         // untyped floating-point constant
@@ -2367,7 +3283,20 @@ const (
 const a, b, c = 3, 4, "foo"  // a = 3, b = 4, c = "foo", untyped integer and string constants
 const u, v float32 = 0, 3    // u = 0.0, v = 3.0
 </pre>
+</div>
 
+<pre>
+const Pi float64 = 3.14159265358979323846
+const zero = 0.0       // 无类型声明浮点常量
+const (
+	size int64 = 1024
+	eof        = -1    // 无类型声明整数常量
+)
+const a, b, c = 3, 4, "foo"  // a = 3, b = 4, c = "foo", 无类型声明整数和字符串常量
+const u, v float32 = 0, 3    // u = 0.0, v = 3.0
+</pre>
+
+<div class="english">
 <p>
 Within a parenthesized <code>const</code> declaration list the
 expression list may be omitted from any but the first declaration.
@@ -2379,7 +3308,16 @@ to the number of expressions in the previous list.
 Together with the <a href="#Iota"><code>iota</code> constant generator</a>
 this mechanism permits light-weight declaration of sequential values:
 </p>
+</div>
 
+<p>
+在 <code>const</code> 后括号中的声明列表，除第一句声明外，任何表达式列表都可省略。
+若前面第一个非空表达式有类型，那么这样的空列表等价于该表达式原文和类型的代换。
+因此，省略表达式的列表等价于重复前面的列表。其标识符的数量必须与上一个表达式的数量相等。
+连同 <a href="#Iota"><code>iota</code> 常量生成器</a>，该机制允许轻量级连续值声明：
+</p>
+
+<div class="english">
 <pre>
 const (
 	Sunday = iota
@@ -2392,10 +3330,25 @@ const (
 	numberOfDays  // this constant is not exported
 )
 </pre>
+</div>
+
+<pre>
+const (
+	Sunday = iota
+	Monday
+	Tuesday
+	Wednesday
+	Thursday
+	Friday
+	Partyday
+	numberOfDays  // 该常量未导出
+)
+</pre>
 
 
 <h3 id="Iota">Iota</h3>
 
+<div class="english">
 <p>
 Within a <a href="#Constant_declarations">constant declaration</a>, the predeclared identifier
 <code>iota</code> represents successive untyped integer <a href="#Constants">
@@ -2403,7 +3356,15 @@ constants</a>. It is reset to 0 whenever the reserved word <code>const</code>
 appears in the source and increments after each <a href="#ConstSpec">ConstSpec</a>.
 It can be used to construct a set of related constants:
 </p>
+</div>
 
+<p>
+在<a href="#常量声明">常量声明</a>中预声明标识符 <code>iota</code> 表示连续的无类型声明整数
+<a href="#常量">常量</a>。每当保留字 <code>const</code> 出现在源码中和每个
+<a href="#常量实现">常量实现</a>增量后，它都会被重置为0。它可被用来构造相关常量的集：
+</p>
+
+<div class="english">
 <pre>
 const (  // iota is reset to 0
 	c0 = iota  // c0 == 0
@@ -2426,12 +3387,43 @@ const (
 const x = iota  // x == 0 (iota has been reset)
 const y = iota  // y == 0 (iota has been reset)
 </pre>
+</div>
 
+<pre>
+const (  // iota重置为0
+	c0 = iota  // c0 == 0
+	c1 = iota  // c1 == 1
+	c2 = iota  // c2 == 2
+)
+
+const (
+	a = 1 &lt;&lt; iota  // a == 1 （iota已重置）
+	b = 1 &lt;&lt; iota  // b == 2
+	c = 1 &lt;&lt; iota  // c == 4
+)
+
+const (
+	u         = iota * 42  // u == 0     （无类型声明整数常量）
+	v float64 = iota * 42  // v == 42.0  （float64常量）
+	w         = iota * 42  // w == 84    （无类型声明整数常量）
+)
+
+const x = iota  // x == 0 （iota已重置）
+const y = iota  // y == 0 （iota已重置）
+</pre>
+
+<div class="english">
 <p>
 Within an ExpressionList, the value of each <code>iota</code> is the same because
 it is only incremented after each ConstSpec:
 </p>
+</div>
 
+<p>
+在表达式列表中，每个 <code>iota</code> 的值都相同，因为它只在每个常量实现后增量。
+</p>
+
+<div class="english">
 <pre>
 const (
 	bit0, mask0 = 1 &lt;&lt; iota, 1&lt;&lt;iota - 1  // bit0 == 1, mask0 == 0
@@ -2440,10 +3432,26 @@ const (
 	bit3, mask3                           // bit3 == 8, mask3 == 7
 )
 </pre>
+</div>
 
+<pre>
+const (
+	bit0, mask0 = 1 &lt;&lt; iota, 1&lt;&lt;iota - 1  // bit0 == 1, mask0 == 0
+	bit1, mask1                           // bit1 == 2, mask1 == 1
+	_, _                                  // 跳过 iota == 2
+	bit3, mask3                           // bit3 == 8, mask3 == 7
+)
+</pre>
+
+<div class="english">
 <p>
 This last example exploits the implicit repetition of the
 last non-empty expression list.
+</p>
+</div>
+
+<p>
+最后一个例子采用上一个非空表达式列表的隐式副本。
 </p>
 
 
@@ -2453,16 +3461,30 @@ last non-empty expression list.
 
 <h3 id="类型声明">类型声明</h3>
 
+<div class="english">
 <p>
 A type declaration binds an identifier, the <i>type name</i>, to a new type
 that has the same <a href="#Types">underlying type</a> as
 an existing type.  The new type is <a href="#Type_identity">different</a> from
 the existing type.
 </p>
+</div>
 
+<p>
+类型声明将标识符、<i>类型名</i> 绑定至一个与现存类型有相同的
+<a href="#类型标识">基本类型</a>的新类型。新类型<a href="#类型">不同</a>于现有类型。
+</p>
+
+<div class="english">
 <pre class="ebnf">
 TypeDecl     = "type" ( TypeSpec | "(" { TypeSpec ";" } ")" ) .
 TypeSpec     = identifier Type .
+</pre>
+</div>
+
+<pre class="ebnf">
+类型声明     = "type" ( 类型实现 | "(" { 类型实现 ";" } ")" ) .
+类型实现     = 标识符 类型 .
 </pre>
 
 <pre>
@@ -2485,12 +3507,20 @@ type Block interface {
 }
 </pre>
 
+<div class="english">
 <p>
 The declared type does not inherit any <a href="#Method_declarations">methods</a>
 bound to the existing type, but the <a href="#Method_sets">method set</a>
 of an interface type or of elements of a composite type remains unchanged:
 </p>
+</div>
 
+<p>
+声明类型不继承任何<a href="#方法声明">方法</a>绑定到现存类型，
+但接口类型或复合类型元素的<a href="#方法集">方法集</a>保持不变：
+</p>
+
+<div class="english">
 <pre>
 // A Mutex is a data type with two methods, Lock and Unlock.
 type Mutex struct         { /* Mutex fields */ }
@@ -2513,10 +3543,40 @@ type PrintableMutex struct {
 // MyBlock is an interface type that has the same method set as Block.
 type MyBlock Block
 </pre>
+</div>
 
+<pre>
+// Mutex为带有Lock和Unlock两个方法的数据类型.
+type Mutex struct         { /* Mutex字段 */ }
+func (m *Mutex) Lock()    { /* Lock实现*/ }
+func (m *Mutex) Unlock()  { /* Unlock实现*/ }
+
+// NewMutex和Mutex拥有相同的组成，但它的方法集为空.
+type NewMutex Mutex
+
+// PtrMutex的<a href="#指针类型">基本类型</a>的方法集保持不变.
+// 但PtrMutex的方法集为空.
+type PtrMutex *Mutex
+
+// *PrintableMutex的方法集包含方法
+// Lock和Unlock绑定至其匿名字段Mutex.
+type PrintableMutex struct {
+	Mutex
+}
+
+// MyBlock为与Block拥有相同方法集的接口类型.
+type MyBlock Block
+</pre>
+
+<div class="english">
 <p>
 A type declaration may be used to define a different boolean, numeric, or string
 type and attach methods to it:
+</p>
+</div>
+
+<p>
+类型声明可用来定义不同的布尔值、数字或字符串类型并对其附上方法：
 </p>
 
 <pre>
@@ -2541,15 +3601,30 @@ func (tz TimeZone) String() string {
 
 <h3 id="变量声明">变量声明</h3>
 
+<div class="english">
 <p>
 A variable declaration creates a variable, binds an identifier to it and
 gives it a type and optionally an initial value.
 </p>
+</div>
+
+<p>
+变量声明将一个标识符绑定至一个创建的变量并赋予其类型和可选的初始值。
+</p>
+
+<div class="english">
 <pre class="ebnf">
 VarDecl     = "var" ( VarSpec | "(" { VarSpec ";" } ")" ) .
 VarSpec     = IdentifierList ( Type [ "=" ExpressionList ] | "=" ExpressionList ) .
 </pre>
+</div>
 
+<pre class="ebnf">
+变量声明     = "var" ( 变量实现 | "(" { 变量实现 ";" } ")" ) .
+变量实现     = 标识符列表 ( 类型 [ "=" 表达式类表 ] | "=" 表达式列表 ) .
+</pre>
+
+<div class="english">
 <pre>
 var i int
 var U, V, W float64
@@ -2562,30 +3637,70 @@ var (
 var re, im = complexSqrt(-1)
 var _, found = entries[name]  // map lookup; only interested in "found"
 </pre>
+</div>
 
+<pre>
+var i int
+var U, V, W float64
+var k = 0
+var x, y float32 = -1, -2
+var (
+	i       int
+	u, v, s = 2.0, 3.0, "bar"
+)
+var re, im = complexSqrt(-1)
+var _, found = entries[name]  // 映射检查；只与“found”有关
+</pre>
+
+<div class="english">
 <p>
 If a list of expressions is given, the variables are initialized
 by assigning the expressions to the variables (§<a href="#Assignments">Assignments</a>)
 in order; all expressions must be consumed and all variables initialized from them.
 Otherwise, each variable is initialized to its <a href="#The_zero_value">zero value</a>.
 </p>
+</div>
 
+<p>
+若给定一个表达式列表，则变量通过按顺序将该表达式赋予该变量（§<a href="#赋值">赋值</a>）来初始化；
+所有表达式必须用尽且所有变量根据他们初始化。否则，每个变量初始化为其 <a href="#零值">零值</a>。
+</p>
+
+<div class="english">
 <p>
 If the type is present, each variable is given that type.
 Otherwise, the types are deduced from the assignment
 of the expression list.
 </p>
+</div>
 
+<p>
+若该类型已存在，每个变量都赋予该类型。否则，该类型根据该表达式列表赋值。
+</p>
+
+<div class="english">
 <p>
 If the type is absent and the corresponding expression evaluates to an
 untyped <a href="#Constants">constant</a>, the type of the declared variable
 is as described in §<a href="#Assignments">Assignments</a>.
 </p>
+</div>
 
+<p>
+若该类型不存在且其对应表达式计算结果为无类型定义<a href="#常量">常量</a>，
+则该声明变量的类型由其§<a href="#赋值">赋值</a>描述。
+</p>
+
+<div class="english">
 <p>
 Implementation restriction: A compiler may make it illegal to declare a variable
 inside a <a href="#Function_declarations">function body</a> if the variable is
 never used.
+</p>
+</div>
+
+<p>
+实现限制：若在<a href="#函数声明">函数体</a>内声明不会使用的变量，编译器可能将其判定为非法。
 </p>
 
 <div class="english">
@@ -2594,23 +3709,48 @@ never used.
 
 <h3 id="短变量声明">短变量声明</h3>
 
+<div class="english">
 <p>
 A <i>short variable declaration</i> uses the syntax:
 </p>
+</div>
 
+<p>
+<i>短变量声明</i> 使用此语法：
+</p>
+
+<div class="english">
 <pre class="ebnf">
 ShortVarDecl = IdentifierList ":=" ExpressionList .
 </pre>
+</div>
 
+<pre class="ebnf">
+短变量声明 = 标识符列表 ":=" 表达式列表 .
+</pre>
+
+<div class="english">
 <p>
 It is a shorthand for a regular <a href="#Variable_declarations">variable declaration</a>
 with initializer expressions but no types:
 </p>
+</div>
 
+<p>
+它是有初始化表达式无类型声明的常规<a href="#变量声明">变量声明</a>的缩写：
+</p>
+
+<div class="english">
 <pre class="grammar">
 "var" IdentifierList = ExpressionList .
 </pre>
+</div>
 
+<pre class="grammar">
+"var" 标识符列表 = 表达式列表 .
+</pre>
+
+<div class="english">
 <pre>
 i, j := 0, 10
 f := func() int { return 7 }
@@ -2618,7 +3758,17 @@ ch := make(chan int)
 r, w := os.Pipe(fd)  // os.Pipe() returns two values
 _, y, _ := coord(p)  // coord() returns three values; only interested in y coordinate
 </pre>
+</div>
 
+<pre>
+i, j := 0, 10
+f := func() int { return 7 }
+ch := make(chan int)
+r, w := os.Pipe(fd)  // os.Pipe() 返回两个值
+_, y, _ := coord(p)  // coord() 返回三个值；只与和y同位的值相关
+</pre>
+
+<div class="english">
 <p>
 Unlike regular variable declarations, a short variable declaration may redeclare variables provided they
 were originally declared in the same block with the same type, and at
@@ -2627,17 +3777,39 @@ can only appear in a multi-variable short declaration.
 Redeclaration does not introduce a new
 variable; it just assigns a new value to the original.
 </p>
+</div>
 
+<p>
+不同于常规变量声明，在至少有一个非<a href="#Blank_identifier">空白</a>变量时，
+短变量声明可在相同块中对原来声明的变量以相同的类型重声明。因此，重声明只能出现在多变量短声明中。
+重声明不能生成新的变量；它只能赋予新的值给原来的变量。
+</p>
+
+<div class="english">
 <pre>
 field1, offset := nextField(str, 0)
 field2, offset := nextField(str, offset)  // redeclares offset
 </pre>
+</div>
 
+<pre>
+field1, offset := nextField(str, 0)
+field2, offset := nextField(str, offset)  // 重声明 offset
+</pre>
+
+<div class="english">
 <p>
 Short variable declarations may appear only inside functions.
 In some contexts such as the initializers for <code>if</code>,
 <code>for</code>, or <code>switch</code> statements,
 they can be used to declare local temporary variables (§<a href="#Statements">Statements</a>).
+</p>
+</div>
+
+<p>
+短变量声明只能出现在函数内部。在某些情况下，例如初始化 <code>if</code>、
+<code>for</code>、或 <code>switch</code> 语句时，它们可用来声明局部临时变量
+（§<a href="#语句">语句</a>)。
 </p>
 
 <div class="english">
@@ -4704,7 +5876,7 @@ x--                 x -= 1
 <h3 id="Assignments">Assignments</h3>
 </div>
 
-<h3 id="分配">分配</h3>
+<h3 id="赋值">赋值</h3>
 
 <pre class="ebnf">
 Assignment = ExpressionList assign_op ExpressionList .
@@ -5716,7 +6888,11 @@ constant and <code>s</code> is evaluated.
 </p>
 
 
+<div class="english">
 <h3 id="Allocation">Allocation</h3>
+</div>
+
+<h3 id="分配">分配</h3>
 
 <p>
 The built-in function <code>new</code> takes a type <code>T</code> and
