@@ -2859,7 +2859,7 @@ brace brackets.
 </div>
 
 <p>
-<i>块</i> 为一对大括号括起的声明和语句。
+<i>块</i> 为一对大括号括住的声明和语句。
 </p>
 
 <div class="english">
@@ -3818,22 +3818,43 @@ they can be used to declare local temporary variables (§<a href="#Statements">S
 
 <h3 id="函数声明">函数声明</h3>
 
+<div class="english">
 <p>
 A function declaration binds an identifier, the <i>function name</i>,
 to a function.
 </p>
+</div>
 
+<p>
+函数声明将标识符，即 <i>函数名</i> 绑定至函数。
+</p>
+
+<div class="english">
 <pre class="ebnf">
 FunctionDecl = "func" FunctionName Signature [ Body ] .
 FunctionName = identifier .
 Body         = Block .
 </pre>
+</div>
 
+<pre class="ebnf">
+函数声明 = "func" 函数名 签名 [ 函数体 ] .
+函数名   = 标识符 .
+函数体   = 块 .
+</pre>
+
+<div class="english">
 <p>
 A function declaration may omit the body. Such a declaration provides the
 signature for a function implemented outside Go, such as an assembly routine.
 </p>
+</div>
 
+<p>
+函数声明可省略函数体。这样的标识符为Go外部实现的函数提供签名，例如汇编例程。
+</p>
+
+<div class="english">
 <pre>
 func min(x int, y int) int {
 	if x &lt; y {
@@ -3844,6 +3865,18 @@ func min(x int, y int) int {
 
 func flushICache(begin, end uintptr)  // implemented externally
 </pre>
+</div>
+
+<pre>
+func min(x int, y int) int {
+	if x &lt; y {
+		return x
+	}
+	return y
+}
+
+func flushICache(begin, end uintptr)  // 外部实现
+</pre>
 
 <div class="english">
 <h3 id="Method_declarations">Method declarations</h3>
@@ -3851,18 +3884,34 @@ func flushICache(begin, end uintptr)  // implemented externally
 
 <h3 id="方法声明">方法声明</h3>
 
+<div class="english">
 <p>
 A method is a function with a <i>receiver</i>.
 A method declaration binds an identifier, the <i>method name</i>, to a method.
 It also associates the method with the receiver's <i>base type</i>.
 </p>
+</div>
 
+<p>
+方法为带 <i>接收器</i> 的函数。方法声明将标识符，即 <i>方法名</i> 绑定至方法。
+它也将该接收器的 <i>基础类型</i> 关联至该方法。
+</p>
+
+<div class="english">
 <pre class="ebnf">
 MethodDecl   = "func" Receiver MethodName Signature [ Body ] .
 Receiver     = "(" [ identifier ] [ "*" ] BaseTypeName ")" .
 BaseTypeName = identifier .
 </pre>
+</div>
 
+<pre class="ebnf">
+方法声明   = "func" 接收器 方法名 签名 [ 函数体 ] .
+接收器     = "(" [ 标志符 ] [ "*" ] 基础类型名 ")" .
+基础类型名 = 标志符 .
+</pre>
+
+<div class="english">
 <p>
 The receiver type must be of the form <code>T</code> or <code>*T</code> where
 <code>T</code> is a type name. The type denoted by <code>T</code> is called
@@ -3871,16 +3920,38 @@ it must be declared in the same package as the method.
 The method is said to be <i>bound</i> to the base type and the method name
 is visible only within selectors for that type.
 </p>
+</div>
 
+<p>
+接收器类型必须为形式 <code>T</code> 或 <code>*T</code>，其中 <code>T</code> 为类型名。
+由 <code>T</code> 表示的类型称为接收器的 <i>基础类型</i>；
+它不能为指针或接口类型且必须在同一包中声明为方法。
+也就是说，该方法被 <i>绑定</i> 至基础类型且该方法名只对其内部此类型选择器可见。
+</p>
+
+<div class="english">
 <p>
 For a base type, the non-<a href="#Blank_identifier">blank</a> names of
 methods bound to it must be <a href="#Uniqueness_of_identifiers">unique</a>.
 If the base type is a <a href="#Struct_types">struct type</a>,
 the non-blank method and field names must be distinct.
 </p>
+</div>
 
 <p>
+对于基础类型，方法绑定至该类型的非<a href="#空白标识符">空白</a>名必须
+<a href="#标识符的唯一性">唯一</a>。
+若其基础类型为<a href="#结构类型">结构类型</a>，则非空白方法与字段名不能相同。
+</p>
+
+<div class="english">
+<p>
 Given type <code>Point</code>, the declarations
+</p>
+</div>
+
+<p>
+给定 <code>Point</code> 类型，声明
 </p>
 
 <pre>
@@ -3894,29 +3965,55 @@ func (p *Point) Scale(factor float64) {
 }
 </pre>
 
+<div class="english">
 <p>
 bind the methods <code>Length</code> and <code>Scale</code>,
 with receiver type <code>*Point</code>,
 to the base type <code>Point</code>.
 </p>
+</div>
 
+<p>
+将接收器类型为 <code>*Point</code> 的方法 <code>Length</code>
+和 <code>Scale</code> 绑定至基础类型 <code>Point</code>。
+</p>
+
+<div class="english">
 <p>
 If the receiver's value is not referenced inside the body of the method,
 its identifier may be omitted in the declaration. The same applies in
 general to parameters of functions and methods.
 </p>
+</div>
 
+<p>
+若该接收器的值在该方法体中未被引用，它的标识符会在该声明中被忽略。
+这同样适用于一般的函数和方法的参数。
+</p>
+
+<div class="english">
 <p>
 The type of a method is the type of a function with the receiver as first
 argument.  For instance, the method <code>Scale</code> has type
+</p>
+</div>
+
+<p>
+方法的类型就是将接收者作为第一个参数的函数类型。例如，方法 <code>Scale</code> 拥有类型
 </p>
 
 <pre>
 func(p *Point, factor float64)
 </pre>
 
+<div class="english">
 <p>
 However, a function declared this way is not a method.
+</p>
+</div>
+
+<p>
+然而，通过这种方式声明的函数不是方法。
 </p>
 
 
@@ -3926,9 +4023,15 @@ However, a function declared this way is not a method.
 
 <h2 id="表达式">表达式</h2>
 
+<div class="english">
 <p>
 An expression specifies the computation of a value by applying
 operators and functions to operands.
+</p>
+</div>
+
+<p>
+表达式通过将运算符和函数应用至操作数来指定值的计算。
 </p>
 
 <div class="english">
@@ -3937,14 +4040,28 @@ operators and functions to operands.
 
 <h3 id="操作数">操作数</h3>
 
+<div class="english">
 <p>
 Operands denote the elementary values in an expression.
 </p>
+</div>
 
+<p>
+操作数表示表达式中的基本值。
+</p>
+
+<div class="english">
 <pre class="ebnf">
 Operand    = Literal | QualifiedIdent | MethodExpr | "(" Expression ")" .
 Literal    = BasicLit | CompositeLit | FunctionLit .
 BasicLit   = int_lit | float_lit | imaginary_lit | char_lit | string_lit .
+</pre>
+</div>
+
+<pre class="ebnf">
+操作数   = 字面 | 限定标识符 | 方法表达式 | "(" 表达式 ")" .
+字面     = 基本字面 | 复合字面 | 函数字面 .
+基本字面 = 整数字面 | 浮点数字面 | 虚数字面 | 字符字面 | 字符串字面 .
 </pre>
 
 
@@ -3954,24 +4071,49 @@ BasicLit   = int_lit | float_lit | imaginary_lit | char_lit | string_lit .
 
 <h3 id="限定标识符">限定标识符</h3>
 
+<div class="english">
 <p>
 A qualified identifier is a non-<a href="#Blank_identifier">blank</a> identifier
 qualified by a package name prefix.
 </p>
+</div>
 
+<p>
+限定标识符为通过包名前缀限定的非<a href="#空白标识符">空白</a>标志符
+</p>
+
+<div class="english">
 <pre class="ebnf">
 QualifiedIdent = [ PackageName "." ] identifier .
 </pre>
+</div>
 
+<pre class="ebnf">
+限定标识符 = [ 包名 "." ] 标识符 .
+</pre>
+
+<div class="english">
 <p>
 A qualified identifier accesses an identifier in a different package, which
 must be <a href="#Import_declarations">imported</a>.
 The identifier must be <a href="#Exported_identifiers">exported</a> and
 declared in the <a href="#Blocks">package block</a> of that package.
 </p>
+</div>
 
+<p>
+限定标识符用于访问另一个包中的标识符，它必须被<a href="#导入声明">导入</a>。
+标识符必须是已<a href="#已导出标识符">导出</a>且在该包的<a href="#块">包块</a>中声明。
+</p>
+
+<div class="english">
 <pre>
 math.Sin	// denotes the Sin function in package math
+</pre>
+</div>
+
+<pre>
+math.Sin	// 表示math包中的Sin函数
 </pre>
 
 <div class="english">
@@ -3980,6 +4122,7 @@ math.Sin	// denotes the Sin function in package math
 
 <h3 id="复合字面">复合字面</h3>
 
+<div class="english">
 <p>
 Composite literals construct values for structs, arrays, slices, and maps
 and create a new value each time they are evaluated.
@@ -3987,7 +4130,14 @@ They consist of the type of the value
 followed by a brace-bound list of composite elements. An element may be
 a single expression or a key-value pair.
 </p>
+</div>
 
+<p>
+复合字面每次为结构、数组、切片、映射构造值，或创建一个新值时，它们都会被求值。
+它们由值的类型后跟一个大括号括住的列表组成。元素可为单个表达式或一个键-值对。
+</p>
+
+<div class="english">
 <pre class="ebnf">
 CompositeLit  = LiteralType LiteralValue .
 LiteralType   = StructType | ArrayType | "[" "..." "]" ElementType |
@@ -4000,7 +4150,22 @@ FieldName     = identifier .
 ElementIndex  = Expression .
 Value         = Expression | LiteralValue .
 </pre>
+</div>
 
+<pre class="ebnf">
+复合字面 = 字面类型 字面值 .
+字面类型 = 结构类型 | 数组类型 | "[" "..." "]" 元素类型 |
+           切片类型 | 映射类型 | 类型名 .
+字面值   = "{" [ 元素列表 [ "," ] ] "}" .
+元素列表 = 元素 { "," 元素 } .
+元素     = [ 键 ":" ] 值 .
+键       = 字段名 | 元素索引 .
+字段名   = 标识符 .
+元素索引 = 表达式 .
+值       = 表达式 | 字面值 .
+</pre>
+
+<div class="english">
 <p>
 The LiteralType must be a struct, array, slice, or map type
 (the grammar enforces this constraint except when the type is given
@@ -4014,10 +4179,26 @@ For map literals, all elements must have a key. It is an error
 to specify multiple elements with the same field name or
 constant key value.
 </p>
+</div>
 
+<p>
+字面类型必须为结构、数组、切片或映射类型（语法规则强制实施此约束，除非该类型作为类型名给定）。
+表达式的类型对于其各自的字段、元素以及该字面类型的键类型必须为<a href="#可赋值性">可赋值</a>的，
+即没有附加转换。作为结构字面的字段名，即数组和切片的索引表达式以及映射字面的键，其键是可解译的。
+对于映射字面，所有元素都必须有键。指定多个具有相同字段名或常量键值的元素会产生一个错误。
+</p>
+
+<div class="english">
 <p>
 For struct literals the following rules apply:
 </p>
+</div>
+
+<p>
+以下规则适用于结构字面：
+</p>
+
+<div class="english">
 <ul>
 	<li>A key must be a field name declared in the LiteralType.
 	</li>
@@ -4038,27 +4219,70 @@ For struct literals the following rules apply:
 	    field of a struct belonging to a different package.
 	</li>
 </ul>
+</div>
 
+<ul>
+	<li>键必须为字面类型中声明的字段名。</li>
+
+	<li>不包含任何键的字面必须按字段的声明顺序列出每个结构字段的元素。</li>
+
+	<li>若其中任何一个元素有键，那么每个元素都必须有键。</li>
+
+	<li>包含键的字面无需每个结构字段都有元素。被忽略的字段会获得零值</li>
+
+	<li>字面可忽略元素列表；这样的字面对其类型求值为零值。</li>
+
+	<li>为属于不同包的结构的非已导出字段指定一个元素会产生一个错误。</li>
+</ul>
+
+<div class="english">
 <p>
 Given the declarations
 </p>
+</div>
+
+<p>
+给定声明
+</p>
+
 <pre>
 type Point3D struct { x, y, z float64 }
 type Line struct { p, q Point3D }
 </pre>
 
+<div class="english">
 <p>
 one may write
 </p>
+</div>
 
+<p>
+可写为
+</p>
+
+<div class="english">
 <pre>
 origin := Point3D{}                            // zero value for Point3D
 line := Line{origin, Point3D{y: -4, z: 12.3}}  // zero value for line.q.x
 </pre>
+</div>
 
+<pre>
+origin := Point3D{}                            // Point3D 为零值
+line := Line{origin, Point3D{y: -4, z: 12.3}}  // line.q.x 为零值
+</pre>
+
+<div class="english">
 <p>
 For array and slice literals the following rules apply:
 </p>
+</div>
+
+<p>
+以下规则适用于数组和切片字面：
+</p>
+
+<div class="english">
 <ul>
 	<li>Each element has an associated integer index marking
 	    its position in the array.
@@ -4070,15 +4294,32 @@ For array and slice literals the following rules apply:
 	    If the first element has no key, its index is zero.
 	</li>
 </ul>
+</div>
 
+<ul>
+	<li>在数组中每个元素都有与之对应的整数下标来标明它的位置。</li>
+
+	<li>带键的元素使用该键作为它的下标；键必须为常量整数表达式。</li>
+
+	<li>无键的元素使用上一个元素的下标加一。若第一个元素无键，则它的下标为零。</li>
+</ul>
+
+<div class="english">
 <p>
 Taking the address of a composite literal (§<a href="#Address_operators">Address operators</a>)
 generates a pointer to a unique instance of the literal's value.
 </p>
+</div>
+
+<p>
+获取复合字面的地址（§<a href="#地址操作符">地址操作符</a>）就是为字面值的唯一实例生成一个指针。
+</p>
+
 <pre>
 var pointer *Point3D = &amp;Point3D{y: 1000}
 </pre>
 
+<div class="english">
 <p>
 The length of an array literal is the length specified in the LiteralType.
 If fewer elements than the length are provided in the literal, the missing
@@ -4087,6 +4328,14 @@ It is an error to provide elements with index values outside the index range
 of the array. The notation <code>...</code> specifies an array length equal
 to the maximum element index plus one.
 </p>
+</div>
+
+<p>
+数组字面的长度为字面类型指定的长度。
+若元素少于字面提供的长度，则缺失的元素会置为该数组元素类型的零值。
+向超出数组下标范围的下标值提供元素会产生一个错误。
+记号 <code>...</code> 指定一个数组，其长度等于最大元素下标加一。
+</p>
 
 <pre>
 buffer := [10]string{}             // len(buffer) == 10
@@ -4094,18 +4343,30 @@ intSet := [6]int{1, 2, 3, 5}       // len(intSet) == 6
 days := [...]string{"Sat", "Sun"}  // len(days) == 2
 </pre>
 
+<div class="english">
 <p>
 A slice literal describes the entire underlying array literal.
 Thus, the length and capacity of a slice literal are the maximum
 element index plus one. A slice literal has the form
+</p>
+</div>
+
+<p>
+切片字面描述全部的基本数组字面。因此，切片字面的长度和容量为其最大元素下标加一。切片字面具有形式
 </p>
 
 <pre>
 []T{x1, x2, … xn}
 </pre>
 
+<div class="english">
 <p>
 and is a shortcut for a slice operation applied to an array:
+</p>
+</div>
+
+<p>
+它是切片操作应用到数组的捷径。
 </p>
 
 <pre>
@@ -4113,6 +4374,7 @@ tmp := [n]T{x1, x2, … xn}
 tmp[0 : n]
 </pre>
 
+<div class="english">
 <p>
 Within a composite literal of array, slice, or map type <code>T</code>,
 elements that are themselves composite literals may elide the respective
@@ -4120,16 +4382,31 @@ literal type if it is identical to the element type of <code>T</code>.
 Similarly, elements that are addresses of composite literals may elide
 the <code>&amp;T</code> when the the element type is <code>*T</code>.
 </p>
+</div>
 
+<p>
+在数组、切片或映射类型 <code>T</code> 的复合字面中，若其元素本身亦为复合字面，
+且该复合字面的元素类型与 <code>T</code> 的相同，则可省略其各自的元素类型。
+类似地，当元素类型为 <code>*T</code> 时，若其元素为复合字面的地址，则可省略 <code>&amp;T</code>。
+</p>
 
-
+<div class="english">
 <pre>
 [...]Point{{1.5, -3.5}, {0, 0}}   // same as [...]Point{Point{1.5, -3.5}, Point{0, 0}}
 [][]int{{1, 2, 3}, {4, 5}}        // same as [][]int{[]int{1, 2, 3}, []int{4, 5}}
 
 [...]*Point{{1.5, -3.5}, {0, 0}}  // same as [...]*Point{&amp;Point{1.5, -3.5}, &amp;Point{0, 0}}
 </pre>
+</div>
 
+<pre>
+[...]Point{{1.5, -3.5}, {0, 0}}   // 等价于 [...]Point{Point{1.5, -3.5}, Point{0, 0}}
+[][]int{{1, 2, 3}, {4, 5}}        // 等价于 [][]int{[]int{1, 2, 3}, []int{4, 5}}
+
+[...]*Point{{1.5, -3.5}, {0, 0}}  // 等价于 [...]*Point{&amp;Point{1.5, -3.5}, &amp;Point{0, 0}}
+</pre>
+
+<div class="english">
 <p>
 A parsing ambiguity arises when a composite literal using the
 TypeName form of the LiteralType appears between the
@@ -4140,16 +4417,30 @@ the block of statements. To resolve the ambiguity in this rare case,
 the composite literal must appear within
 parentheses.
 </p>
+</div>
+
+<p>
+当复合字面使用字面类型的类型名形式时，若它出现在<a href="#关键字">关键字</a>
+"if"、"for" 或 "switch" 语句及其开大括号之间，就会产生解析歧义。因为在该字面中，
+表达式外围的大括号会和那些语句块前的混淆。为解决此罕见情况中的歧义，该复合字面必须出现在小括号中。
+</p>
 
 <pre>
 if x == (T{a,b,c}[i]) { … }
 if (x == T{a,b,c}[i]) { … }
 </pre>
 
+<div class="english">
 <p>
 Examples of valid array, slice, and map literals:
 </p>
+</div>
 
+<p>
+有效的数组、切片和映射字面的例子：
+</p>
+
+<div class="english">
 <pre>
 // list of prime numbers
 primes := []int{2, 3, 5, 7, 9, 2147483647}
@@ -4166,6 +4457,24 @@ noteFrequency := map[string]float32{
 	"G0": 24.50, "A0": 27.50, "B0": 30.87,
 }
 </pre>
+</div>
+
+<pre>
+// 素数列表
+primes := []int{2, 3, 5, 7, 9, 2147483647}
+
+// 若 ch 为元音则 vowels[ch] 为 true
+vowels := [128]bool{'a': true, 'e': true, 'i': true, 'o': true, 'u': true, 'y': true}
+
+// 数组 [10]float32{-1, 0, 0, 0, -0.1, -0.1, 0, 0, 0, -1}
+filter := [10]float32{-1, 4: -0.1, -0.1, 9: -1}
+
+// 平均律以Hz为单位的频率（A4 = 440Hz）
+noteFrequency := map[string]float32{
+	"C0": 16.35, "D0": 18.35, "E0": 20.60, "F0": 21.83,
+	"G0": 24.50, "A0": 27.50, "B0": 30.87,
+}
+</pre>
 
 
 <div class="english">
@@ -4174,21 +4483,39 @@ noteFrequency := map[string]float32{
 
 <h3 id="函数字面">函数字面</h3>
 
+<div class="english">
 <p>
 A function literal represents an anonymous function.
 It consists of a specification of the function type and a function body.
 </p>
+</div>
 
+<p>
+函数字面表示匿名函数。它由函数类型和函数体的规范组成。
+</p>
+
+<div class="english">
 <pre class="ebnf">
 FunctionLit = FunctionType Body .
+</pre>
+</div>
+
+<pre class="ebnf">
+函数字面 = 函数类型 函数体 .
 </pre>
 
 <pre>
 func(a, b int, z float64) bool { return a*b &lt; int(z) }
 </pre>
 
+<div class="english">
 <p>
 A function literal can be assigned to a variable or invoked directly.
+</p>
+</div>
+
+<p>
+函数字面可赋予一个变量或直接调用。
 </p>
 
 <pre>
@@ -4196,11 +4523,18 @@ f := func(x, y int) int { return x + y }
 func(ch chan int) { ch &lt;- ACK }(replyChan)
 </pre>
 
+<div class="english">
 <p>
 Function literals are <i>closures</i>: they may refer to variables
 defined in a surrounding function. Those variables are then shared between
 the surrounding function and the function literal, and they survive as long
 as they are accessible.
+</p>
+</div>
+
+<p>
+<i>闭包</i> 的函数字面：它们可引用定义在外围函数中的变量。
+那些变量共享于外围函数与函数字面之间，并且只要它们可访问就会继续存在。
 </p>
 
 
@@ -4210,10 +4544,17 @@ as they are accessible.
 
 <h3 id="主表达式">主表达式</h3>
 
+<div class="english">
 <p>
 Primary expressions are the operands for unary and binary expressions.
 </p>
+</div>
 
+<p>
+主表达式为一元和二元表达式的操作数。
+</p>
+
+<div class="english">
 <pre class="ebnf">
 PrimaryExpr =
 	Operand |
@@ -4231,6 +4572,26 @@ Slice          = "[" [ Expression ] ":" [ Expression ] "]" .
 TypeAssertion  = "." "(" Type ")" .
 Call           = "(" [ ArgumentList [ "," ] ] ")" .
 ArgumentList   = ExpressionList [ "..." ] .
+</pre>
+</div>
+
+<pre class="ebnf">
+主表达式 =
+	操作数 |
+	强制转换 |
+	内建调用 |
+	主表达式 选择器 |
+	主表达式 下标 |
+	主表达式 切片 |
+	主表达式 类型断言 |
+	主表达式 调用 .
+
+选择器   = "." 标识符 .
+下标     = "[" 表达式 "]" .
+切片     = "[" [ 表达式 ] ":" [ 表达式 ] "]" .
+类型断言 = "." "(" 类型 ")" .
+调用     = "(" [ 参数列表 [ "," ] ] ")" .
+参数列表 = 表达式列表 [ "..." ] .
 </pre>
 
 
@@ -4254,14 +4615,21 @@ f.p[i].x()
 
 <h3 id="选择器">选择器</h3>
 
+<div class="english">
 <p>
 A primary expression of the form
+</p>
+</div>
+
+<p>
+形式为
 </p>
 
 <pre>
 x.f
 </pre>
 
+<div class="english">
 <p>
 denotes the field or method <code>f</code> of the value denoted by <code>x</code>
 (or sometimes <code>*x</code>; see below). The identifier <code>f</code>
@@ -4269,6 +4637,15 @@ is called the (field or method)
 <i>selector</i>; it must not be the <a href="#Blank_identifier">blank identifier</a>.
 The type of the expression is the type of <code>f</code>.
 </p>
+</div>
+
+<p>
+的主表达式表示 <code>x</code>（有时为 <code>*x</code>，见下）所表示的值的字段或方法 <code>f</code>。
+标识符 <code>f</code> 称为（字段或方法）<i>选择器</i>，它不能为<a href="#空白标识符">空白标识符</a>。
+该表达式的类型即为 <code>f</code> 的类型。
+</p>
+
+<div class="english">
 <p>
 A selector <code>f</code> may denote a field or method <code>f</code> of
 a type <code>T</code>, or it may refer
@@ -4282,9 +4659,28 @@ The depth of a field or method <code>f</code> declared in
 an anonymous field <code>A</code> in <code>T</code> is the
 depth of <code>f</code> in <code>A</code> plus one.
 </p>
+</div>
+
+<p>
+选择器 <code>f</code> 可代表类型为 <code>T</code> 的字段或方法 <code>f</code>，
+或引用 <code>T</code> 中嵌套匿名字段的字段或方法 <code>f</code>。
+在 <code>T</code> 中遍历区域 <code>f</code> 的匿名字段所得的数量称为它的 <i>深度</i>。
+以 <code>T</code> 声明的字段或方法 <code>f</code> 的深度为0。
+在 <code>T</code> 中以匿名字段 <code>A</code> 声明的字段或方法 <code>f</code> 的深度
+为 <code>f</code> 在 <code>A</code> 中的深度加1。
+</p>
+
+<div class="english">
 <p>
 The following rules apply to selectors:
 </p>
+</div>
+
+<p>
+以下规则适用于选择器：
+</p>
+
+<div class="english">
 <ol>
 <li>
 For a value <code>x</code> of type <code>T</code> or <code>*T</code>
@@ -4306,6 +4702,25 @@ If no value or <code>nil</code> was assigned to <code>x</code>, <code>x.f</code>
 In all other cases, <code>x.f</code> is illegal.
 </li>
 </ol>
+</div>
+
+<ol>
+<li>
+对于非接口类型 <code>T</code> 或 <code>*T</code> 的值 <code>x</code>，
+<code>x.f</code> 中的 <code>f</code> 表示在 <code>T</code> 中最浅深度的字段或方法。
+若并非<a href="#标识符的唯一性">只有一个 <code>f</code></a>，该选择器表达式即为非法的。
+</li>
+<li>
+对于接口类型 <code>I</code> 的变量 <code>x</code>，
+<code>x.f</code> 表示赋予 <code>x</code> 的值名为 <code>f</code> 的真实方法。
+若没有值或 <code>nil</code> 赋予 <code>x</code>，<code>x.f</code>即为非法的。
+</li>
+<li>
+其它情况下，所有 <code>x.f</code> 均为非法的。
+</li>
+</ol>
+
+<div class="english">
 <p>
 Selectors automatically dereference pointers to structs.
 If <code>x</code> is a pointer to a struct, <code>x.y</code>
@@ -4316,10 +4731,28 @@ If <code>x</code> contains an anonymous field of type <code>*A</code>,
 where <code>A</code> is also a struct type,
 <code>x.f</code> is a shortcut for <code>(*x.A).f</code>.
 </p>
+</div>
+
+<p>
+选择器会自动解引用指向结构的指针。
+若 <code>x</code> 为指向结构的指针，<code>x.y</code> 即为 <code>(*x).y</code> 的缩写；
+若字段 <code>y</code> 亦为指向结构的指针，<code>x.y.z</code> 即为 <code>(*(*x).y).z</code> 的缩写,
+以此类推。
+若 <code>x</code> 包含类型为 <code>*A</code> 的匿名字段，且 <code>A</code> 亦为结构类型，
+<code>x.f</code> 即为 <code>(*x.A).f</code> 的缩写。
+</p>
+
+<div class="english">
 <p>
 For example, given the declarations:
 </p>
+</div>
 
+<p>
+例如，给定声明：
+</p>
+
+<div class="english">
 <pre>
 type T0 struct {
 	x int
@@ -4343,9 +4776,40 @@ func (recv *T2) M2()
 
 var p *T2  // with p != nil and p.T1 != nil
 </pre>
+</div>
 
+<pre>
+type T0 struct {
+	x int
+}
+
+func (recv *T0) M0()
+
+type T1 struct {
+	y int
+}
+
+func (recv T1) M1()
+
+type T2 struct {
+	z int
+	T1
+	*T0
+}
+
+func (recv *T2) M2()
+
+var p *T2  // 其中 p != nil 且 p.T1 != nil
+</pre>
+
+<div class="english">
 <p>
 one may write:
+</p>
+</div>
+
+<p>
+可写为：
 </p>
 
 <pre>
@@ -4378,21 +4842,35 @@ TODO: 详述接收器会发生什么事。
 
 <h3 id="下标">下标</h3>
 
+<div class="english">
 <p>
 A primary expression of the form
+</p>
+</div>
+
+<p>
+形式为
 </p>
 
 <pre>
 a[x]
 </pre>
 
+<div class="english">
 <p>
 denotes the element of the array, slice, string or map <code>a</code> indexed by <code>x</code>.
 The value <code>x</code> is called the
 <i>index</i> or <i>map key</i>, respectively. The following
 rules apply:
 </p>
+</div>
 
+<p>
+的主表达式表示数组、切片、字符串或映射 <code>a</code> 的元素通过 <code>x</code> 索引。
+值 <code>x</code> 称为 <i>下标</i> 或 <i>映射键</i>。以下规则适用于其对应的类型：
+</p>
+
+<div class="english">
 <p>
 For <code>a</code> of type <code>A</code> or <code>*A</code>
 where <code>A</code> is an <a href="#Array_types">array type</a>,
@@ -4405,7 +4883,21 @@ or for <code>a</code> of type <code>S</code> where <code>S</code> is a <a href="
 	<li>if <code>a</code> is <code>nil</code> or if the index <code>x</code> is out of range,
 	a <a href="#Run_time_panics">run-time panic</a> occurs</li>
 </ul>
+</div>
 
+<p>
+对于类型为<a href="#数组类型">数组类型</a> <code>A</code> 或 <code>*A</code> 的 <code>a</code>，
+或对于类型为<a href="#切片类型">切片类型</a> <code>S</code> 的 <code>a</code>：
+</p>
+<ul>
+	<li><code>x</code> 必须为整数值且 <code>0 &lt;= x &lt; len(a)</code></li>
+	<li><code>a[x]</code> 为下标 <code>x</code> 的数组元素且
+	  <code>a[x]</code> 的类型为 <code>A</code> 的元素类型</li>
+	<li>若 <code>a</code> 为 <code>nil</code> 或下标 <code>x</code> 超出范围，
+	就会出现<a href="#运行时异常">运行时异常</a></li>
+</ul>
+
+<div class="english">
 <p>
 For <code>a</code> of type <code>T</code>
 where <code>T</code> is a <a href="#String_types">string type</a>:
@@ -4418,7 +4910,21 @@ where <code>T</code> is a <a href="#String_types">string type</a>:
 	<li>if the index <code>x</code> is out of range,
 	a <a href="#Run_time_panics">run-time panic</a> occurs</li>
 </ul>
+</div>
 
+<p>
+对于类型为<a href="#字符串类型">字符串类型</a> <code>T</code> 的 <code>a</code>：
+</p>
+<ul>
+	<li><code>x</code> 必须为整数值且 <code>0 &lt;= x &lt; len(a)</code></li>
+	<li><code>a[x]</code> 为下标 <code>x</code> 的字节且
+	  <code>a[x]</code> 的类型为 <code>byte</code></li>
+	<li><code>a[x]</code> 不可赋值</li>
+	<li>若下标 <code>x</code> 超出范围，
+	就会出现<a href="#运行时异常">运行时异常</a></li>
+</ul>
+
+<div class="english">
 <p>
 For <code>a</code> of type <code>M</code>
 where <code>M</code> is a <a href="#Map_types">map type</a>:
@@ -4434,14 +4940,38 @@ where <code>M</code> is a <a href="#Map_types">map type</a>:
 	  <code>a[x]</code> is the <a href="#The_zero_value">zero value</a>
 	  for the value type of <code>M</code></li>
 </ul>
+</div>
 
+<p>
+对于类型为<a href="#映射类型">映射类型</a> <code>M</code> 的 <code>a</code>：
+</p>
+<ul>
+	<li><code>x</code> 的类型必须<a href="#可赋值性">可赋值</a>至 <code>M</code> 的键类型</li>
+	<li>若映射包含键为 <code>x</code> 的项，则 <code>a[x]</code> 为键 <code>x</code> 的映射值，
+	  且 <code>a[x]</code> 的类型为 <code>M</code> 的值类型</li>
+	<li>若映射为 <code>nil</code> 或不包含这样的项，
+	  <code>a[x]</code> 为 <code>M</code> 值类型的<a href="#零值">零值</a></li>
+</ul>
+
+<div class="english">
 <p>
 Otherwise <code>a[x]</code> is illegal.
 </p>
+</div>
 
+<p>
+否则 <code>a[x]</code> 即为非法的。
+</p>
+
+<div class="english">
 <p>
 An index expression on a map <code>a</code> of type <code>map[K]V</code>
 may be used in an assignment or initialization of the special form
+</p>
+</div>
+
+<p>
+在类型为 <code>map[K]V</code> 的映射 <code>a</code> 中，下标表达式可使用特殊形式
 </p>
 
 <pre>
@@ -4450,6 +4980,7 @@ v, ok := a[x]
 var v, ok = a[x]
 </pre>
 
+<div class="english">
 <p>
 where the result of the index expression is a pair of values with types
 <code>(V, bool)</code>. In this form, the value of <code>ok</code> is
@@ -4457,10 +4988,23 @@ where the result of the index expression is a pair of values with types
 <code>false</code> otherwise. The value of <code>v</code> is the value
 <code>a[x]</code> as in the single-result form.
 </p>
+</div>
 
+<p>
+赋值或初始化，该下标表达式结果的类型为 <code>(V, bool)</code> 的值对。
+在此形式中，若键 <code>x</code> 已在映射中，则 <code>ok</code> 的值为 <code>true</code>，
+否则即为 <code>false</code>。<code>v</code> 的值为 <code>a[x]</code> 的单值形式。
+</p>
+
+<div class="english">
 <p>
 Assigning to an element of a <code>nil</code> map causes a
 <a href="#Run_time_panics">run-time panic</a>.
+</p>
+</div>
+
+<p>
+向 <code>nil</code> 映射的元素赋值会引起<a href="#运行时异常">运行时异常</a>
 </p>
 
 
