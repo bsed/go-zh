@@ -1,6 +1,6 @@
 <!--{
 	"Title": "Go编程语言规范",
-	"Subtitle": "版本：2012年3月17日",
+	"Subtitle": "版本：2012年3月17日	译者：Oling Cat <olingcat@gmail.com>",
 	"Path": "/ref/spec"
 }-->
 
@@ -4894,7 +4894,7 @@ or for <code>a</code> of type <code>S</code> where <code>S</code> is a <a href="
 	<li><code>a[x]</code> 为下标 <code>x</code> 的数组元素且
 	  <code>a[x]</code> 的类型为 <code>A</code> 的元素类型</li>
 	<li>若 <code>a</code> 为 <code>nil</code> 或下标 <code>x</code> 超出范围，
-	就会出现<a href="#运行时异常">运行时异常</a></li>
+	就会出现一个<a href="#运行时异常">运行时异常</a></li>
 </ul>
 
 <div class="english">
@@ -4921,7 +4921,7 @@ where <code>T</code> is a <a href="#String_types">string type</a>:
 	  <code>a[x]</code> 的类型为 <code>byte</code></li>
 	<li><code>a[x]</code> 不可赋值</li>
 	<li>若下标 <code>x</code> 超出范围，
-	就会出现<a href="#运行时异常">运行时异常</a></li>
+	就会出现一个<a href="#运行时异常">运行时异常</a></li>
 </ul>
 
 <div class="english">
@@ -5014,14 +5014,21 @@ Assigning to an element of a <code>nil</code> map causes a
 
 <h3 id="切片">切片</h3>
 
+<div class="english">
 <p>
 For a string, array, pointer to array, or slice <code>a</code>, the primary expression
+</p>
+</div>
+
+<p>
+对于字符串，数组，指向数组的指针或切片 <code>a</code>，主表达式
 </p>
 
 <pre>
 a[low : high]
 </pre>
 
+<div class="english">
 <p>
 constructs a substring or slice. The index expressions <code>low</code> and
 <code>high</code> select which elements appear in the result. The result has
@@ -5029,14 +5036,27 @@ indexes starting at 0 and length equal to
 <code>high</code>&nbsp;-&nbsp;<code>low</code>.
 After slicing the array <code>a</code>
 </p>
+</div>
+
+<p>
+会构造一个字串或切片。下标表达式 <code>low</code> 和 <code>high</code> 则选出哪些元素出现在结果中。
+该结果的下标起始于 0 且长度等于 <code>high</code>&nbsp;-&nbsp;<code>low</code>。
+在切下数组 <code>a</code>
+</p>
 
 <pre>
 a := [5]int{1, 2, 3, 4, 5}
 s := a[1:4]
 </pre>
 
+<div class="english">
 <p>
 the slice <code>s</code> has type <code>[]int</code>, length 3, capacity 4, and elements
+</p>
+</div>
+
+<p>
+之后，切片 <code>s</code> 的类型为 <code>[]int</code>，长度为 3，容量为 4，且元素
 </p>
 
 <pre>
@@ -5045,10 +5065,17 @@ s[1] == 3
 s[2] == 4
 </pre>
 
+<div class="english">
 <p>
 For convenience, any of the index expressions may be omitted. A missing <code>low</code>
 index defaults to zero; a missing <code>high</code> index defaults to the length of the
 sliced operand:
+</p>
+</div>
+
+<p>
+为方便起见，任何下标表达式都可省略。略去的 <code>low</code> 下标默认为零；
+略去的 <code>high</code> 下标默认为已切下的操作数的长度：
 </p>
 
 <pre>
@@ -5057,17 +5084,32 @@ a[:3]  // same as a[0 : 3]
 a[:]   // same as a[0 : len(a)]
 </pre>
 
+<div class="english">
 <p>
 For arrays or strings, the indexes <code>low</code> and <code>high</code> must
 satisfy 0 &lt;= <code>low</code> &lt;= <code>high</code> &lt;= length; for
 slices, the upper bound is the capacity rather than the length.
 </p>
+</div>
 
+<p>
+对于数组或字符串，下标 <code>low</code> 和 <code>high</code> 必须满足
+0 &lt;= <code>low</code> &lt;= <code>high</code> &lt;= 长度；对于切片，其上界为容量而非长度。
+</p>
+
+<div class="english">
 <p>
 If the sliced operand is a string or slice, the result of the slice operation
 is a string or slice of the same type.
 If the sliced operand is an array, it must be <a href="#Address_operators">addressable</a>
 and the result of the slice operation is a slice with the same element type as the array.
+</p>
+</div>
+
+<p>
+若已切下操作数为字符串或切片，该切片操作的结果即为相同类型的字符串或切片。
+若已切下操作数为数组，它必须为<a href="#地址操作符">可寻址的</a>，
+且该切片操作的结果为以相同元素类型作为数组的切片。
 </p>
 
 
@@ -5077,20 +5119,35 @@ and the result of the slice operation is a slice with the same element type as t
 
 <h3 id="类型断言">类型断言</h3>
 
+<div class="english">
 <p>
 For an expression <code>x</code> of <a href="#Interface_types">interface type</a>
 and a type <code>T</code>, the primary expression
+</p>
+</div>
+
+<p>
+对于<a href="#接口类型">接口类型</a>的表达式 <code>x</code> 与类型 <code>T</code>，主表达式
 </p>
 
 <pre>
 x.(T)
 </pre>
 
+<div class="english">
 <p>
 asserts that <code>x</code> is not <code>nil</code>
 and that the value stored in <code>x</code> is of type <code>T</code>.
 The notation <code>x.(T)</code> is called a <i>type assertion</i>.
 </p>
+</div>
+
+<p>
+断言 <code>x</code> 不为 <code>nil</code> 且存储于 <code>x</code> 中的值其类型为 <code>T</code>。
+记法 <code>x.(T)</code> 称为 <i>类型断言</i>。
+</p>
+
+<div class="english">
 <p>
 More precisely, if <code>T</code> is not an interface type, <code>x.(T)</code> asserts
 that the dynamic type of <code>x</code> is <a href="#Type_identity">identical</a>
@@ -5098,6 +5155,15 @@ to the type <code>T</code>.
 If <code>T</code> is an interface type, <code>x.(T)</code> asserts that the dynamic type
 of <code>x</code> implements the interface <code>T</code> (§<a href="#Interface_types">Interface types</a>).
 </p>
+</div>
+
+<p>
+更确切地说，若 <code>T</code> 为非接口类型，<code>x.(T)</code> 断言 <code>x</code> 的动态类型
+与 <code>T</code><a href="#类型标识">相同</a>。若 <code>T</code> 为接口类型，<code>x.(T)</code>
+则断言<code>x</code> 的动态类型实现了接口 <code>T</code>（§<a href="#接口类型">接口类型</a>）。
+</p>
+
+<div class="english">
 <p>
 If the type assertion holds, the value of the expression is the value
 stored in <code>x</code> and its type is <code>T</code>. If the type assertion is false,
@@ -5106,8 +5172,22 @@ In other words, even though the dynamic type of <code>x</code>
 is known only at run-time, the type of <code>x.(T)</code> is
 known to be <code>T</code> in a correct program.
 </p>
+</div>
+
+<p>
+若该类型断言成立，该表达式的值即为存储于 <code>x</code> 中的值，且其类型为 <code>T</code>。若该类型断言不成立，
+就会出现一个<a href="#运行时异常">运行时异常</a>。换句话说，即使 <code>x</code> 的动态类型只能在运行时可知，
+在正确的程序中，<code>x.(T)</code> 的类型也可知为 <code>T</code>。
+</p>
+
+<div class="english">
 <p>
 If a type assertion is used in an assignment or initialization of the form
+</p>
+</div>
+
+<p>
+若类型断言以
 </p>
 
 <pre>
@@ -5116,6 +5196,7 @@ v, ok := x.(T)
 var v, ok = x.(T)
 </pre>
 
+<div class="english">
 <p>
 the result of the assertion is a pair of values with types <code>(T, bool)</code>.
 If the assertion holds, the expression returns the pair <code>(x.(T), true)</code>;
@@ -5125,6 +5206,14 @@ No run-time panic occurs in this case.
 The type assertion in this construct thus acts like a function call
 returning a value and a boolean indicating success.  (§<a href="#Assignments">Assignments</a>)
 </p>
+</div>
+
+<p>
+的形式用于赋值或初始化，该断言的结果即为类型为 <code>(T, bool)</code> 的值对。
+若该断言成立，该表达式返回值对 <code>(x.(T), true)</code>；否则，该表达式返回 <code>(Z, false)</code>，
+其中 <code>Z</code> 为类型为 <code>T</code> 的<a href="#零值">零值</a>。此种情况不会产生运行时异常。
+类型断言在这种构造中，其行为类似于函数调用返回一个值与一个布尔值以表示成功。（§<a href="#赋值">赋值</a>）
+</p>
 
 
 <div class="english">
@@ -5133,15 +5222,22 @@ returning a value and a boolean indicating success.  (§<a href="#Assignments">A
 
 <h3 id="调用">调用</h3>
 
+<div class="english">
 <p>
 Given an expression <code>f</code> of function type
 <code>F</code>,
+</p>
+</div>
+
+<p>
+给定函数类型为 <code>F</code> 的表达式 <code>f</code>，
 </p>
 
 <pre>
 f(a1, a2, … an)
 </pre>
 
+<div class="english">
 <p>
 calls <code>f</code> with arguments <code>a1, a2, … an</code>.
 Except for one special case, arguments must be single-valued expressions
@@ -5153,13 +5249,31 @@ A method invocation is similar but the method itself
 is specified as a selector upon a value of the receiver type for
 the method.
 </p>
+</div>
 
+<p>
+以实参 <code>a1, a2, … an</code> 调用 <code>f</code>。
+除一种特殊情况外，实参必须为 <a href="#可赋值性">可赋予</a>
+<code>F</code> 的形参类型的单值表达式，且在该函数被调用前求值。
+该表达式的类型为 <code>F</code> 的结果类型。
+方法调用也类似，但方法本身作为选择器被指定，该选择器取决于方法接收器类型的值。
+</p>
+
+<div class="english">
 <pre>
 math.Atan2(x, y)  // function call
 var pt *Point
 pt.Scale(3.5)  // method call with receiver pt
 </pre>
+</div>
 
+<pre>
+math.Atan2(x, y)  // 函数调用
+var pt *Point
+pt.Scale(3.5)     // 带接收器 pt 的方法调用
+</pre>
+
+<div class="english">
 <p>
 In a function call, the function value and arguments are evaluated in
 <a href="#Order_of_evaluation">the usual order</a>.
@@ -5168,12 +5282,26 @@ and the called function begins execution.
 The return parameters of the function are passed by value
 back to the calling function when the function returns.
 </p>
+</div>
 
+<p>
+在函数调用中，函数值与实参按<a href="#求值顺序">一般顺序</a>求值。
+在它们求值后，该调用的形参传值至该函数，被调用函数开始执行。
+当函数返回时，该函数的返回形参将值传回调用函数。
+</p>
+
+<div class="english">
 <p>
 Calling a <code>nil</code> function value
 causes a <a href="#Run_time_panics">run-time panic</a>.
 </p>
+</div>
 
+<p>
+调用 <code>nil</code> 函数值会引起 <a href="#运行时异常">运行时异常</a>。
+</p>
+
+<div class="english">
 <p>
 As a special case, if the return parameters of a function or method
 <code>g</code> are equal in number and individually
@@ -5185,6 +5313,15 @@ of <code>f</code> must contain no parameters other than the call of <code>g</cod
 If <code>f</code> has a final <code>...</code> parameter, it is
 assigned the return values of <code>g</code> that remain after
 assignment of regular parameters.
+</p>
+</div>
+
+<p>
+作为一种特殊情况，若函数或方法 <code>g</code> 的返回形参在数量上等于函数或方法 <code>f</code> 的形参，
+且分别可赋予它，那么调用 <code>f(g(<i>g的形参</i>))</code> 将在依序绑定 <code>g</code>
+的返回值至 <code>f</code> 的形参后引用 <code>f</code>。除 <code>g</code> 的调用外，
+<code>f</code> 的调用必须不包含任何形参。若 <code>f</code> 的最后有 <code>...</code> 形参，
+它在常规的形参赋值后，可被赋予 <code>g</code> 余下的返回值。
 </p>
 
 <pre>
@@ -5201,6 +5338,7 @@ if Join(Split(value, len(value)/2)) != value {
 }
 </pre>
 
+<div class="english">
 <p>
 A method call <code>x.m()</code> is valid if the <a href="#Method_sets">method set</a>
 of (the type of) <code>x</code> contains <code>m</code> and the
@@ -5209,15 +5347,30 @@ If <code>x</code> is <a href="#Address_operators">addressable</a> and <code>&amp
 set contains <code>m</code>, <code>x.m()</code> is shorthand
 for <code>(&amp;x).m()</code>:
 </p>
+</div>
+
+<p>
+若 <code>x</code>（的类型）的<a href="#方法集">方法集</a>包含 <code>m</code>，
+且其实参列表可赋予 <code>m</code> 的形参列表，方法调用 <code>x.m()</code> 即为有效的。
+若 <code>x</code> 为 <a href="#地址操作符">可寻址</a>的且 <code>&amp;x</code> 的方法集包含 <code>m</code>，
+<code>x.m()</code> 即为 <code>(&amp;x).m()</code> 的简写：
+</p>
 
 <pre>
 var p Point
 p.Scale(3.5)
 </pre>
 
+<div class="english">
 <p>
 There is no distinct method type and there are no method literals.
 </p>
+</div>
+
+<p>
+其中即没有明显的方法类型，也没有方法字面。
+</p>
+
 
 <div class="english">
 <h3 id="Passing_arguments_to_..._parameters">Passing arguments to <code>...</code> parameters</h3>
@@ -5225,6 +5378,7 @@ There is no distinct method type and there are no method literals.
 
 <h3 id="传递实参至...形参">传递实参至...形参</h3>
 
+<div class="english">
 <p>
 If <code>f</code> is variadic with final parameter type <code>...T</code>,
 then within the function the argument is equivalent to a parameter of type
@@ -5235,28 +5389,63 @@ the actual arguments, which all must be <a href="#Assignability">assignable</a>
 to the type <code>T</code>. The length of the slice is therefore the number of
 arguments bound to the final parameter and may differ for each call site.
 </p>
+</div>
 
+<p>
+若 <code>f</code> 为最后带有形参类型 <code>...T</code> 的可变参函数，
+那么在该函数中，实参等价于类型为 <code>[]T</code> 的形参。
+对于每一个 <code>f</code> 的调用，传递至最后形参的实参为类型为 <code>[]T</code> 的一个新切片，
+其连续的元素即为实际的实参，它们必须都<a href="#可赋值性">可赋予</a>类型 <code>T</code>。
+因此，该切片的长度为绑定至最后形参的实参的数目，且对于每一个调用位置可能都不同。
+</p>
+
+<div class="english">
 <p>
 Given the function and call
 </p>
+</div>
+
+<p>
+给定函数和调用
+</p>
+
 <pre>
 func Greeting(prefix string, who ...string)
 Greeting("hello:", "Joe", "Anna", "Eileen")
 </pre>
 
+<div class="english">
 <p>
 within <code>Greeting</code>, <code>who</code> will have the value
 <code>[]string{"Joe", "Anna", "Eileen"}</code>
 </p>
+</div>
 
+<p>
+在 <code>Greeting</code> 中，<code>who</code> 将拥有值 <code>[]string{"Joe", "Anna", "Eileen"}</code>
+</p>
+
+<div class="english">
 <p>
 If the final argument is assignable to a slice type <code>[]T</code>, it may be
 passed unchanged as the value for a <code>...T</code> parameter if the argument
 is followed by <code>...</code>. In this case no new slice is created.
 </p>
+</div>
 
 <p>
+若最后的实参可赋予类型为 <code>[]T</code> 的切片且后跟着 <code>...</code>，
+它可能作为 <code>...T</code> 形参的值不变而被传入。
+</p>
+
+<div class="english">
+<p>
 Given the slice <code>s</code> and call
+</p>
+</div>
+
+<p>
+给定切片 <code>s</code> 与调用
 </p>
 
 <pre>
@@ -5264,9 +5453,15 @@ s := []string{"James", "Jasmine"}
 Greeting("goodbye:", s...)
 </pre>
 
+<div class="english">
 <p>
 within <code>Greeting</code>, <code>who</code> will have the same value as <code>s</code>
 with the same underlying array.
+</p>
+</div>
+
+<p>
+在 <code>Greeting</code> 中，<code>who</code> 将作为与 <code>s</code> 一样的值拥有与其相同的基本数组。
 </p>
 
 
@@ -5276,10 +5471,17 @@ with the same underlying array.
 
 <h3 id="操作符">操作符</h3>
 
+<div class="english">
 <p>
 Operators combine operands into expressions.
 </p>
+</div>
 
+<p>
+操作符与操作数结合成为表达式。
+</p>
+
+<div class="english">
 <pre class="ebnf">
 Expression = UnaryExpr | Expression binary_op UnaryExpr .
 UnaryExpr  = PrimaryExpr | unary_op UnaryExpr .
@@ -5291,7 +5493,21 @@ mul_op     = "*" | "/" | "%" | "&lt;&lt;" | "&gt;&gt;" | "&amp;" | "&amp;^" .
 
 unary_op   = "+" | "-" | "!" | "^" | "*" | "&amp;" | "&lt;-" .
 </pre>
+</div>
 
+<pre class="ebnf">
+表达式     = 一元表达式 | 表达式 二元操作符 一元表达式 .
+一元表达式 = 主表达式 | 一元操作符 一元表达式 .
+
+二元操作符 = "||" | "&amp;&amp;" | 比较操作符 | 加法操作符 | 乘法操作符 .
+比较操作符 = "==" | "!=" | "&lt;" | "&lt;=" | ">" | ">=" .
+加法操作符 = "+" | "-" | "|" | "^" .
+乘法操作符 = "*" | "/" | "%" | "&lt;&lt;" | "&gt;&gt;" | "&amp;" | "&amp;^" .
+
+一元操作符 = "+" | "-" | "!" | "^" | "*" | "&amp;" | "&lt;-" .
+</pre>
+
+<div class="english">
 <p>
 Comparisons are discussed <a href="#Comparison_operators">elsewhere</a>.
 For other binary operators, the operand types must be <a href="#Type_identity">identical</a>
@@ -5299,13 +5515,28 @@ unless the operation involves shifts or untyped <a href="#Constants">constants</
 For operations involving constants only, see the section on
 <a href="#Constant_expressions">constant expressions</a>.
 </p>
+</div>
 
+<p>
+比较操作将在<a href="#比较操作符">别处</a>讨论。
+对于其他二元操作符，操作数的类型必须<a href="#类型标识">相同</a>，
+除非该操作包含移位或无类型定义<a href="#常量">常量</a>。
+</p>
+
+<div class="english">
 <p>
 Except for shift operations, if one operand is an untyped <a href="#Constants">constant</a>
 and the other operand is not, the constant is <a href="#Conversions">converted</a>
 to the type of the other operand.
 </p>
+</div>
 
+<p>
+除移位操作外，若其中一个操作数为无类型定义<a href="#常量">常量</a>而另一个不是，
+该常量需<a href="#强制转换">强制转换</a>为另一个操作数的类型。
+</p>
+
+<div class="english">
 <p>
 The right operand in a shift expression must have unsigned integer type
 or be an untyped constant that can be converted to unsigned integer type.
@@ -5315,7 +5546,16 @@ replaced by its left operand alone; the type is <code>int</code> if it cannot
 be determined from the context (for instance, if the shift expression is an
 operand in a comparison against an untyped constant).
 </p>
+</div>
 
+<p>
+移位表达式中的右操作数必须为无符号整数，或可转换为无符号整数的无类型定义常量。
+若非常量移位表达式的左操作数为无类型定义常量，且该移位表达式已被其左操作数独自取代，
+则该移位表达式的类型将变为该常量的类型；若其类型不能从上下文中判定
+（例如，若该移位表达式在针对无类型定义常量的比较操作中），则为 <code>int</code>类型。
+</p>
+
+<div class="english">
 <pre>
 var s uint = 33
 var i = 1&lt;&lt;s           // 1 has type int
@@ -5329,6 +5569,22 @@ var u = 1.0&lt;&lt;s         // illegal: 1.0 has type float64, cannot shift
 var v float32 = 1&lt;&lt;s   // illegal: 1 has type float32, cannot shift
 var w int64 = 1.0&lt;&lt;33  // 1.0&lt;&lt;33 is a constant shift expression
 </pre>
+</div>
+
+<pre>
+var s uint = 33
+var i = 1&lt;&lt;s           // 1 的类型为 int
+var j int32 = 1&lt;&lt;s     // 1 的类型为 int32；j == 0
+var k = uint64(1&lt;&lt;s)   // 1 的类型为 uint64；k == 1&lt;&lt;33
+var m int = 1.0&lt;&lt;s     // 1.0 的类型为 int
+var n = 1.0&lt;&lt;s != 0    // 1.0 的类型为 int；若int的大小为 32位，则 n == false
+var o = 1&lt;&lt;s == 2&lt;&lt;s   // 1 与 2 的类型为 int；若 int 的大小为32位，则 o == true
+var p = 1&lt;&lt;s == 1&lt;&lt;33  // 若 int 的大小为32位即为非法：虽然 1 的类型为 int，但 1&lt;&lt;33 溢出了 int
+var u = 1.0&lt;&lt;s         // 非法: 1.0 的类型为 float64，不能移位
+var v float32 = 1&lt;&lt;s   // 非法: 1 的类型为 float32，不能移位
+var w int64 = 1.0&lt;&lt;33  // 1.0&lt;&lt;33 为常量移位表达式
+</pre>
+
 
 <div class="english">
 <h3 id="Operator_precedence">Operator precedence</h3>
@@ -5336,19 +5592,38 @@ var w int64 = 1.0&lt;&lt;33  // 1.0&lt;&lt;33 is a constant shift expression
 
 <h3 id="操作符优先级">操作符优先级</h3>
 
+<div class="english">
 <p>
 Unary operators have the highest precedence.
 As the  <code>++</code> and <code>--</code> operators form
 statements, not expressions, they fall
 outside the operator hierarchy.
 As a consequence, statement <code>*p++</code> is the same as <code>(*p)++</code>.
+</p>
+</div>
+
+<p>
+一元操作符拥有最高优先级。
+<code>++</code> 和 <code>--</code> 操作符是语句，而非表达式，它们不属于运算符一级。
+因此，语句 <code>*p++</code> 等价于 <code>(*p)++</code>。
+</p>
+
+<div class="english">
 <p>
 There are five precedence levels for binary operators.
 Multiplication operators bind strongest, followed by addition
 operators, comparison operators, <code>&amp;&amp;</code> (logical and),
 and finally <code>||</code> (logical or):
 </p>
+</div>
 
+<p>
+二元操作符有五种优先级。
+乘法操作符结合性最强，其次为乘法操作符、比较操作符、<code>&amp;&amp;</code>（逻辑与），
+最后为 <code>||</code>（逻辑或）：
+</p>
+
+<div class="english">
 <pre class="grammar">
 Precedence    Operator
     5             *  /  %  &lt;&lt;  &gt;&gt;  &amp;  &amp;^
@@ -5357,10 +5632,27 @@ Precedence    Operator
     2             &amp;&amp;
     1             ||
 </pre>
+</div>
 
+<pre class="grammar">
+  优先级        操作符
+    5             *  /  %  &lt;&lt;  &gt;&gt;  &amp;  &amp;^
+    4             +  -  |  ^
+    3             ==  !=  &lt;  &lt;=  &gt;  &gt;=
+    2             &amp;&amp;
+    1             ||
+</pre>
+
+<div class="english">
 <p>
 Binary operators of the same precedence associate from left to right.
 For instance, <code>x / y * z</code> is the same as <code>(x / y) * z</code>.
+</p>
+</div>
+
+<p>
+相同优先级的二元操作符从左到右结合。
+例如，<code>x / y * z</code> 等价于 <code>(x / y) * z</code>。
 </p>
 
 <pre>
@@ -5379,6 +5671,7 @@ x == y+1 &amp;&amp; &lt;-chanPtr &gt; 0
 
 <h3 id="算数操作符">算数操作符</h3>
 
+<div class="english">
 <p>
 Arithmetic operators apply to numeric values and yield a result of the same
 type as the first operand. The four standard arithmetic operators (<code>+</code>,
@@ -5386,7 +5679,15 @@ type as the first operand. The four standard arithmetic operators (<code>+</code
 floating-point, and complex types; <code>+</code> also applies
 to strings. All other arithmetic operators apply to integers only.
 </p>
+</div>
 
+<p>
+算数操作符适用于数值，并产生相同类型的结果作为第一个操作数。四个基本算数操作符
+（<code>+</code>，<code>-</code>，<code>*</code>，<code>/</code>）适用于整数、浮点数和复数类型；
+<code>+</code> 也适用于字符串。其他所有算数操作符仅适用于整数。
+</p>
+
+<div class="english">
 <pre class="grammar">
 +    sum                    integers, floats, complex values, strings
 -    difference             integers, floats, complex values
@@ -5402,10 +5703,33 @@ to strings. All other arithmetic operators apply to integers only.
 &lt;&lt;   left shift             integer &lt;&lt; unsigned integer
 &gt;&gt;   right shift            integer &gt;&gt; unsigned integer
 </pre>
+</div>
 
+<pre class="grammar">
++    和                     integers, floats, complex values, strings
+-    差                     integers, floats, complex values
+*    积                     integers, floats, complex values
+/    商                     integers, floats, complex values
+%    余                     integers
+
+&amp;    按位与                 integers
+|    按位或                 integers
+^    按位异或               integers
+&amp;^   位清除（同或）         integers
+
+&lt;&lt;   向左移位               integer &lt;&lt; unsigned integer
+&gt;&gt;   向右移位               integer &gt;&gt; unsigned integer
+</pre>
+
+<div class="english">
 <p>
 Strings can be concatenated using the <code>+</code> operator
 or the <code>+=</code> assignment operator:
+</p>
+</div>
+
+<p>
+字符串可使用 <code>+</code> 操作符连结或 <code>+=</code> 赋值操作符：
 </p>
 
 <pre>
@@ -5413,22 +5737,48 @@ s := "hi" + string(c)
 s += " and good bye"
 </pre>
 
+<div class="english">
 <p>
 String addition creates a new string by concatenating the operands.
 </p>
+</div>
+
+<p>
+字符串加法通过连结操作数创建一个新的字符串。
+</p>
+
+<div class="english">
 <p>
 For two integer values <code>x</code> and <code>y</code>, the integer quotient
 <code>q = x / y</code> and remainder <code>r = x % y</code> satisfy the following
 relationships:
 </p>
+</div>
 
+<p>
+对于两个整数值 <code>x</code> 与 <code>y</code>，整数除法 <code>q = x / y</code>
+和取余 <code>r = x % y</code> 满足以下关系：
+</p>
+
+<div class="english">
 <pre>
 x = q*y + r  and  |r| &lt; |y|
 </pre>
+</div>
 
+<pre>
+x = q*y + r  且  |r| &lt; |y|
+</pre>
+
+<div class="english">
 <p>
 with <code>x / y</code> truncated towards zero
 (<a href="http://en.wikipedia.org/wiki/Modulo_operation">"truncated division"</a>).
+</p>
+</div>
+
+<p>
+将 <code>x / y</code> 向零截断（“<a href="http://en.wikipedia.org/wiki/Modulo_operation">除法截断</a>”）。
 </p>
 
 <pre>
@@ -5439,10 +5789,17 @@ with <code>x / y</code> truncated towards zero
 -5    -3       1        -2
 </pre>
 
+<div class="english">
 <p>
 As an exception to this rule, if the dividend <code>x</code> is the most
 negative value for the int type of <code>x</code>, the quotient
 <code>q = x / -1</code> is equal to <code>x</code> (and <code>r = 0</code>).
+</p>
+</div>
+
+<p>
+作为该规则的一个例外，若被除数 <code>x</code> 为 <code>x</code> 的int类型的最小负值，商
+<code>q = x / -1</code> 等于 <code>x</code>（且 <code>r = 0</code>）。
 </p>
 
 <pre>
@@ -5453,11 +5810,18 @@ int32             -2147483648
 int64    -9223372036854775808
 </pre>
 
+<div class="english">
 <p>
 If the divisor is zero, a <a href="#Run_time_panics">run-time panic</a> occurs.
 If the dividend is positive and the divisor is a constant power of 2,
 the division may be replaced by a right shift, and computing the remainder may
 be replaced by a bitwise "and" operation:
+</p>
+</div>
+
+<p>
+若被除数为零，就会出现一个<a href="#运行时异常">运行时异常</a>。
+若被除数为正，且除数为2的常量次幂，则该除法可被向右移位取代，且计算其商可被按位“与”操作取代：
 </p>
 
 <pre>
@@ -5466,6 +5830,7 @@ be replaced by a bitwise "and" operation:
 -11     -2        -3        -3          1
 </pre>
 
+<div class="english">
 <p>
 The shift operators shift the left operand by the shift count specified by the
 right operand. They implement arithmetic shifts if the left operand is a signed
@@ -5477,20 +5842,45 @@ As a result, <code>x &lt;&lt; 1</code> is the same as <code>x*2</code>
 and <code>x &gt;&gt; 1</code> is the same as
 <code>x/2</code> but truncated towards negative infinity.
 </p>
+</div>
 
+<p>
+移位操作符通过右操作数指定的移位计数来移位左操作数。若左操作数为带符号整数，它们就执行算术移位；
+若左操作数为为无符号整数，它们则执行逻辑移位。移位计数没有上界。
+若左操作数移位 <code>n</code> 次，移位的行为如同从 1 到 <code>n</code> 的一个移位计数。
+按照其结果，<code>x &lt;&lt; 1</code> 等价于 <code>x*2</code>，而 <code>x &gt;&gt; 1</code>
+等价于 <code>x/2</code> 但向负无穷大截断。
+</p>
+
+<div class="english">
 <p>
 For integer operands, the unary operators
 <code>+</code>, <code>-</code>, and <code>^</code> are defined as
 follows:
 </p>
+</div>
 
+<p>
+对于整数操作数，一元操作符 <code>+</code>、<code>-</code> 和 <code>^</code> 的定义如下：
+</p>
+
+<div class="english">
 <pre class="grammar">
 +x                          is 0 + x
 -x    negation              is 0 - x
 ^x    bitwise complement    is m ^ x  with m = "all bits set to 1" for unsigned x
                                       and  m = -1 for signed x
 </pre>
+</div>
 
+<pre class="grammar">
++x                  即为 0 + x
+-x    相反数        即为 0 - x
+^x    按位补码      即为 m ^ x  对于无符号的 x，m = "所有位置为1"
+                                对于带符号的 x，m = -1
+</pre>
+
+<div class="english">
 <p>
 For floating-point numbers,
 <code>+x</code> is the same as <code>x</code>,
@@ -5499,6 +5889,12 @@ The result of a floating-point division by zero is not specified beyond the
 IEEE-754 standard; whether a <a href="#Run_time_panics">run-time panic</a>
 occurs is implementation-specific.
 </p>
+</div>
+
+<p>
+对于浮点数，<code>+x</code> 等价于 <code>x</code>，而 <code>-x</code> 则为 <code>x</code> 的相反数。
+浮点数除以零的结果因超出 IEEE-754 标准的范围而未指定；是否会出现<a href="#运行时异常">运行时异常</a>取决于具体实现。
+</p>
 
 <div class="english">
 <h3 id="Integer_overflow">Integer overflow</h3>
@@ -5506,6 +5902,7 @@ occurs is implementation-specific.
 
 <h3 id="整数溢出">整数溢出</h3>
 
+<div class="english">
 <p>
 For unsigned integer values, the operations <code>+</code>,
 <code>-</code>, <code>*</code>, and <code>&lt;&lt;</code> are
@@ -5514,6 +5911,15 @@ the unsigned integer's type
 (§<a href="#Numeric_types">Numeric types</a>). Loosely speaking, these unsigned integer operations
 discard high bits upon overflow, and programs may rely on ``wrap around''.
 </p>
+</div>
+
+<p>
+对于无符号整数值，操作 <code>+</code>、<code>-</code>、<code>*</code> 和 <code>&lt;&lt;</code>
+均被计算为取模 2<sup><i>n</i></sup>，其中 <i>n</i> 为该无符号整数类型的位宽
+（§<a href="#数值类型">数值类型</a>）。不严格地说，这些无符号整数操作抛弃高位向上溢出，而程序可依赖“折回”。
+</p>
+
+<div class="english">
 <p>
 For signed integers, the operations <code>+</code>,
 <code>-</code>, <code>*</code>, and <code>&lt;&lt;</code> may legally
@@ -5523,6 +5929,14 @@ No exception is raised as a result of overflow. A
 compiler may not optimize code under the assumption that overflow does
 not occur. For instance, it may not assume that <code>x &lt; x + 1</code> is always true.
 </p>
+</div>
+
+<p>
+对于带符号整数，操作 <code>+</code>、<code>-</code>、<code>*</code> 和 <code>&lt;&lt;</code> 可合法溢出，
+而由此产生的值会继续存在，并由该带符号整数表现、操作、与其操作数决定性地定义。
+没有例外作为溢出的结果提高。在溢出不会发生的假定情况下下编译器可能不会优化代码。
+例如，它可能不假定 <code>x &lt; x + 1</code> 总为真。
+</p>
 
 
 <div class="english">
@@ -5531,10 +5945,17 @@ not occur. For instance, it may not assume that <code>x &lt; x + 1</code> is alw
 
 <h3 id="比较操作符">比较操作符</h3>
 
+<div class="english">
 <p>
 Comparison operators compare two operands and yield a boolean value.
 </p>
+</div>
 
+<p>
+比较操作符比较两个操作数并产生一个布尔值。
+</p>
+
+<div class="english">
 <pre class="grammar">
 ==    equal
 !=    not equal
@@ -5543,12 +5964,30 @@ Comparison operators compare two operands and yield a boolean value.
 &gt;     greater
 &gt;=    greater or equal
 </pre>
+</div>
 
+<pre class="grammar">
+==    等于
+!=    不等于
+&lt;     小于
+&lt;=    小于等于
+&gt;     大于
+&gt;=    大于等于
+</pre>
+
+<div class="english">
 <p>
 In any comparison, the first operand
 must be <a href="#Assignability">assignable</a>
 to the type of the second operand, or vice versa.
 </p>
+</div>
+
+<p>
+在任何比较中，第一个操作数必须<a href="#可赋值性">可赋予</a>第二个操作数的类型，反之亦然。
+</p>
+
+<div class="english">
 <p>
 The equality operators <code>==</code> and <code>!=</code> apply
 to operands that are <i>comparable</i>.
@@ -5556,7 +5995,15 @@ The ordering operators <code>&lt;</code>, <code>&lt;=</code>, <code>&gt;</code>,
 apply to operands that are <i>ordered</i>.
 These terms and the result of the comparisons are defined as follows:
 </p>
+</div>
 
+<p>
+相等操作符 <code>==</code> 和 <code>!=</code> 适用于<i>可比较</i>操作数。
+顺序操作符 <code>&lt;</code>、<code>&lt;=</code>、<code>&gt;</code> 和 <code>&gt;=</code>
+适用于<i>有序的</i>操作数。这些比较操作的关系和值定义如下：
+</p>
+
+<div class="english">
 <ul>
 	<li>
 	Boolean values are comparable.
@@ -5623,7 +6070,61 @@ These terms and the result of the comparisons are defined as follows:
 	Two array values are equal if their corresponding elements are equal.
 	</li>
 </ul>
+</div>
 
+<ul>
+	<li>
+	布尔值之间可比较。若两个布尔值同为 <code>true</code> 或同为 <code>false</code>，它们即为相等。
+	</li>
+
+	<li>
+	通常情况下，整数值之间可比较或排序。
+	</li>
+
+	<li>
+	根据 IEEE-754 标准的定义，浮点数值之间可比较或排序。
+	</li>
+
+	<li>
+	复数值之间可比较。对于两个复数值 <code>u</code> 与 <code>v</code>，
+	若 <code>real(u) == real(v)</code> 且 <code>imag(u) == imag(v)</code>，它们即为相等。
+	</li>
+
+	<li>
+	根据按字节词法，字符串值之间可比较或排序。
+	</li>
+
+	<li>
+	指针值之间可比较。若两个指针指向相同的值或其值同为 <code>nil</code>，它们即为相等。
+	指向明显为<a href="#大小与对齐保证">零大小</a>变量的指针可能相等也可能不相等。
+	</li>
+
+	<li>
+	信道值可比较。若两个信道值通过相同的 <code>make</code> 调用
+	（§<a href="#创建切片、映射和信道">创建切片、映射和信道</a>）创建或同为 <code>nil</code> 值，它们即为相等。
+	</li>
+
+	<li>
+	接口值可比较。若两个接口值拥有<a href="#类型标识">相同</a>的动态类型与相等的动态值，或同为
+	<code>nil</code> 值，它们即为相等。
+	</li>
+
+	<li>
+	当非接口类型 <code>X</code> 的值可比较且 <code>X</code> 实现了 <code>T</code> 时，
+	非接口类型 <code>X</code> 的值 <code>x</code> 与接口类型 <code>T</code> 的值 <code>t</code> 则可比较。
+	若 <code>t</code> 的动态类型与 <code>X</code> 相同且 <code>t</code> 动态值等于 <code>x</code>，它们即为相等。
+	</li>
+
+	<li>
+	若两个结构值的所有字段可比较，它们即可比较。若其相应的非<a href="#空白标识符">空白</a>字段相等，它们即为相等。
+	</li>
+
+	<li>
+	若两个数组元素类型的值可比较，则数组值可比较。若其相应的元素相等，它们即为相等。
+	</li>
+</ul>
+
+<div class="english">
 <p>
 A comparison of two interface values with identical dynamic types
 causes a <a href="#Run_time_panics">run-time panic</a> if values
@@ -5631,7 +6132,14 @@ of that type are not comparable.  This behavior applies not only to direct inter
 value comparisons but also when comparing arrays of interface values
 or structs with interface-valued fields.
 </p>
+</div>
 
+<p>
+两个动态类型相同的接口值进行比较，若该动态类型的值不可比较，将引起一个<a href="#运行时异常">运行时异常</a>。
+此行为不仅适用于直接的接口值比较，当比较接口值的数组或接口值作为字段的结构时也适用。
+</p>
+
+<div class="english">
 <p>
 Slice, map, and function values are not comparable.
 However, as a special case, a slice, map, or function value may
@@ -5639,13 +6147,26 @@ be compared to the predeclared identifier <code>nil</code>.
 Comparison of pointer, channel, and interface values to <code>nil</code>
 is also allowed and follows from the general rules above.
 </p>
+</div>
 
+<p>
+切片、映射和函数值同类型之间不可比较。然而，作为一种特殊情况，切片、映射或函数值可与预声明标识符 <code>nil</code>
+进行比较。指针、信道和接口值与 <code>nil</code> 之间的比较也允许并遵循上面的一般规则。
+</p>
+
+<div class="english">
 <p>
 The result of a comparison can be assigned to any boolean type.
 If the context does not demand a specific boolean type,
 the result has type <code>bool</code>.
 </p>
+</div>
 
+<p>
+比较的结果可赋予任何布尔类型。若上下文无需特殊的布尔类型，其结为的类型即为 <code>bool</code>。
+</p>
+
+<div class="english">
 <pre>
 type MyBool bool
 
@@ -5656,6 +6177,18 @@ var (
 	b3        = x == y // result of comparison has type bool
 )
 </pre>
+</div>
+
+<pre>
+type MyBool bool
+
+var x, y int
+var (
+	b1 MyBool = x == y // 比较的结果为类型 MyBool
+	b2 bool   = x == y // 比较的结果为类型 bool
+	b3        = x == y // 比较的结果为类型 bool
+)
+</pre>
 
 <div class="english">
 <h3 id="Logical_operators">Logical operators</h3>
@@ -5663,16 +6196,30 @@ var (
 
 <h3 id="逻辑操作符">逻辑操作符</h3>
 
+<div class="english">
 <p>
 Logical operators apply to <a href="#Boolean_types">boolean</a> values
 and yield a result of the same type as the operands.
 The right operand is evaluated conditionally.
 </p>
+</div>
 
+<p>
+逻辑操作符适用于<a href="#布尔类型">布尔</a>值并根据操作数产生一个相同类型的结果。右操作数有条件地求值。
+</p>
+
+<div class="english">
 <pre class="grammar">
 &amp;&amp;    conditional and    p &amp;&amp; q  is  "if p then q else false"
 ||    conditional or     p || q  is  "if p then true else q"
 !     not                !p      is  "not p"
+</pre>
+</div>
+
+<pre class="grammar">
+&amp;&amp;    条件与    p &amp;&amp; q  即  “若 p 则 q 否则 false”
+||    条件或    p || q  即  “若 p 则 true 否则 q”
+!     非        !p      即  “非 p”
 </pre>
 
 
@@ -5682,6 +6229,7 @@ The right operand is evaluated conditionally.
 
 <h3 id="地址操作符">地址操作符</h3>
 
+<div class="english">
 <p>
 For an operand <code>x</code> of type <code>T</code>, the address operation
 <code>&amp;x</code> generates a pointer of type <code>*T</code> to <code>x</code>.
@@ -5692,12 +6240,29 @@ or an array indexing operation of an addressable array.
 As an exception to the addressability requirement, <code>x</code> may also be a
 <a href="#Composite_literals">composite literal</a>.
 </p>
+</div>
+
+<p>
+对于类型为 <code>T</code> 的操作数 <code>x</code>，地址操作符 <code>&amp;x</code> 将生成一个类型为
+<code>*T</code> 的指针指向 <code>x</code>。操作数必须<i>可寻址</i>，即，变量、间接指针、切片索引操作，
+或可寻址结构操作数的字段选择器，或可寻址数组的数组索引操作均不可寻址。作为可寻址性需求的例外，
+<code>x</code> 也可为 <a href="#复合字面">复合字面</a>.
+</p>
+
+<div class="english">
 <p>
 For an operand <code>x</code> of pointer type <code>*T</code>, the pointer
 indirection <code>*x</code> denotes the value of type <code>T</code> pointed
 to by <code>x</code>.
 If <code>x</code> is <code>nil</code>, an attempt to evaluate <code>*x</code>
 will cause a <a href="#Run_time_panics">run-time panic</a>.
+</p>
+</div>
+
+<p>
+对于指针类型为 <code>*T</code> 的操作数 <code>x</code>，间接指针 <code>*x</code>
+表示类型为 <code>T</code> 的值指向 <code>x</code>。若 <code>x</code> 为 <code>nil</code>，
+尝试求值 <code>*x</code> 将会引起<a href="#运行时异常">运行时异常</a>。
 </p>
 
 <pre>
@@ -5714,12 +6279,25 @@ will cause a <a href="#Run_time_panics">run-time panic</a>.
 
 <h3 id="接收操作符">接收操作符</h3>
 
+<div class="english">
 <p>
 For an operand <code>ch</code> of <a href="#Channel_types">channel type</a>,
 the value of the receive operation <code>&lt;-ch</code> is the value received
 from the channel <code>ch</code>. The type of the value is the element type of
 the channel. The expression blocks until a value is available.
 Receiving from a <code>nil</code> channel blocks forever.
+</p>
+</div>
+
+<p>
+For an operand <code>ch</code> of <a href="#Channel_types">channel type</a>,
+the value of the receive operation <code>&lt;-ch</code> is the value received
+from the channel <code>ch</code>. The type of the value is the element type of
+the channel. The expression blocks until a value is available.
+Receiving from a <code>nil</code> channel blocks forever.
+对于<a href="#信道类型">信道类型</a>的操作数 <code>ch</code>，接收操作符 <code>&lt;-ch</code> 的值即为从信道
+<code>ch</code> 接收的值。该值的类型即为该信道的元素类型。该值前的表达式块是有效的。
+从 <code>nil</code> 信道接收将永远死锁，
 </p>
 
 <pre>
@@ -6278,7 +6856,7 @@ is performed before adding <code>x</code>.
 <h2 id="Statements">Statements</h2>
 </div>
 
-<h2 id="">语句</h2>
+<h2 id="语句">语句</h2>
 
 <p>
 Statements control execution.
@@ -7770,7 +8348,7 @@ of the same package. Those elements may be
 <h3 id="Source_file_organization">Source file organization</h3>
 </div>
 
-<h3 id="">源文件组织</h3>
+<h3 id="源文件组织">源文件组织</h3>
 
 <p>
 Each source file consists of a package clause defining the package
@@ -8170,7 +8748,7 @@ type ArbitraryType int  // shorthand for an arbitrary Go type; it is not a real 
 type Pointer *ArbitraryType
 
 func Alignof(variable ArbitraryType) uintptr
-func Offsetof(selector ArbitraryType) uinptr
+func Offsetof(selector ArbitraryType) uintptr
 func Sizeof(variable ArbitraryType) uintptr
 </pre>
 
