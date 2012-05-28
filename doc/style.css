@@ -220,7 +220,6 @@ div.left,
 div.right {
 	width: 415px;
 }
-
 div#learn,
 div#about {
 	padding-top: 20px;
@@ -390,3 +389,5 @@ img.gopher {
 	margin-bottom: -120px;
 }
 h2 { clear: right; }
+
+.invisible_translation { display: none; }
