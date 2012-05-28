@@ -3,9 +3,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 {{with .Tabtitle}}
-  <title>{{html .}} - The Go Programming Language</title>
+  <title>{{html .}} - Go 编程语言</title>
 {{else}}
-  <title>The Go Programming Language</title>
+  <title>Go 编程语言</title>
 {{end}}
 <link type="text/css" rel="stylesheet" href="/doc/style.css">
 <script type="text/javascript" src="/doc/godocs.js"></script>
@@ -19,11 +19,11 @@
 
 <form method="GET" action="/search">
 <div id="menu">
-<a href="/doc/">Documents</a>
-<a href="/ref/">References</a>
-<a href="/pkg/">Packages</a>
-<a href="/project/">The Project</a>
-<a href="/help/">Help</a>
+<a href="/doc/">文档</a>
+<a href="/ref/">参考</a>
+<a href="/pkg/">包</a>
+<a href="/project/">项目</a>
+<a href="/help/">帮助</a>
 <input type="text" id="search" name="q" class="inactive" value="Search">
 </div>
 <div id="heading"><a href="/">The Go Programming Language</a></div>
@@ -51,13 +51,10 @@
 </div>
 
 <div id="footer">
-Build version {{html .Version}}.<br>
-Except as <a href="http://code.google.com/policies.html#restrictions">noted</a>,
-the content of this page is licensed under the
-Creative Commons Attribution 3.0 License,
-and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
-<a href="/doc/tos.html">Terms of Service</a> | 
-<a href="http://www.google.com/intl/en/privacy/privacy-policy.html">Privacy Policy</a>
+godoc 版本 {{.Version}}。<br>
+除了<a href="http://code.google.com/policies.html#restrictions">特别说明</a>外，本内容使用知识共享-署名 3.0 授权，代码遵循<a href="/LICENSE">BSD协议</a>。<br>
+<a href="/doc/tos.html">使用条款</a> | 
+<a href="http://www.google.com/intl/en/privacy/privacy-policy.html">隐私权</a>
 </div>
 
 </body>
@@ -66,6 +63,31 @@ and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
     var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
     po.src = 'https://apis.google.com/js/plusone.js';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+  (function() {
+    /*bindEvent(window, 'load', function ()*/ {
+		var texts
+		var query = window.location.search.substring(1);
+		var vars = query.split("&");
+		var langs = "", pair
+		// parse lang=en,zh querystring
+		for (var i = 0; i < vars.length; i++) {
+			pair = vars[i].split("=");
+			if (pair[0] == "lang") {
+				langs = unescape(pair[1])
+				break
+			}
+		}
+		// if en not enabled, don't show english translation
+		if (langs != "en") {
+			texts = document.getElementsByTagName('div')
+			for (var i in texts) {
+				if (texts[i].className == "english") {
+					texts[i].className = "invisible_translation";
+				}
+			}
+		}
+	}/*);*/
   })();
 </script>
 </html>
