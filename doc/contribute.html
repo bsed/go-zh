@@ -1,9 +1,18 @@
 <!--{
+	"Title": "贡献指南"
+}-->
+
+<!--{
 	"Title": "Contribution Guidelines"
 }-->
 
+<div class="english">
 <h2 id="Introduction">Introduction</h2>
+</div>
 
+<h2 id="前言">前言</h2>
+
+<div class="english">
 <p>
 This document explains how to contribute changes to the Go project.
 It assumes you have installed Go using the
@@ -12,8 +21,13 @@ have <a href="code.html">written and tested your code</a>.
 (Note that the <code>gccgo</code> frontend lives elsewhere;
 see <a href="gccgo_contribute.html">Contributing to gccgo</a>.)
 </p>
+</div>
 
+<div class="english">
 <h2 id="Design">Discuss your design</h2>
+</div>
+
+<h2 id="设计">讨论你的设计</h2>
 
 <p>
 The project welcomes submissions but please let everyone know what
@@ -36,7 +50,11 @@ In short, send mail before you code.
 And don't start the discussion by mailing a change list!
 </p>
 
+<div class="english">
 <h2 id="Testing">Testing redux</h2>
+</div>
+
+<h2 id="测试">最终测试</h2>
 
 <p>
 You've <a href="code.html">written and tested your code</a>, but
@@ -64,7 +82,11 @@ add &ldquo;<code>test output differs</code>.&rdquo;
 </p>
 
 
+<div class="english">
 <h2 id="Code_review">Code review</h2>
+</div>
+
+<h2 id="代码审查">代码审查</h2>
 
 <p>
 Changes to Go must be reviewed before they are submitted,
@@ -76,7 +98,11 @@ The extension is included in the Go source tree but needs
 to be added to your Mercurial configuration.
 </p>
 
+<div class="english">
 <h3>Caveat for Mercurial aficionados</h3>
+</div>
+
+<h3>敬告Mercurial死忠</h3>
 
 <p>
 <i>Using Mercurial with the code review extension is not the same
@@ -109,7 +135,11 @@ Mercurial power users: if you prefer to use the Mercurial Queues extension, see
 <a href="codereview_with_mq.html">Using Mercurial Queues with Codereview</a>.
 </p>
 
+<div class="english">
 <h3>Configure the extension</h3>
+</div>
+
+<h3>设置扩展</h3>
 
 <p>Edit <code>$GOROOT/.hg/hgrc</code> to add:</p>
 
@@ -127,7 +157,11 @@ The <code>username</code> information will not be used unless
 you are a committer (see below), but Mercurial complains if it is missing.
 </p>
 
+<div class="english">
 <h3>Log in to the code review site.</h3>
+</div>
+
+<h3>登录到代码检查站</h3>
 
 <p>
 The code review server uses a Google Account to authenticate.
@@ -150,7 +184,11 @@ Password for rsc@golang.org:
 Saving authentication cookies to /Users/rsc/.codereview_upload_cookies_codereview.appspot.com
 </pre>
 
+<div class="english">
 <h3>Configure your account settings.</h3>
+</div>
+
+<h3>配置你的帐户设置</h3>
 
 <p>Edit your <a href="http://codereview.appspot.com/settings">code review settings</a>.
 Grab a nickname.
@@ -163,20 +201,36 @@ can use that nickname as a shorthand for naming reviewers and the CC list.
 For example, <code>rsc</code> is an alias for <code>rsc@golang.org</code>.
 </p>
 
+<div class="english">
 <h3>Switch to the default branch</h3>
+</div>
 
+<h3>切换到default分支</h3>
+
+<div class="english">
 <p>
 Most Go installations use a release branch, but new changes should
 only be made to the default branch. (They may be applied later to a release
 branch as part of the release process.)
 Before making a change, make sure you use the default branch:
 </p>
+</div>
+
+<p>
+大多数Go安装使用release分支，但是任何新的改动都只能对default分支进行。（他们
+会在发布下一步发布版时候被合并到release分支。）
+在做任何修改之前，请确保已经切换到了default分支：
+</p>
 
 <pre>
 $ hg update default
 </pre>
 
+<div class="english">
 <h3>Make a change</h3>
+</div>
+
+<h3>进行更改</h3>
 
 <p>
 The entire checked-out tree is writable.
