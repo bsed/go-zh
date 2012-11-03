@@ -1,12 +1,12 @@
 <!--{
 	"Title": "Go编程语言规范",
-	"Subtitle": "版本：2012年10月19日 || 译者：Oling Cat <olingcat@gmail.com>",
+	"Subtitle": "版本：2012年10月31日 || 译者：Oling Cat <olingcat@gmail.com>",
 	"Path": "/ref/spec"
 }-->
 
 <!--{
 	"Title": "The Go Programming Language Specification",
-	"Subtitle": "Version of November 1, 2012",
+	"Subtitle": "Version of October 31, 2012",
 	"Path": "/ref/spec"
 }-->
 
@@ -260,9 +260,9 @@ unicode_digit  = /* a Unicode code point classified as "Decimal Digit" */ .
 
 <pre class="ebnf">
 换行符      = /* Unicode码点 U+000A */ .
-Unicode字符 = /* 除newline以外的任意Unicode码点 */ .
-Unicode字母 = /* 类型为“字母”的Unicode码点 */ .
-Unicode数字 = /* 类型为“十进制数字”的Unicode码点 */ .
+unicode字符 = /* 除newline以外的任意Unicode码点 */ .
+unicode字母 = /* 类型为“字母”的Unicode码点 */ .
+unicode数字 = /* 类型为“十进制数字”的Unicode码点 */ .
 </pre>
 
 <div class="english">
@@ -276,7 +276,7 @@ and those in category Nd as Unicode digits.
 </div>
 
 <p>
-在<a href="http://www.unicode.org/versions/Unicode6.0.0/">Unicode标准6.0</a>，
+在<a href="http://www.unicode.org/versions/Unicode6.2.0/">Unicode标准6.2</a>，
 章节4.5 “一般类别” 中定义了字符集类别。
 其中类别Lu，Ll，Lt，Lm及Lo被视为Unicode字母，类别Nd被视为Unicode数字。
 </p>
@@ -303,7 +303,7 @@ hex_digit     = "0" … "9" | "A" … "F" | "a" … "f" .
 下划线字符<code>_</code>（U+005F）被视为一个字母。
 </p>
 <pre class="ebnf">
-字母         = Unicode字母 | "_" .
+字母         = unicode字母 | "_" .
 十进制数字   = "0" … "9" .
 八进制数字   = "0" … "7" .
 十六进制数字 = "0" … "9" | "A" … "F" | "a" … "f" .
@@ -531,7 +531,7 @@ identifier = letter { letter | unicode_digit } .
 标识符的第一个字符必须是字母。
 </p>
 <pre class="ebnf">
-标识符 = 字母 { 字母 | Unicode数字 } .
+标识符 = 字母 { 字母 | unicode数字 } .
 </pre>
 <pre>
 a
@@ -891,8 +891,8 @@ escaped_char     = `\` ( "a" | "b" | "f" | "n" | "r" | "t" | "v" | `\` | "'" | `
 在符文字面中，所有其它以反斜杠开始的序列都是非法的。
 </p>
 <pre class="ebnf">
-字符字面       = "'" ( Unicode值 | 字节值 ) "'" .
-Unicode值      = Unicode字符 | 小Unicode值 | 大Unicode值 | 转义字符 .
+字符字面       = "'" ( unicode值 | 字节值 ) "'" .
+unicode值      = unicode字符 | 小Unicode值 | 大Unicode值 | 转义字符 .
 字节值         = 八进制字节值 | 十六进制字节值 .
 八进制字节值   = `\` 八进制数字 八进制数字 八进制数字 .
 十六进制字节值 = `\` "x" 十六进制数字 十六进制数字 .
@@ -1015,8 +1015,8 @@ interpreted_string_lit = `"` { unicode_value | byte_value } `"` .
 
 <pre class="ebnf">
 字符串字面     = 原始字符串字面 | 解译字符串字面 .
-原始字符串字面 = "`" { Unicode字符 | 换行符 } "`" .
-解译字符串字面 = `"` { Unicode值 | 字节值 } `"` .
+原始字符串字面 = "`" { unicode字符 | 换行符 } "`" .
+解译字符串字面 = `"` { unicode值 | 字节值 } `"` .
 </pre>
 
 <pre>
@@ -4223,15 +4223,15 @@ For struct literals the following rules apply:
 <ul>
 	<li>键必须为字面类型中声明的字段名。</li>
 
-	<li>不包含任何键的字面必须按字段的声明顺序列出每个结构字段的元素。</li>
+	<li>不包含任何键的元素列表必须按字段的声明顺序列出每个结构字段的元素。</li>
 
 	<li>若其中任何一个元素有键，那么每个元素都必须有键。</li>
 
-	<li>包含键的字面无需每个结构字段都有元素。被忽略的字段会获得零值</li>
+	<li>包含键的元素列表无需每个结构字段都有元素。被忽略的字段会获得零值</li>
 
 	<li>字面可忽略元素列表；这样的字面对其类型求值为零值。</li>
 
-	<li>为属于不同包的结构的非已导出字段指定一个元素会产生一个错误。</li>
+	<li>为属于不同包的结构的未导出字段指定一个元素会产生一个错误。</li>
 </ul>
 
 <div class="english">
@@ -8798,10 +8798,8 @@ select {}  // 永远阻塞
 
 <div class="english">
 <p>
-A "return" statement in a function <code>F</code> terminates the execution
-of <code>F</code>, and optionally provides one or more result values.
-Any functions <a href="#Defer_statements">deferred</a> by <code>F</code>
-are executed before <code>F</code> returns to its caller.
+A "return" statement terminates execution of the containing function
+and optionally provides a result value or values to the caller.
 </p>
 
 <pre class="ebnf">
@@ -8936,10 +8934,7 @@ func (devnull) Write(p []byte) (n int, _ error) {
 
 <div class="english">
 <p>
-Regardless of how they are declared, all the result values are initialized to the zero
-values for their type (§<a href="#The_zero_value">The zero value</a>) upon entry to the
-function. A "return" statement that specifies results sets the result parameters before
-any deferred functions are executed.
+Regardless of how they are declared, all the result values are initialized to the zero values for their type (§<a href="#The_zero_value">The zero value</a>) upon entry to the function.
 </p>
 </div>
 
@@ -8993,8 +8988,7 @@ Break语句 = "break" [ 标签 ] .
 If there is a label, it must be that of an enclosing
 "for", "switch" or "select" statement, and that is the one whose execution
 terminates
-(§<a href="#For_statements">For statements</a>, §<a href="#Switch_statements">Switch statements</a>,
-§<a href="#Select_statements">Select statements</a>).
+(§<a href="#For_statements">For statements</a>, §<a href="#Switch_statements">Switch statements</a>, §<a href="#Select_statements">Select statements</a>).
 </p>
 </div>
 
@@ -9190,11 +9184,8 @@ Fallthrough语句 = "fallthrough" .
 
 <div class="english">
 <p>
-A "defer" statement invokes a function whose execution is deferred
-to the moment the surrounding function returns, either because the
-surrounding function executed a <a href="#Return_statements">return statement</a>,
-reached the end of its <a href="#Function_declarations">function body</a>,
-or because the corresponding goroutine is <a href="#Handling_panics">panicking</a>.
+A "defer" statement invokes a function whose execution is deferred to the moment
+the surrounding function returns.
 </p>
 
 <pre class="ebnf">
@@ -9216,14 +9207,13 @@ The expression must be a function or method call.
 Each time the "defer" statement
 executes, the function value and parameters to the call are
 <a href="#Calls">evaluated as usual</a>
-and saved anew but the actual function body is not executed.
-Instead, deferred functions are executed immediately before
-the surrounding function returns, in the reverse order
-they were deferred.
-</p>
-
-<p>
-For instance, if the deferred function is
+and saved anew but the
+actual function is not invoked.
+Instead, deferred calls are executed in LIFO order
+immediately before the surrounding function returns,
+after the return values, if any, have been evaluated and assigned
+to the result parameters, but before they
+are returned to the caller. For instance, if the deferred function is
 a <a href="#Function_literals">function literal</a> and the surrounding
 function has <a href="#Function_types">named result parameters</a> that
 are in scope within the literal, the deferred function may access and modify
@@ -9867,16 +9857,21 @@ func recover() interface{}
 
 <div class="english">
 <p>
-A <code>panic</code> call in a function <code>F</code> terminates the execution
-of <code>F</code>.
-Any functions <a href="#Defer_statements">deferred</a> by <code>F</code>
-are executed before <code>F</code> returns to its caller. To the caller,
-the call of <code>F</code> then behaves itself like a call to <code>panic</code>,
-terminating its own execution and running deferred functions in the same manner.
-This continues until all functions in the goroutine have ceased execution,
-in reverse order. At that point, the program is terminated and the error
-condition is reported, including the value of the argument to <code>panic</code>.
-This termination sequence is called <i>panicking</i>.
+When a function <code>F</code> calls <code>panic</code>, normal
+execution of <code>F</code> stops immediately.  Any functions whose
+execution was <a href="#Defer_statements">deferred</a> by the
+invocation of <code>F</code> are immediately run in the usual way,
+but with the current values of any result parameters, and then
+<code>F</code> returns to its caller without executing the rest of
+the function.  To the caller, <code>F</code>
+then behaves like a call to <code>panic</code>, terminating its own
+execution and running deferred functions in the same manner.
+This continues until all
+functions in the goroutine have ceased execution, in reverse order.
+At that point, the program is
+terminated and the error condition is reported, including the value of
+the argument to <code>panic</code>.  This termination sequence is
+called <i>panicking</i>.
 </p>
 </div>
 
@@ -10172,7 +10167,7 @@ package and may be relative to a repository of installed packages.
 <p>
 Implementation restriction: A compiler may restrict ImportPaths to
 non-empty strings using only characters belonging to
-<a href="http://www.unicode.org/versions/Unicode6.2.0/">Unicode's</a>
+<a href="http://www.unicode.org/versions/Unicode6.0.0/">Unicode's</a>
 L, M, N, P, and S general categories (the Graphic characters without
 spaces) and may also exclude the characters
 <code>!"#$%&amp;'()*,:;&lt;=&gt;?[\]^`{|}</code>
