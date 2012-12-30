@@ -1,0 +1,111 @@
+# Copyright 2012 The Go Authors.  All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+# These function names are also known to
+# (and are the plan for transitioning to) run.go.
+
+compile() {
+	$G $D/$F.go
+}
+
+compiledir() {
+	for gofile in $D/$F.dir/*.go
+	do
+		$G -I. "$gofile" || return 1
+	done
+}
+
+errorcheckdir() {
+	lastzero=""
+	if [ "$1" = "-0" ]; then
+		lastzero="-0"
+	fi
+	files=($D/$F.dir/*.go)
+	for gofile in ${files[@]}
+	do
+		zero="-0"
+		if [ ${files[${#files[@]}-1]} = $gofile ]; then
+			zero=$lastzero
+		fi
+		errchk $zero $G -D. -I. -e $gofile
+	done
+}
+
+rundir() {
+	lastfile=""
+	for gofile in $D/$F.dir/*.go
+	do
+		name=$(basename ${gofile/\.go/} )
+		$G -D. -I. -e "$gofile" || return 1
+		lastfile=$name
+	done
+	$L -o $A.out -L. $lastfile.$A
+	./$A.out
+}
+
+rundircmpout() {
+	lastfile=""
+	for gofile in $D/$F.dir/*.go
+	do
+		name=$(basename ${gofile/\.go/} )
+		$G -D. -I. -e "$gofile" || return 1
+		lastfile=$name
+	done
+	$L -o $A.out -L. $lastfile.$A
+	./$A.out 2>&1 | cmp - $D/$F.out
+}
+
+build() {
+	$G $D/$F.go && $L $F.$A
+}
+
+runoutput() {
+	go run "$D/$F.go" "$@" > tmp.go
+	go run tmp.go
+}
+
+run() {
+	gofiles=""
+	ingo=true
+	while $ingo; do
+		case "$1" in
+		*.go)
+			gofiles="$gofiles $1"
+			shift
+			;;
+		*)
+			ingo=false
+			;;
+		esac
+	done
+
+	$G $D/$F.go $gofiles && $L $F.$A && ./$A.out "$@"
+}
+
+cmpout() {
+	$G $D/$F.go && $L $F.$A && ./$A.out 2>&1 | cmp - $D/$F.out
+}
+
+errorcheck() {
+	zero=""
+	if [ "$1" = "-0" ]; then
+		zero="-0"
+		shift
+	fi
+	errchk $zero $G -e $* $D/$F.go
+}
+
+errorcheckoutput() {
+	zero=""
+	if [ "$1" = "-0" ]; then
+		zero="-0"
+		shift
+	fi
+	go run "$D/$F.go" "$@" > tmp.go
+	errchk $zero $G -e tmp.go
+}
+
+skip() {
+	true
+}
