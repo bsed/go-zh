@@ -79,7 +79,7 @@ func pkgPath(f *File, pkgName string) (path string) {
 			}
 		} else {
 			// Catch `import "pkgName"` or `import "foo/bar/pkgName"`.
-			if s == pkgName || strings.HasSuffix(s, "/"+pkgName) {
+			if s == pkgName || strings.HasSuffix(s, "/" + pkgName) {
 				return s
 			}
 		}
@@ -117,7 +117,6 @@ var untaggedLiteralWhitelist = map[string]bool{
 	"sort.IntSlice":                                 true,
 	"sort.StringSlice":                              true,
 	"unicode.SpecialCase":                           true,
-
 	// These image and image/color struct types are frozen. We will never add fields to them.
 	"image/color.Alpha16": true,
 	"image/color.Alpha":   true,
