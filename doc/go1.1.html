@@ -18,7 +18,7 @@ TODO
 <h3 id="divzero">Integer division by zero</h3>
 
 <p>
-In Go 1, integer division by a constant zero produced a runtime panic:
+    In Go 1, integer division by a constant zero produced a runtime panic:
 </p>
 
 <pre>
@@ -28,7 +28,7 @@ func f(x int) int {
 </pre>
 
 <p>
-In Go 1.1, an integer division by constant zero is not a legal program, so it is a compile-time error.
+    In Go 1.1, an integer division by constant zero is not a legal program, so it is a compile-time error.
 </p>
 
 
@@ -40,21 +40,24 @@ In Go 1.1, an integer division by constant zero is not a legal program, so it is
 <h3 id="gc-flag">Command-line flag parsing</h3>
 
 <p>
-In the gc toolchain, the compilers and linkers now use the
-same command-line flag parsing rules as the Go flag package, a departure
-from the traditional Unix flag parsing. This may affect scripts that invoke
-the tool directly.
-For example,
-<code>go tool 6c -Fw -Dfoo</code> must now be written
-<code>go tool 6c -F -w -D foo</code>. 
+    In the gc toolchain, the compilers and linkers now use the
+    same command-line flag parsing rules as the Go flag package, a departure
+    from the traditional Unix flag parsing. This may affect scripts that invoke
+    the tool directly.
+    For example,
+    <code>go tool 6c -Fw -Dfoo</code> must now be written
+    <code>go tool 6c -F -w -D foo</code>.
 </p>
 
 <h3 id="int">Size of int on 64-bit platforms</h3>
 
 <p>
-The language allows the implementation to choose whether the <code>int</code> type and <code>uint</code> types are 32 or 64 bits. Previous Go implementations made <code>int</code> and <code>uint</code> 32 bits on all systems. Both the gc and gccgo implementations (TODO: check that gccgo does) <a href="http://golang.org/issue/2188">now make <code>int</code> and <code>uint</code> 64 bits on 64-bit platforms such as AMD64/x86-64</a>.
-Among other things, this enables the allocation of slices with
-more than 2 billion elements on 64-bit platforms.
+    The language allows the implementation to choose whether the <code>int</code> type and <code>uint</code> types are
+    32 or 64 bits. Previous Go implementations made <code>int</code> and <code>uint</code> 32 bits on all systems. Both
+    the gc and gccgo implementations (TODO: check that gccgo does) <a href="http://golang.org/issue/2188">now make
+    <code>int</code> and <code>uint</code> 64 bits on 64-bit platforms such as AMD64/x86-64</a>.
+    Among other things, this enables the allocation of slices with
+    more than 2 billion elements on 64-bit platforms.
 </p>
 
 <p>
@@ -75,7 +78,7 @@ fmt.Println(i)
 </pre>
 
 <p>Portable code intending 32-bit sign extension (yielding -1 on all systems)
-would instead say:
+    would instead say:
 </p>
 
 <pre>
@@ -85,36 +88,40 @@ i := int(int32(x))
 <h3 id="asm">Assembler</h3>
 
 <p>
-Due to the <a href="#int">int</a> and TODO: OTHER changes,
-the placement of function arguments on the stack has changed.
-Functions written in assembly will need to be revised at least
-to adjust frame pointer offsets.
+    Due to the <a href="#int">int</a> and TODO: OTHER changes,
+    the placement of function arguments on the stack has changed.
+    Functions written in assembly will need to be revised at least
+    to adjust frame pointer offsets.
 </p>
 
 <h3 id="gotool">Changes to the go tool</h3>
 
-<p>The <code>go</code> tool has acquired several improvements which are intended to improve the experience for new Go users.</p>
+<p>The <code>go</code> tool has acquired several improvements which are intended to improve the experience for new Go
+    users.</p>
 
-<p>Firstly, when compiling, testing, or running Go code, the <code>go</code> tool will now give more detailed errors messages, including a list of paths searched, when a package cannot be located.
+<p>Firstly, when compiling, testing, or running Go code, the <code>go</code> tool will now give more detailed errors
+    messages, including a list of paths searched, when a package cannot be located.
 </p>
 
 <pre>
 $ go build foo/quxx
 can't load package: package foo/quxx: cannot find package "foo/quxx" in any of:
         /home/User/go/src/pkg/foo/quxx (from $GOROOT)
-        /home/User/src/foo/quxx (from $GOPATH) 
+        /home/User/src/foo/quxx (from $GOPATH)
 </pre>
 
 <p>
-Secondly, the <code>go get</code> command no longer allows <code>$GOROOT</code> as the default destination when downloading package source. To use <code>go get</code> command, a valid <code>$GOPATH</code> is now required.
+    Secondly, the <code>go get</code> command no longer allows <code>$GOROOT</code> as the default destination when
+    downloading package source. To use <code>go get</code> command, a valid <code>$GOPATH</code> is now required.
 </p>
 
 <pre>
 $ GOPATH= go get code.google.com/p/foo/quxx
-package code.google.com/p/foo/quxx: cannot download, $GOPATH not set. For more details see: go help gopath 
+package code.google.com/p/foo/quxx: cannot download, $GOPATH not set. For more details see: go help gopath
 </pre>
 
-<p>Finally, as a result of the previous change, the <code>go get</code> command will also fail when <code>$GOPATH</code> and <code>$GOROOT</code> are set to the same value. 
+<p>Finally, as a result of the previous change, the <code>go get</code> command will also fail when <code>$GOPATH</code>
+    and <code>$GOROOT</code> are set to the same value.
 </p>
 
 <pre>
@@ -126,9 +133,9 @@ package code.google.com/p/foo/quxx: cannot download, $GOPATH must not be set to 
 <h3 id="gofix">Changes to go fix</h3>
 
 <p>
-The <code>go fix</code> command no longer applies fixes to update code from
-before Go 1 to use Go 1 APIs. To update pre-Go 1 code to Go 1.1, use a Go 1.0 toolchain
-to convert the code to Go 1.0 first.
+    The <code>go fix</code> command no longer applies fixes to update code from
+    before Go 1 to use Go 1 APIs. To update pre-Go 1 code to Go 1.1, use a Go 1.0 toolchain
+    to convert the code to Go 1.0 first.
 </p>
 
 <h2 id="performance">Performance</h2>
@@ -154,38 +161,39 @@ TODO
 
 <h3 id="debug_elf">debug/elf</h3>
 <p>
-Previous versions of the debug/elf package intentionally skipped over the first
-symbol in the ELF symbol table, since it is always an empty symbol. This symbol
-is no longer skipped since indexes into the symbol table returned by debug/elf,
-will be different to indexes into the original ELF symbol table. Any code that
-calls the debug/elf functions Symbols or ImportedSymbols may need to be
-adjusted to account for the additional symbol and the change in symbol offsets.
+    Previous versions of the debug/elf package intentionally skipped over the first
+    symbol in the ELF symbol table, since it is always an empty symbol. This symbol
+    is no longer skipped since indexes into the symbol table returned by debug/elf,
+    will be different to indexes into the original ELF symbol table. Any code that
+    calls the debug/elf functions Symbols or ImportedSymbols may need to be
+    adjusted to account for the additional symbol and the change in symbol offsets.
 </p>
 
 <h3 id="net">net</h3>
 
 <p>
-The protocol-specific resolvers were formerly
-lax about the network name passed in. For example, although the documentation was clear
-that the only valid networks for <code>ResolveTCPAddr</code> are <code>"tcp"</code>,
-<code>"tcp4"</code>, and <code>"tcp6"</code>, the Go 1.0 implementation silently accepted
-any string. The Go 1.1 implementation returns an error if the network is not one of those strings.
-The same is true of the other protocol-specific resolvers <code>ResolveIPAddr</code>, <code>ResolveUDPAddr</code>, and
-<code>ResolveUnixAddr</code>.
+    The protocol-specific resolvers were formerly
+    lax about the network name passed in. For example, although the documentation was clear
+    that the only valid networks for <code>ResolveTCPAddr</code> are <code>"tcp"</code>,
+    <code>"tcp4"</code>, and <code>"tcp6"</code>, the Go 1.0 implementation silently accepted
+    any string. The Go 1.1 implementation returns an error if the network is not one of those strings.
+    The same is true of the other protocol-specific resolvers <code>ResolveIPAddr</code>, <code>ResolveUDPAddr</code>,
+    and
+    <code>ResolveUnixAddr</code>.
 </p>
 
 <p>
-The previous <code>ListenUnixgram</code> returned <code>UDPConn</code> as
-arepresentation of the connection endpoint. The Go 1.1 implementation
-returns <code>UnixConn</code> to allow reading and writing
-with <code>ReadFrom</code> and <code>WriteTo</code> methods on
-the <code>UnixConn</code>.
+    The previous <code>ListenUnixgram</code> returned <code>UDPConn</code> as
+    arepresentation of the connection endpoint. The Go 1.1 implementation
+    returns <code>UnixConn</code> to allow reading and writing
+    with <code>ReadFrom</code> and <code>WriteTo</code> methods on
+    the <code>UnixConn</code>.
 </p>
 
 <h3 id="reflect">reflect</h3>
 
 <p>
-TODO: 
+TODO:
 <code>reflect</code>: Select, ChanOf, MakeFunc, MapOf, SliceOf, Convert, Type.ConvertibleTo
 </p>
 
@@ -198,19 +206,19 @@ TODO:
 
 <h3 id="time">time</h3>
 <p>
-On FreeBSD, Linux, NetBSD, OS X and OpenBSD, previous versions of the time package
-returned times with microsecond precision. The Go 1.1 implementation of time on these
-systems now returns times with nanosecond precision. Code may exist that expects to be
-able to store such a time in an external format with only microsecond precision,
-read it back, and recover exactly the same time instant.
-In Go 1.1 the same time will not be recovered, since the external storage
-will have discarded nanoseconds.
-To address this case, there are two new methods of time.Time, Round and Truncate,
-that can be used to remove precision from a time before passing it to
-external storage.
+    On FreeBSD, Linux, NetBSD, OS X and OpenBSD, previous versions of the time package
+    returned times with microsecond precision. The Go 1.1 implementation of time on these
+    systems now returns times with nanosecond precision. Code may exist that expects to be
+    able to store such a time in an external format with only microsecond precision,
+    read it back, and recover exactly the same time instant.
+    In Go 1.1 the same time will not be recovered, since the external storage
+    will have discarded nanoseconds.
+    To address this case, there are two new methods of time.Time, Round and Truncate,
+    that can be used to remove precision from a time before passing it to
+    external storage.
 </p>
 
-<p> TODO: 
+<p> TODO:
 <code>time</code>: ParseInLocation, Timer.Reset, Time.YearDay
 </p>
 
@@ -244,7 +252,7 @@ See the relevant package documentation for more information about each change.
 </p>
 
 <ul>
-<li> 
+<li>
 The <a href="/pkg/bytes/"><code>bytes</code></a> package has two new functions,
 <a href="/pkg/bytes/#TrimPrefix"><code>TrimPrefix</code></a>
 and
@@ -257,7 +265,7 @@ provides some control over memory allocation inside the buffer.
 Finally, the
 <a href="/pkg/bytes/#Reader"><code>Reader</code></a> type now has a
 <a href="/pkg/strings/#Reader.WriteTo"><code>WriteTo</code></a> method
-so it implements the 
+so it implements the
 <a href="/pkg/io/#WriterTo"><code>io.WriterTo</code></a> interface.
 </li>
 
@@ -266,23 +274,23 @@ The <a href="/pkg/crypto/hmac/"><code>crypto/hmac</code></a> package has a new f
 <a href="/pkg/crypto/hmac/#Equal"><code>Equal</code></a>, to compare two MACs.
 </li>
 
-<li> TODO: 
+<li> TODO:
 <code>crypto/x509</code>: DecryptPEMBlock, EncryptPEMBlock etc.
 </li>
 
-<li> TODO: 
+<li> TODO:
 <code>database/sql/driver</code>: Queryer
 </li>
 
-<li> TODO: 
+<li> TODO:
 <code>database/sql</code>: Ping, SetMaxIdleConns
 </li>
 
-<li> TODO: 
+<li> TODO:
 <code>encoding/json</code>: Decoder.Buffered, UseNumber, Number
 </li>
 
-<li> TODO: 
+<li> TODO:
 <code>encoding/xml</code>: EscapeText Encoder.Indent
 </li>
 
@@ -300,7 +308,7 @@ information that the <a href="/cmd/godoc/"><code>godoc</code></a>
 command can filter or present according to the value of the <code>-notes</code> flag.
 </li>
 
-<li> TODO: 
+<li> TODO:
 <code>go/format</code>: Node, Source
 </li>
 
@@ -343,7 +351,7 @@ and
 <a href="/pkg/math/big/#Rat.SetFloat64"><code>SetFloat64</code></a>.
 </li>
 
-<li> TODO: 
+<li> TODO:
 <code>mime/multipart</code>: Writer.SetBoundary
 </li>
 
@@ -351,19 +359,19 @@ and
 The new <a href="/pkg/net/http/cookiejar/">net/http/cookiejar</a> package provides the basics for managing HTTP cookies.
 </li>
 
-<li> TODO: 
+<li> TODO:
 <code>net/http</code>: ParseTime, CloseNotifier, Request.PostFormValue, ServeMux.Handler, Transport.CancelRequest
 </li>
 
-<li> TODO: 
+<li> TODO:
 <code>net/mail</code>: ParseAddress, ParseAddressList
 </li>
 
-<li> TODO: 
+<li> TODO:
 <code>net/smtp</code>: Client.Hello
 </li>
 
-<li> TODO: 
+<li> TODO:
 <code>net/textproto</code>: TrimBytes, TrimString
 </li>
 
@@ -375,7 +383,7 @@ The new <a href="/pkg/net/http/cookiejar/">net/http/cookiejar</a> package provid
 The new method <a href="/pkg/os/#FileMode.IsRegular"><code>os.FileMode.IsRegular</code> </a> makes it easy to ask if a file is a plain file.
 </li>
 
-<li> TODO: 
+<li> TODO:
 <code>pkg/image</code>: new subsamplings
 </li>
 
@@ -388,14 +396,14 @@ method, while
 strings into pieces based on separators defined by the regular expression.
 </li>
 
-<li> TODO: 
+<li> TODO:
 <code>runtime/debug</code>: FreeOSMemory, ReadGCStats, SetGCPercent
 </li>
 
 <li>
 The <a href="/pkg/sort/"><code>sort</code></a> package has a new function,
 <a href="/pkg/sort/#Reverse"><code>Reverse</code></a>.
-Wrapping the argument of a call to 
+Wrapping the argument of a call to
 <a href="/pkg/sort/#Sort"><code>sort.Sort</code></a>
 with a call to <code>Reverse</code> causes the sort order to be reversed.
 </li>
