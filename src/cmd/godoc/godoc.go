@@ -119,7 +119,9 @@ func initFSTree() {
 // ----------------------------------------------------------------------------
 // Tab conversion
 
-var spaces = []byte("                                ") // 32 spaces seems like a good number
+var spaces = []byte("                                ")
+
+// 32 spaces seems like a good number
 
 const (
 	indenting = iota
@@ -545,29 +547,24 @@ var fmap = template.FuncMap{
 	// access to FileInfos (directory listings)
 	"fileInfoName": fileInfoNameFunc,
 	"fileInfoTime": fileInfoTimeFunc,
-
 	// access to search result information
 	"infoKind_html":    infoKind_htmlFunc,
 	"infoLine":         infoLineFunc,
 	"infoSnippet_html": infoSnippet_htmlFunc,
-
 	// formatting of AST nodes
 	"node":         nodeFunc,
 	"node_html":    node_htmlFunc,
 	"comment_html": comment_htmlFunc,
 	"comment_text": comment_textFunc,
-
 	// support for URL attributes
 	"pkgLink":     pkgLinkFunc,
 	"srcLink":     srcLinkFunc,
 	"posLink_url": posLink_urlFunc,
-
 	// formatting of Examples
 	"example_html":   example_htmlFunc,
 	"example_text":   example_textFunc,
 	"example_name":   example_nameFunc,
 	"example_suffix": example_suffixFunc,
-
 	// formatting of Notes
 	"noteTitle": noteTitle,
 }

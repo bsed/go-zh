@@ -148,7 +148,6 @@ var untaggedLiteralWhitelist = map[string]bool{
 	"sort.IntSlice":                                 true,
 	"sort.StringSlice":                              true,
 	"unicode.SpecialCase":                           true,
-
 	// These image and image/color struct types are frozen. We will never add fields to them.
 	"image/color.Alpha16": true,
 	"image/color.Alpha":   true,
