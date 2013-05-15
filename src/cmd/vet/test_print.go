@@ -25,7 +25,9 @@ func (errorTest1) Error(...interface{}) string {
 	return "hi"
 }
 
-type errorTest2 int // Analogous to testing's *T type.
+type errorTest2 int
+
+// Analogous to testing's *T type.
 func (errorTest2) Error(...interface{}) {
 }
 
