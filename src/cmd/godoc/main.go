@@ -50,7 +50,9 @@ import (
 	"strings"
 )
 
-const defaultAddr = ":6060" // default webserver address
+const defaultAddr = ":6060"
+
+// default webserver address
 
 var (
 	// file system to serve
