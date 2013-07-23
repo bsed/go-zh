@@ -536,3 +536,4 @@ div#playground .code {
 div#playground .output {
 	height: 100px;
 }
+.invisible_translation { display: none; }
