@@ -62,6 +62,7 @@ func testCPUProfile(t *testing.T, need []string, f func()) {
 		t.Logf("uname -a: %v", vers)
 	case "plan9":
 		// unimplemented
+		// 还未实现
 		return
 	}
 
@@ -73,6 +74,7 @@ func testCPUProfile(t *testing.T, need []string, f func()) {
 	StopCPUProfile()
 
 	// Convert []byte to []uintptr.
+	// 将 []byte 转换为 []uintptr。
 	bytes := prof.Bytes()
 	l := len(bytes) / int(unsafe.Sizeof(uintptr(0)))
 	val := *(*[]uintptr)(unsafe.Pointer(&bytes))
@@ -97,6 +99,7 @@ func testCPUProfile(t *testing.T, need []string, f func()) {
 	}
 
 	// Check that profile is well formed and contains ChecksumIEEE.
+	// 检查分析报告的形式是否符合格式 ChecksumIEEE.
 	have := make([]uintptr, len(need))
 	for len(val) > 0 {
 		if len(val) < 2 || val[0] < 1 || val[1] < 1 || uintptr(len(val)) < 2+val[1] {

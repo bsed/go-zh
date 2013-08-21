@@ -6,6 +6,11 @@
 //
 // See "The Go image/draw package" for an introduction to this package:
 // http://golang.org/doc/articles/image_draw.html
+
+// draw 包提供组装图片的方法.
+//
+// 参考 "The Go image/draw package" 获取这个包的简介：
+// http://golang.org/doc/articles/image_draw.html
 package draw
 
 import (
@@ -14,6 +19,8 @@ import (
 )
 
 // m is the maximum color value returned by image.Color.RGBA.
+
+// m是image.Color.RGBA返回颜色的最大值。
 const m = 1<<16 - 1
 
 // Image is an image.Image with a Set method to change a single pixel.
@@ -30,30 +37,45 @@ type Quantizer interface {
 }
 
 // Op is a Porter-Duff compositing operator.
+
+// Op是Porter-Duff合成操作。
 type Op int
 
 const (
 	// Over specifies ``(src in mask) over dst''.
+
+	// Over说明``(在mask上的src)覆盖在dst上''。
 	Over Op = iota
 	// Src specifies ``src in mask''.
+
+	// Src说明``src作用在mask上''。
 	Src
 )
 
 // Draw implements the Drawer interface by calling the Draw function with this
 // Op.
+
+// Draw 通过用此 Op 调用 Draw 函数实现了 Drawer 接口。
 func (op Op) Draw(dst Image, r image.Rectangle, src image.Image, sp image.Point) {
 	DrawMask(dst, r, src, sp, nil, image.Point{}, op)
 }
 
 // Drawer contains the Draw method.
+
+// Drawer 包含 Draw 方法。
 type Drawer interface {
 	// Draw aligns r.Min in dst with sp in src and then replaces the
 	// rectangle r in dst with the result of drawing src on dst.
+
+	// Draw 根据 src 中的 sp 来对齐 dst 中的 r.Min，然后用在 dst 上画出 src
+	// 的结果来替换掉矩形 r
 	Draw(dst Image, r image.Rectangle, src image.Image, sp image.Point)
 }
 
 // FloydSteinberg is a Drawer that is the Src Op with Floyd-Steinberg error
 // diffusion.
+
+// FloydSteinberg 是一个 Drawer，它对 Src 进行 Floyd-Steinberg 误差扩散操作。
 var FloydSteinberg Drawer = floydSteinberg{}
 
 type floydSteinberg struct{}
@@ -69,6 +91,8 @@ func (floydSteinberg) Draw(dst Image, r image.Rectangle, src image.Image, sp ima
 // clip clips r against each image's bounds (after translating into the
 // destination image's co-ordinate space) and shifts the points sp and mp by
 // the same amount as the change in r.Min.
+
+// clip将r剪辑到每个图像的边界上（转移到目标图像的边界上之后），按照作用在r.Min上的变化转变sp和mp两个点。
 func clip(dst Image, r *image.Rectangle, src image.Image, sp *image.Point, mask image.Image, mp *image.Point) {
 	orig := r.Min
 	*r = r.Intersect(dst.Bounds())
@@ -100,6 +124,9 @@ func Draw(dst Image, r image.Rectangle, src image.Image, sp image.Point, op Op) 
 
 // DrawMask aligns r.Min in dst with sp in src and mp in mask and then replaces the rectangle r
 // in dst with the result of a Porter-Duff composition. A nil mask is treated as opaque.
+
+// DrawMask将dst上的r.Min，src上的sp，mask上的mp对齐，然后对dst上的r型矩阵区域执行Porter-Duff合并操作。
+// mask设置为nil就代表完全不透明。
 func DrawMask(dst Image, r image.Rectangle, src image.Image, sp image.Point, mask image.Image, mp image.Point, op Op) {
 	clip(dst, &r, src, &sp, mask, &mp)
 	if r.Empty() {
