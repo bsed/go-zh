@@ -111,18 +111,40 @@ func init() {
 }
 
 // Flags set by multiple commands.
-var buildA bool               // -a flag
-var buildN bool               // -n flag
-var buildP = runtime.NumCPU() // -p flag
-var buildV bool               // -v flag
-var buildX bool               // -x flag
+var buildA bool
+
+// -a flag
+var buildN bool
+
+// -n flag
+var buildP = runtime.NumCPU()
+
+// -p flag
+var buildV bool
+
+// -v flag
+var buildX bool
+
+// -x flag
 var buildO = cmdBuild.Flag.String("o", "", "output file")
-var buildWork bool           // -work flag
-var buildGcflags []string    // -gcflags flag
-var buildCcflags []string    // -ccflags flag
-var buildLdflags []string    // -ldflags flag
-var buildGccgoflags []string // -gccgoflags flag
-var buildRace bool           // -race flag
+var buildWork bool
+
+// -work flag
+var buildGcflags []string
+
+// -gcflags flag
+var buildCcflags []string
+
+// -ccflags flag
+var buildLdflags []string
+
+// -ldflags flag
+var buildGccgoflags []string
+
+// -gccgoflags flag
+var buildRace bool
+
+// -race flag
 
 var buildContext = build.Default
 var buildToolchain toolchain = noToolchain{}
