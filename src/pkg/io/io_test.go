@@ -14,13 +14,16 @@ import (
 )
 
 // An version of bytes.Buffer without ReadFrom and WriteTo
+
+// bytes.Buffer 的没有 ReadFrom 和 WriteTo 的版本
 type Buffer struct {
 	bytes.Buffer
-	ReaderFrom // conflicts with and hides bytes.Buffer's ReaderFrom.
-	WriterTo   // conflicts with and hides bytes.Buffer's WriterTo.
+	ReaderFrom // conflicts with and hides bytes.Buffer's ReaderFrom.   // 与 bytes.Buffer 的 ReaderFrom 冲突，因而隐藏了它。
+	WriterTo   // conflicts with and hides bytes.Buffer's WriterTo.     // 与 bytes.Buffer 的 WriterTo 冲突，因而隐藏了它。
 }
 
 // Simple tests, primarily to verify the ReadFrom and WriteTo callouts inside Copy and CopyN.
+// 简单的测试，主要是为了验证 Copy 和 CopyN 中对 ReadFrom 和 WriteTo 的内部调用。
 
 func TestCopy(t *testing.T) {
 	rb := new(Buffer)
@@ -34,7 +37,7 @@ func TestCopy(t *testing.T) {
 
 func TestCopyReadFrom(t *testing.T) {
 	rb := new(Buffer)
-	wb := new(bytes.Buffer) // implements ReadFrom.
+	wb := new(bytes.Buffer) // implements ReadFrom. // 实现 ReadFrom。
 	rb.WriteString("hello, world.")
 	Copy(wb, rb)
 	if wb.String() != "hello, world." {
@@ -43,7 +46,7 @@ func TestCopyReadFrom(t *testing.T) {
 }
 
 func TestCopyWriteTo(t *testing.T) {
-	rb := new(bytes.Buffer) // implements WriteTo.
+	rb := new(bytes.Buffer) // implements WriteTo.  // 实现 WriteTo。
 	wb := new(Buffer)
 	rb.WriteString("hello, world.")
 	Copy(wb, rb)
@@ -90,7 +93,7 @@ func TestCopyN(t *testing.T) {
 
 func TestCopyNReadFrom(t *testing.T) {
 	rb := new(Buffer)
-	wb := new(bytes.Buffer) // implements ReadFrom.
+	wb := new(bytes.Buffer) // implements ReadFrom. // 实现 ReadFrom。
 	rb.WriteString("hello")
 	CopyN(wb, rb, 5)
 	if wb.String() != "hello" {
@@ -99,7 +102,7 @@ func TestCopyNReadFrom(t *testing.T) {
 }
 
 func TestCopyNWriteTo(t *testing.T) {
-	rb := new(bytes.Buffer) // implements WriteTo.
+	rb := new(bytes.Buffer) // implements WriteTo.  // 实现 WriteTo。
 	wb := new(Buffer)
 	rb.WriteString("hello, world.")
 	CopyN(wb, rb, 5)
@@ -125,6 +128,7 @@ func (wantedAndErrReader) Read(p []byte) (int, error) {
 func TestCopyNEOF(t *testing.T) {
 	// Test that EOF behavior is the same regardless of whether
 	// argument to CopyN has ReadFrom.
+	// 测试 EOF 行为的一致性，不管 CopyN 的实参是否拥有 ReadFrom。
 
 	b := new(bytes.Buffer)
 
@@ -166,6 +170,8 @@ func TestReadAtLeast(t *testing.T) {
 
 // A version of bytes.Buffer that returns n > 0, err on Read
 // when the input is exhausted.
+
+// bytes.Buffer 的一个版本，当输入被用尽时 Read 会返回 n > 0, EOF。
 type dataAndErrorBuffer struct {
 	err error
 	bytes.Buffer
