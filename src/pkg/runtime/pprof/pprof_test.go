@@ -98,6 +98,7 @@ func testCPUProfile(t *testing.T, need []string, f func()) {
 		t.Logf("uname -a: %v", vers)
 	case "plan9":
 		// unimplemented
+		// 还未实现
 		return
 	}
 
@@ -109,6 +110,7 @@ func testCPUProfile(t *testing.T, need []string, f func()) {
 	StopCPUProfile()
 
 	// Check that profile is well formed and contains ChecksumIEEE.
+	// 检查分析报告的形式是否符合格式 ChecksumIEEE.
 	have := make([]uintptr, len(need))
 	parseProfile(t, prof.Bytes(), func(count uintptr, stk []uintptr) {
 		for _, pc := range stk {
