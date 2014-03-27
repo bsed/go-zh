@@ -19,16 +19,24 @@ import (
 //
 // A Cond can be created as part of other structures.
 // A Cond must not be copied after first use.
+
+// Cond 实现了条件变量，即Go程等待的汇合点或宣布一个事件的发生。
+//
+// 每个 Cond 都有一个与其相关联的 Locker L（一般是 *Mutex 或 *RWMutex），
+// 在改变该条件或调用 Wait 方法时，它必须保持不变。
 type Cond struct {
 	// L is held while observing or changing the condition
+	// L 在观测或更改条件时保持不变
 	L Locker
 
 	sema    syncSema
-	waiters uint32 // number of waiters
+	waiters uint32 // number of waiters // 等待者的数量
 	checker copyChecker
 }
 
 // NewCond returns a new Cond with Locker l.
+
+// NewCond 用 Locker l 返回一个新的 Cond。
 func NewCond(l Locker) *Cond {
 	return &Cond{L: l}
 }
@@ -49,6 +57,20 @@ func NewCond(l Locker) *Cond {
 //    ... make use of condition ...
 //    c.L.Unlock()
 //
+
+// Wait 原子性地解锁 c.L 并挂起调用的Go程的执行。不像其它的系统那样，Wait
+// 不会返回，除非它被 Broadcast 或 Signal 唤醒。
+//
+// 由于 Wait 第一次恢复时 c.L 并未锁定，因此调用者一般不能假定 Wait 返回时条件为真。
+// 取而代之，调用者应当把 Wait 放入循环中：
+//
+//    c.L.Lock()
+//    for !condition() {
+//        c.Wait()
+//    }
+//    ... 使用 condition ...
+//    c.L.Unlock()
+//
 func (c *Cond) Wait() {
 	c.checker.check()
 	if raceenabled {
@@ -67,6 +89,10 @@ func (c *Cond) Wait() {
 //
 // It is allowed but not required for the caller to hold c.L
 // during the call.
+
+// Signal 用于唤醒等待 c 的Go程，如果有的话。
+//
+// during the call.在调用其间可以保存 c.L，但并没有必要。
 func (c *Cond) Signal() {
 	c.signalImpl(false)
 }
@@ -75,6 +101,10 @@ func (c *Cond) Signal() {
 //
 // It is allowed but not required for the caller to hold c.L
 // during the call.
+
+// Broadcast 唤醒所有等待 c 的Go程。
+//
+// during the call.在调用其间可以保存 c.L，但并没有必要。
 func (c *Cond) Broadcast() {
 	c.signalImpl(true)
 }
