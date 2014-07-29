@@ -9,6 +9,13 @@ package math
 //	Nextafter32(x, x)   = x
 //      Nextafter32(NaN, y) = NaN
 //      Nextafter32(x, NaN) = NaN
+
+// Nextafter32 返回从 x 到 y 的下一个可表示的 float32 值。
+//
+// 特殊情况为：
+//	Nextafter32(x, x)   = x
+//	Nextafter32(NaN, y) = NaN
+//	Nextafter32(x, NaN) = NaN
 func Nextafter32(x, y float32) (r float32) {
 	switch {
 	case IsNaN(float64(x)) || IsNaN(float64(y)): // special case
@@ -30,8 +37,16 @@ func Nextafter32(x, y float32) (r float32) {
 //	Nextafter64(x, x)   = x
 //      Nextafter64(NaN, y) = NaN
 //      Nextafter64(x, NaN) = NaN
+
+// Nextafter 返回从 x 到 y 的下一个可表示的 float64 值。
+//
+// 特殊情况为：
+//	Nextafter64(x, x)   = x
+//	Nextafter(NaN, y) = NaN
+//	Nextafter(x, NaN) = NaN
 func Nextafter(x, y float64) (r float64) {
 	switch {
+	// 特殊情况
 	case IsNaN(x) || IsNaN(y): // special case
 		r = NaN()
 	case x == y:
