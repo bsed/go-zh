@@ -42,10 +42,29 @@ import "math"
 // arithmetic   domain     # trials      peak         rms
 //    IEEE      -10,+10     30000       9.4e-15     1.5e-15
 
+// 复数的幂函数
+//
+// 描述：
+//
+// 求出复数 A 的复数 Z 次幂。
+// 定义遵循 AMS55 # 4.2.8，
+// 解析式等价于 cpow(a,z) = cexp(z clog(a))。
+//
+// 精度：
+//
+//                         相对误差:
+//    算法      范围         测试次数     峰值         均方根
+//    IEEE      -10,+10     30000       9.4e-15     1.5e-15
+
 // Pow returns x**y, the base-x exponential of y.
 // For generalized compatibility with math.Pow:
 //	Pow(0, ±0) returns 1+0i
 //	Pow(0, c) for real(c)<0 returns Inf+0i if imag(c) is zero, otherwise Inf+Inf i.
+
+// Pow 返回 x**y，即以 x 为底的 y 次幂。
+// 对于 math.Pow 的通用化兼容：
+//	Pow(0, ±0) 返回 1+0i
+//	若 imag(c) 为零，则 Pow(0, c) 在 real(c)<0 时返回 Inf+0i, 否则返回 Inf+Inf i。
 func Pow(x, y complex128) complex128 {
 	if x == 0 { // Guaranteed also true for x == -0.
 		r, i := real(y), imag(y)
