@@ -25,12 +25,22 @@ import (
 // The struct fields x.before and x.after check that the
 // operations do not extend past the full word size.
 
+// 无争用情况下的行为正确性测试。（此函数的工作是否需要公布？）
+//
+// 测试 Add 函数的“加上”是否正确。
+// 测试 CompareAndSwap 函数是否真的做了比较，交换是否正确。
+//
+// 循环2的幂值是为了确保该操作适用于全字长。
+// 结构体字段 x.before 和 x.after 是为了确认该操作是否超出了全字长。
+
 const (
 	magic32 = 0xdedbeef
 	magic64 = 0xdeddeadbeefbeef
 )
 
 // Do the 64-bit functions panic?  If so, don't bother testing.
+
+// 64位函数恐慌了？要真是这样，也懒得测试了。
 var test64err = func() (err interface{}) {
 	defer func() {
 		err = recover()
@@ -755,6 +765,13 @@ func TestStorePointer(t *testing.T) {
 // low bits are equal to high bits, swap, check that the old value
 // has low and high bits equal.
 
+// 有争用情况下的行为正确性测试。（该函数是原子性的么？）
+//
+// 对于每一个函数我们都编写了一个 "hammer" 函数，它反复地使用原子性操作将某个值加1。
+// 在并行地运行多个 hammer 之后，检查一下我们是否停止在正确的结果上。
+//
+// Swap 不能加 1，因此它采用了不同的策略。该函数反复地生成一个伪随机数，它的低位等于高位，
+// 交换，检查旧值的低位和高位是否相等。
 var hammer32 = map[string]func(*uint32, int){
 	"SwapInt32":             hammerSwapInt32,
 	"SwapUint32":            hammerSwapUint32,
@@ -773,6 +790,7 @@ func init() {
 	var v uint64 = 1 << 50
 	if uintptr(v) != 0 {
 		// 64-bit system; clear uintptr tests
+		// 64位系统，清除 uintptr 测试
 		delete(hammer32, "SwapUintptr")
 		delete(hammer32, "SwapPointer")
 		delete(hammer32, "AddUintptr")
@@ -807,6 +825,7 @@ func hammerSwapUint32(addr *uint32, count int) {
 func hammerSwapUintptr32(uaddr *uint32, count int) {
 	// only safe when uintptr is 32-bit.
 	// not called on 64-bit systems.
+	// 仅当 uintptr 为32位时才安全。不在64位系统上调用。
 	addr := (*uintptr)(unsafe.Pointer(uaddr))
 	seed := int(uintptr(unsafe.Pointer(&count)))
 	for i := 0; i < count; i++ {
@@ -821,6 +840,7 @@ func hammerSwapUintptr32(uaddr *uint32, count int) {
 func hammerSwapPointer32(uaddr *uint32, count int) {
 	// only safe when uintptr is 32-bit.
 	// not called on 64-bit systems.
+	// 仅当 uintptr 为32位时才安全。不在64位系统上调用。
 	addr := (*unsafe.Pointer)(unsafe.Pointer(uaddr))
 	seed := int(uintptr(unsafe.Pointer(&count)))
 	for i := 0; i < count; i++ {
@@ -848,6 +868,7 @@ func hammerAddUint32(addr *uint32, count int) {
 func hammerAddUintptr32(uaddr *uint32, count int) {
 	// only safe when uintptr is 32-bit.
 	// not called on 64-bit systems.
+	// 仅当 uintptr 为32位时才安全。不在64位系统上调用。
 	addr := (*uintptr)(unsafe.Pointer(uaddr))
 	for i := 0; i < count; i++ {
 		AddUintptr(addr, 1)
@@ -880,6 +901,7 @@ func hammerCompareAndSwapUint32(addr *uint32, count int) {
 func hammerCompareAndSwapUintptr32(uaddr *uint32, count int) {
 	// only safe when uintptr is 32-bit.
 	// not called on 64-bit systems.
+	// 仅当 uintptr 为32位时才安全。不在64位系统上调用。
 	addr := (*uintptr)(unsafe.Pointer(uaddr))
 	for i := 0; i < count; i++ {
 		for {
@@ -894,6 +916,7 @@ func hammerCompareAndSwapUintptr32(uaddr *uint32, count int) {
 func hammerCompareAndSwapPointer32(uaddr *uint32, count int) {
 	// only safe when uintptr is 32-bit.
 	// not called on 64-bit systems.
+	// 仅当 uintptr 为32位时才安全。不在64位系统上调用。
 	addr := (*unsafe.Pointer)(unsafe.Pointer(uaddr))
 	for i := 0; i < count; i++ {
 		for {
@@ -954,6 +977,7 @@ func init() {
 	var v uint64 = 1 << 50
 	if uintptr(v) == 0 {
 		// 32-bit system; clear uintptr tests
+		// 32位系统，清除 uintptr 测试
 		delete(hammer64, "SwapUintptr")
 		delete(hammer64, "SwapPointer")
 		delete(hammer64, "AddUintptr")
@@ -988,6 +1012,7 @@ func hammerSwapUint64(addr *uint64, count int) {
 func hammerSwapUintptr64(uaddr *uint64, count int) {
 	// only safe when uintptr is 64-bit.
 	// not called on 32-bit systems.
+	// 仅当 uintptr 为64位时才安全。不在32位系统上调用。
 	addr := (*uintptr)(unsafe.Pointer(uaddr))
 	seed := int(uintptr(unsafe.Pointer(&count)))
 	for i := 0; i < count; i++ {
@@ -1002,6 +1027,7 @@ func hammerSwapUintptr64(uaddr *uint64, count int) {
 func hammerSwapPointer64(uaddr *uint64, count int) {
 	// only safe when uintptr is 64-bit.
 	// not called on 32-bit systems.
+	// 仅当 uintptr 为64位时才安全。不在32位系统上调用。
 	addr := (*unsafe.Pointer)(unsafe.Pointer(uaddr))
 	seed := int(uintptr(unsafe.Pointer(&count)))
 	for i := 0; i < count; i++ {
@@ -1029,6 +1055,7 @@ func hammerAddUint64(addr *uint64, count int) {
 func hammerAddUintptr64(uaddr *uint64, count int) {
 	// only safe when uintptr is 64-bit.
 	// not called on 32-bit systems.
+	// 仅当 uintptr 为64位时才安全。不在32位系统上调用。
 	addr := (*uintptr)(unsafe.Pointer(uaddr))
 	for i := 0; i < count; i++ {
 		AddUintptr(addr, 1)
@@ -1061,6 +1088,7 @@ func hammerCompareAndSwapUint64(addr *uint64, count int) {
 func hammerCompareAndSwapUintptr64(uaddr *uint64, count int) {
 	// only safe when uintptr is 64-bit.
 	// not called on 32-bit systems.
+	// 仅当 uintptr 为64位时才安全。不在32位系统上调用。
 	addr := (*uintptr)(unsafe.Pointer(uaddr))
 	for i := 0; i < count; i++ {
 		for {
@@ -1075,6 +1103,7 @@ func hammerCompareAndSwapUintptr64(uaddr *uint64, count int) {
 func hammerCompareAndSwapPointer64(uaddr *uint64, count int) {
 	// only safe when uintptr is 64-bit.
 	// not called on 32-bit systems.
+	// 仅当 uintptr 为64位时才安全。不在32位系统上调用。
 	addr := (*unsafe.Pointer)(unsafe.Pointer(uaddr))
 	for i := 0; i < count; i++ {
 		for {

@@ -358,6 +358,8 @@ func gogc(force int32) {
 }
 
 // GC runs a garbage collection.
+
+// GC 运行一次垃圾回收。
 func GC() {
 	gogc(2)
 }
@@ -404,6 +406,31 @@ func GC() {
 // A single goroutine runs all finalizers for a program, sequentially.
 // If a finalizer must run for a long time, it should do so by starting
 // a new goroutine.
+
+// SetFinalizer 为 f 设置与 x 相关联的终结器。
+// 当垃圾回收器找到一个无法访问的块及与其相关联的终结器时，就会清理该关联，
+// 并在一个独立的Go程中运行f(x)。这会使 x 再次变得可访问，但现在没有了相关联的终结器。
+// 假设 SetFinalizer 未被再次调用，当下一次垃圾回收器发现 x 无法访问时，就会释放 x。
+//
+// SetFinalizer(x, nil) 会清理任何与 x 相关联的终结器。
+//
+// 实参 x 必须是一个对象的指针，该对象通过调用新的或获取一个复合字面地址来分配。
+// 实参 f 必须是一个函数，该函数获取一个 x 的类型的单一实参，并拥有可任意忽略的返回值。
+// 只要这些条件有一个不满足，SetFinalizer 就会跳过该程序。
+//
+// 终结器按照依赖顺序运行：若 A 指向 B，则二者都有终结器，当只有 A 的终结器运行时，
+// 它们才无法访问；一旦 A 被释放，则 B 的终结器便可运行。若循环依赖的结构包含块及其终结器，
+// 则该循环并不能保证被垃圾回收，而其终结器并不能保证运行，这是因为其依赖没有顺序。
+//
+// x 的终结器预定为在 x 无法访问后的任意时刻运行。无法保证终结器会在程序退出前运行，
+// 因此它们通常只在长时间运行的程序中释放一个关联至对象的非内存资源时使用。
+// 例如，当程序丢弃 os.File 而没有调用 Close 时，该 os.File 对象便可使用一个终结器
+// 来关闭与其相关联的操作系统文件描述符，但依赖终结器去刷新一个内存中的I/O缓存是错误的，
+// 因为该缓存不会在程序退出时被刷新。
+//
+// 一个程序的单个Go程会按顺序运行所有的终结器。若某个终结器需要长时间运行，
+// 它应当通过开始一个新的Go程来继续。
+// TODO: 仍需校对及语句优化
 func SetFinalizer(obj interface{}, finalizer interface{}) {
 	// We do just enough work here to make the mcall type safe.
 	// The rest is done on the M stack.
