@@ -4,6 +4,8 @@
 
 // Type conversions for Scan.
 
+// Scan的时候进行的类型转换。
+
 package sql
 
 import (
@@ -20,6 +22,10 @@ var errNilPtr = errors.New("destination pointer is nil") // embedded in descript
 // Stmt.Query into driver Values.
 //
 // The statement ds may be nil, if no statement is available.
+
+// driverArgs 将Stmt.Exec和Stmt.Query的调用参数转换成为driver中定义的值。
+//
+// 若没有语句可用，则语句 ds 为 nil。
 func driverArgs(ds *driverStmt, args []interface{}) ([]driver.Value, error) {
 	dargs := make([]driver.Value, len(args))
 	var si driver.Stmt
@@ -82,6 +88,10 @@ func driverArgs(ds *driverStmt, args []interface{}) ([]driver.Value, error) {
 // convertAssign copies to dest the value in src, converting it if possible.
 // An error is returned if the copy would result in loss of information.
 // dest should be a pointer type.
+
+// convertAssign 将值从src中拷贝到dest中，并且进行转换。
+// 如果转换过程中出现数据信息的丢失，就会返回error。
+// dest应该是一个类型指针。
 func convertAssign(dest, src interface{}) error {
 	// Common cases, without reflect.
 	switch s := src.(type) {
