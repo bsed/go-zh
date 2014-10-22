@@ -65,7 +65,7 @@
 enum {
 	Debug		= 0,
 	DebugPtrs	= 0, // if 1, print trace of every pointer load during GC
-	ConcurrentSweep	= 1,
+	ConcurrentSweep	= 0,
 
 	WorkbufSize	= 4*1024,
 	FinBlockSize	= 4*1024,
@@ -1779,7 +1779,7 @@ runtime·unrollgcprog_m(void)
 	Type *typ;
 	byte *mask, *prog;
 	uintptr pos;
-	uint32 x;
+	uintptr x;
 
 	typ = g->m->ptrarg[0];
 	g->m->ptrarg[0] = nil;
@@ -1797,9 +1797,11 @@ runtime·unrollgcprog_m(void)
 			prog = (byte*)typ->gc[1];
 			unrollgcprog1(mask, prog, &pos, false, true);
 		}
+		
 		// atomic way to say mask[0] = 1
-		x = ((uint32*)mask)[0];
-		runtime·atomicstore((uint32*)mask, x|1);
+		x = typ->gc[0];
+		((byte*)&x)[0] = 1;
+		runtime·atomicstorep((void**)mask, (void*)x);
 	}
 	runtime·unlock(&lock);
 }
