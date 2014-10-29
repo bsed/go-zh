@@ -423,13 +423,7 @@ runtime·casgstatus(G *gp, uint32 oldval, uint32 newval)
 	// loop if gp->atomicstatus is in a scan state giving
 	// GC time to finish and change the state to oldval.
 	while(!runtime·cas(&gp->atomicstatus, oldval, newval)) {
-		// Help GC if needed. 
-		if(gp->preemptscan && !gp->gcworkdone && (oldval == Grunning || oldval == Gsyscall)) {
-			gp->preemptscan = false;
-			g->m->ptrarg[0] = gp;
-			fn = helpcasgstatus;
-			runtime·onM(&fn);
-		}
+
 	}	
 }
 
@@ -504,6 +498,13 @@ runtime·stopg(G *gp)
 			return false;
 
 		case Grunning:
+			if(runtime·gcphase == GCscan) {
+				gp->gcworkdone = true;
+				return false;
+				// Running routines not scanned during
+				// GCscan phase, we only scan non-running routines.
+			}
+				
 			// Claim goroutine, so we aren't racing with a status
 			// transition away from Grunning.
 			if(!runtime·castogscanstatus(gp, Grunning, Gscanrunning))
@@ -581,9 +582,10 @@ mquiesce(G *gpmaster)
 	uint32 status;
 	uint32 activeglen;
 
-	activeglen = runtime·allglen;
 	// enqueue the calling goroutine.
 	runtime·restartg(gpmaster);
+
+	activeglen = runtime·allglen;
 	for(i = 0; i < activeglen; i++) {
 		gp = runtime·allg[i];
 		if(runtime·readgstatus(gp) == Gdead) 
@@ -1917,6 +1919,7 @@ exitsyscallfast(void)
 
 	// Freezetheworld sets stopwait but does not retake P's.
 	if(runtime·sched.stopwait) {
+		g->m->mcache = nil; 
 		g->m->p = nil;
 		return false;
 	}
@@ -1929,6 +1932,7 @@ exitsyscallfast(void)
 		return true;
 	}
 	// Try to get any other idle P.
+	g->m->mcache = nil;
 	g->m->p = nil;
 	if(runtime·sched.pidle) {
 		fn = exitsyscallfast_pidle;
@@ -2616,6 +2620,8 @@ runtime·setcpuprofilerate_m(void)
 P *runtime·newP(void);
 
 // Change number of processors.  The world is stopped, sched is locked.
+// gcworkbufs are not being modified by either the GC or 
+// the write barrier code.
 static void
 procresize(int32 new)
 {
