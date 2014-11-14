@@ -382,8 +382,6 @@ adjustpointers(byte **scanp, BitVector *bv, AdjustInfo *adjinfo, Func *f)
 	uintptr delta;
 	int32 num, i;
 	byte *p, *minp, *maxp;
-	Type *t;
-	Itab *tab;
 	
 	minp = (byte*)adjinfo->old.lo;
 	maxp = (byte*)adjinfo->old.hi;
@@ -415,43 +413,7 @@ adjustpointers(byte **scanp, BitVector *bv, AdjustInfo *adjinfo, Func *f)
 			}
 			break;
 		case BitsMultiWord:
-			switch(bv->bytedata[(i+1) / (8 / BitsPerPointer)] >> ((i+1) * BitsPerPointer & 7) & 3) {
-			default:
-				runtime·throw("unexpected garbage collection bits");
-			case BitsEface:
-				t = (Type*)scanp[i];
-				if(t != nil && ((t->kind & KindDirectIface) == 0 || (t->kind & KindNoPointers) == 0)) {
-					p = scanp[i+1];
-					if(minp <= p && p < maxp) {
-						if(StackDebug >= 3)
-							runtime·printf("adjust eface %p\n", p);
-						if(t->size > PtrSize) // currently we always allocate such objects on the heap
-							runtime·throw("large interface value found on stack");
-						scanp[i+1] = p + delta;
-					}
-				}
-				i++;
-				break;
-			case BitsIface:
-				tab = (Itab*)scanp[i];
-				if(tab != nil) {
-					t = tab->type;
-					//runtime·printf("          type=%p\n", t);
-					if((t->kind & KindDirectIface) == 0 || (t->kind & KindNoPointers) == 0) {
-						p = scanp[i+1];
-						if(minp <= p && p < maxp) {
-							if(StackDebug >= 3)
-								runtime·printf("adjust iface %p\n", p);
-							if(t->size > PtrSize) // currently we always allocate such objects on the heap
-								runtime·throw("large interface value found on stack");
-							scanp[i+1] = p + delta;
-						}
-					}
-				}
-				i++;
-				break;
-			}
-			break;
+			runtime·throw("adjustpointers: unexpected garbage collection bits");
 		}
 	}
 }
@@ -587,13 +549,13 @@ adjustsudogs(G *gp, AdjustInfo *adjinfo)
 }
 
 // Copies gp's stack to a new stack of a different size.
+// Caller must have changed gp status to Gcopystack.
 static void
 copystack(G *gp, uintptr newsize)
 {
 	Stack old, new;
 	uintptr used;
 	AdjustInfo adjinfo;
-	uint32 oldstatus;
 	bool (*cb)(Stkframe*, void*);
 	byte *p, *ep;
 
@@ -637,19 +599,10 @@ copystack(G *gp, uintptr newsize)
 	}
 	runtime·memmove((byte*)new.hi - used, (byte*)old.hi - used, used);
 
-	oldstatus = runtime·readgstatus(gp);
-	oldstatus &= ~Gscan;
-	if(oldstatus == Gwaiting || oldstatus == Grunnable)
-		runtime·casgstatus(gp, oldstatus, Gcopystack); // oldstatus is Gwaiting or Grunnable
-	else
-		runtime·throw("copystack: bad status, not Gwaiting or Grunnable");
-
 	// Swap out old stack for new one
 	gp->stack = new;
 	gp->stackguard0 = new.lo + StackGuard; // NOTE: might clobber a preempt request
 	gp->sched.sp = new.hi - used;
-
-	runtime·casgstatus(gp, Gcopystack, oldstatus); // oldstatus is Gwaiting or Grunnable
 
 	// free old stack
 	if(StackPoisonCopy) {
@@ -700,6 +653,7 @@ void
 runtime·newstack(void)
 {
 	int32 oldsize, newsize;
+	uint32 oldstatus;
 	uintptr sp;
 	G *gp;
 	Gobuf morebuf;
@@ -752,6 +706,14 @@ runtime·newstack(void)
 		runtime·printf("runtime: split stack overflow: %p < %p\n", sp, gp->stack.lo);
 		runtime·throw("runtime: split stack overflow");
 	}
+	
+	if(gp->sched.ctxt != nil) {
+		// morestack wrote sched.ctxt on its way in here,
+		// without a write barrier. Run the write barrier now.
+		// It is not possible to be preempted between then
+		// and now, so it's okay.
+		runtime·writebarrierptr_nostore(&gp->sched.ctxt, gp->sched.ctxt);
+	}
 
 	if(gp->stackguard0 == (uintptr)StackPreempt) {
 		if(gp == g->m->g0)
@@ -789,12 +751,15 @@ runtime·newstack(void)
 		runtime·throw("stack overflow");
 	}
 
-	// Note that the concurrent GC might be scanning the stack as we try to replace it.
-	// copystack takes care of the appropriate coordination with the stack scanner.
+	oldstatus = runtime·readgstatus(gp);
+	oldstatus &= ~Gscan;
+	runtime·casgstatus(gp, oldstatus, Gcopystack); // oldstatus is Gwaiting or Grunnable
+	// The concurrent GC will not scan the stack while we are doing the copy since
+	// the gp is in a Gcopystack status.
 	copystack(gp, newsize);
 	if(StackDebug >= 1)
 		runtime·printf("stack grow done\n");
-	runtime·casgstatus(gp, Gwaiting, Grunning);
+	runtime·casgstatus(gp, Gcopystack, Grunning);
 	runtime·gogo(&gp->sched);
 }
 
@@ -825,6 +790,7 @@ void
 runtime·shrinkstack(G *gp)
 {
 	uintptr used, oldsize, newsize;
+	uint32 oldstatus;
 
 	if(runtime·readgstatus(gp) == Gdead) {
 		if(gp->stack.lo != 0) {
@@ -858,8 +824,19 @@ runtime·shrinkstack(G *gp)
 #endif
 	if(StackDebug > 0)
 		runtime·printf("shrinking stack %D->%D\n", (uint64)oldsize, (uint64)newsize);
+	// This is being done in a Gscan state and was initiated by the GC so no need to move to
+	// the Gcopystate.
+	// The world is stopped, so the goroutine must be Gwaiting or Grunnable,
+	// and what it is is not changing underfoot.
+
+	oldstatus = runtime·readgstatus(gp);
+	oldstatus &= ~Gscan;
+	if(oldstatus != Gwaiting && oldstatus != Grunnable)
+		runtime·throw("status is not Gwaiting or Grunnable");
+	runtime·casgstatus(gp, oldstatus, Gcopystack);
 	copystack(gp, newsize);
-}
+	runtime·casgstatus(gp, Gcopystack, oldstatus);
+ }
 
 // Do any delayed stack freeing that was queued up during GC.
 void

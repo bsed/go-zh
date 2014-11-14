@@ -4,9 +4,7 @@
 
 package runtime
 
-import (
-	"unsafe"
-)
+import "unsafe"
 
 const (
 	debugMalloc = false
@@ -247,6 +245,8 @@ func mallocgc(size uintptr, typ *_type, flags uint32) unsafe.Pointer {
 			masksize = masksize * pointersPerByte / 8 // 4 bits per word
 			masksize++                                // unroll flag in the beginning
 			if masksize > maxGCMask && typ.gc[1] != 0 {
+				// write barriers have not been updated to deal with this case yet.
+				gothrow("maxGCMask too small for now")
 				// If the mask is too large, unroll the program directly
 				// into the GC bitmap. It's 7 times slower than copying
 				// from the pre-unrolled mask, but saves 1/16 of type size
@@ -261,8 +261,10 @@ func mallocgc(size uintptr, typ *_type, flags uint32) unsafe.Pointer {
 				goto marked
 			}
 			ptrmask = (*uint8)(unsafe.Pointer(uintptr(typ.gc[0])))
-			// Check whether the program is already unrolled.
-			if uintptr(atomicloadp(unsafe.Pointer(ptrmask)))&0xff == 0 {
+			// Check whether the program is already unrolled
+			// by checking if the unroll flag byte is set
+			maskword := uintptr(atomicloadp(unsafe.Pointer(ptrmask)))
+			if *(*uint8)(unsafe.Pointer(&maskword)) == 0 {
 				mp := acquirem()
 				mp.ptrarg[0] = unsafe.Pointer(typ)
 				onM(unrollgcprog_m)
@@ -304,6 +306,18 @@ func mallocgc(size uintptr, typ *_type, flags uint32) unsafe.Pointer {
 		}
 	}
 marked:
+
+	// GCmarkterminate allocates black
+	// All slots hold nil so no scanning is needed.
+	// This may be racing with GC so do it atomically if there can be
+	// a race marking the bit.
+	if gcphase == _GCmarktermination {
+		mp := acquirem()
+		mp.ptrarg[0] = x
+		onM(gcmarknewobject_m)
+		releasem(mp)
+	}
+
 	if raceenabled {
 		racemalloc(x, size)
 	}
@@ -342,6 +356,37 @@ marked:
 	}
 
 	return x
+}
+
+func loadPtrMask(typ *_type) []uint8 {
+	var ptrmask *uint8
+	nptr := (uintptr(typ.size) + ptrSize - 1) / ptrSize
+	if typ.kind&kindGCProg != 0 {
+		masksize := nptr
+		if masksize%2 != 0 {
+			masksize *= 2 // repeated
+		}
+		masksize = masksize * pointersPerByte / 8 // 4 bits per word
+		masksize++                                // unroll flag in the beginning
+		if masksize > maxGCMask && typ.gc[1] != 0 {
+			// write barriers have not been updated to deal with this case yet.
+			gothrow("maxGCMask too small for now")
+		}
+		ptrmask = (*uint8)(unsafe.Pointer(uintptr(typ.gc[0])))
+		// Check whether the program is already unrolled
+		// by checking if the unroll flag byte is set
+		maskword := uintptr(atomicloadp(unsafe.Pointer(ptrmask)))
+		if *(*uint8)(unsafe.Pointer(&maskword)) == 0 {
+			mp := acquirem()
+			mp.ptrarg[0] = unsafe.Pointer(typ)
+			onM(unrollgcprog_m)
+			releasem(mp)
+		}
+		ptrmask = (*uint8)(add(unsafe.Pointer(ptrmask), 1)) // skip the unroll flag byte
+	} else {
+		ptrmask = (*uint8)(unsafe.Pointer(typ.gc[0])) // pointer to unrolled mask
+	}
+	return (*[1 << 30]byte)(unsafe.Pointer(ptrmask))[:(nptr+1)/2]
 }
 
 // implementation of new builtin
@@ -438,7 +483,20 @@ func gogc(force int32) {
 	mp = acquirem()
 	mp.gcing = 1
 	releasem(mp)
+
 	onM(stoptheworld)
+	onM(finishsweep_m) // finish sweep before we start concurrent scan.
+	if false {         // To turn on concurrent scan and mark set to true...
+		onM(starttheworld)
+		// Do a concurrent heap scan before we stop the world.
+		onM(gcscan_m)
+		onM(stoptheworld)
+		onM(gcinstallmarkwb_m)
+		onM(starttheworld)
+		onM(gcmark_m)
+		onM(stoptheworld)
+		onM(gcinstalloffwb_m)
+	}
 	if mp != acquirem() {
 		gothrow("gogc: rescheduled")
 	}
@@ -469,6 +527,8 @@ func gogc(force int32) {
 		onM(gc_m)
 	}
 
+	onM(gccheckmark_m)
+
 	// all done
 	mp.gcing = 0
 	semrelease(&worldsema)
@@ -481,6 +541,14 @@ func gogc(force int32) {
 		// give the queued finalizers, if any, a chance to run
 		Gosched()
 	}
+}
+
+func GCcheckmarkenable() {
+	onM(gccheckmarkenable_m)
+}
+
+func GCcheckmarkdisable() {
+	onM(gccheckmarkdisable_m)
 }
 
 // GC runs a garbage collection.

@@ -94,6 +94,7 @@ typedef	struct	PollDesc	PollDesc;
 typedef	struct	DebugVars	DebugVars;
 typedef	struct	ForceGCState	ForceGCState;
 typedef	struct	Stack		Stack;
+typedef struct  Workbuf         Workbuf;
 
 /*
  * Per-CPU declaration.
@@ -304,7 +305,7 @@ struct	G
 	bool	paniconfault;	// panic (instead of crash) on unexpected fault address
 	bool	preemptscan;    // preempted g does scan for GC
 	bool	gcworkdone;     // debug: cleared at begining of gc work phase cycle, set by gcphasework, tested at end of cycle
-	bool	throwsplit; // must not split stack
+	bool	throwsplit;     // must not split stack
 	int8	raceignore;	// ignore race detection events
 	M*	m;		// for debuggers, but offset not hard-coded
 	M*	lockedm;
@@ -344,6 +345,8 @@ struct	M
 	int32	helpgc;
 	bool	spinning;	// M is out of work and is actively looking for work
 	bool	blocked;	// M is blocked on a Note
+	bool    inwb;           // M is executing a write barrier
+	int8	printlock;
 	uint32	fastrand;
 	uint64	ncgocall;	// number of cgo calls in total
 	int32	ncgo;		// number of cgo calls currently in progress
@@ -570,9 +573,10 @@ enum {
 #endif
 
 // Lock-free stack node.
+// Also known to export_test.go.
 struct LFNode
 {
-	LFNode	*next;
+	uint64	next;
 	uintptr	pushcnt;
 };
 
@@ -598,6 +602,16 @@ struct ParFor
 	uint64 nsleep;
 };
 
+enum {
+	WorkbufSize	= 4*1024,
+};
+struct Workbuf
+{
+	LFNode	node; // must be first
+	uintptr	nobj;
+	byte*	obj[(WorkbufSize-sizeof(LFNode)-sizeof(uintptr))/PtrSize];
+};
+
 // Track memory allocated by code not written in Go during a cgo call,
 // so that the garbage collector can see them.
 struct CgoMal
@@ -620,12 +634,14 @@ struct DebugVars
 
 // Indicates to write barrier and sychronization task to preform.
 enum
-{                   // Synchronization            Write barrier
-	GCoff,      // stop and start             nop
-	GCquiesce,  // stop and start             nop
-	GCstw,      // stop the ps                nop
-	GCmark,     // scan the stacks and start  no white to black
-	GCsweep,    // stop and start             nop
+{                               // Action               WB installation
+	GCoff = 0,		// stop and start	no wb
+	GCquiesce, 		// stop and start	no wb
+	GCstw, 			// stop the ps		nop
+	GCscan,			// scan the stacks prior to marking
+	GCmark,			// mark use wbufs from GCscan and globals, scan the stacks, then go to GCtermination
+	GCmarktermination,	// mark termination detection. Allocate black, Ps help out GC
+	GCsweep,		// stop and start	nop
 };
 
 struct ForceGCState
@@ -636,6 +652,7 @@ struct ForceGCState
 };
 
 extern uint32 runtime·gcphase;
+extern Mutex runtime·allglock;
 
 /*
  * defined macros
@@ -666,6 +683,7 @@ enum {
 
 uint32  runtime·readgstatus(G*);
 void    runtime·casgstatus(G*, uint32, uint32);
+bool    runtime·castogscanstatus(G*, uint32, uint32);
 void    runtime·quiesce(G*);
 bool    runtime·stopg(G*);
 void    runtime·restartg(G*);
@@ -882,6 +900,7 @@ int32	runtime·round2(int32 x); // round x up to a power of 2.
 bool	runtime·cas(uint32*, uint32, uint32);
 bool	runtime·cas64(uint64*, uint64, uint64);
 bool	runtime·casp(void**, void*, void*);
+bool	runtime·casuintptr(uintptr*, uintptr, uintptr);
 // Don't confuse with XADD x86 instruction,
 // this one is actually 'addx', that is, add-and-fetch.
 uint32	runtime·xadd(uint32 volatile*, int32);
@@ -1107,6 +1126,8 @@ void	runtime·procyield(uint32);
 void	runtime·osyield(void);
 void	runtime·lockOSThread(void);
 void	runtime·unlockOSThread(void);
+
+void	runtime·writebarrierptr_nostore(void*, void*);
 
 bool	runtime·showframe(Func*, G*);
 void	runtime·printcreatedby(G*);
