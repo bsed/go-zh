@@ -423,13 +423,7 @@ runtime·casgstatus(G *gp, uint32 oldval, uint32 newval)
 	// loop if gp->atomicstatus is in a scan state giving
 	// GC time to finish and change the state to oldval.
 	while(!runtime·cas(&gp->atomicstatus, oldval, newval)) {
-		// Help GC if needed. 
-		if(gp->preemptscan && !gp->gcworkdone && (oldval == Grunning || oldval == Gsyscall)) {
-			gp->preemptscan = false;
-			g->m->ptrarg[0] = gp;
-			fn = helpcasgstatus;
-			runtime·onM(&fn);
-		}
+
 	}	
 }
 
@@ -504,6 +498,13 @@ runtime·stopg(G *gp)
 			return false;
 
 		case Grunning:
+			if(runtime·gcphase == GCscan) {
+				gp->gcworkdone = true;
+				return false;
+				// Running routines not scanned during
+				// GCscan phase, we only scan non-running routines.
+			}
+				
 			// Claim goroutine, so we aren't racing with a status
 			// transition away from Grunning.
 			if(!runtime·castogscanstatus(gp, Grunning, Gscanrunning))
@@ -581,9 +582,10 @@ mquiesce(G *gpmaster)
 	uint32 status;
 	uint32 activeglen;
 
-	activeglen = runtime·allglen;
 	// enqueue the calling goroutine.
 	runtime·restartg(gpmaster);
+
+	activeglen = runtime·allglen;
 	for(i = 0; i < activeglen; i++) {
 		gp = runtime·allg[i];
 		if(runtime·readgstatus(gp) == Gdead) 
@@ -874,7 +876,9 @@ runtime·allocm(P *p)
 		mp->g0 = runtime·malg(-1);
 	else
 		mp->g0 = runtime·malg(8192);
+	runtime·writebarrierptr_nostore(&mp->g0, mp->g0);
 	mp->g0->m = mp;
+	runtime·writebarrierptr_nostore(&mp->g0->m, mp->g0->m);
 
 	if(p == g->m->p)
 		releasep();
@@ -1058,7 +1062,7 @@ runtime·dropm(void)
 	unlockextra(mp);
 }
 
-#define MLOCKED ((M*)1)
+#define MLOCKED 1
 
 // lockextra locks the extra list and returns the list head.
 // The caller must unlock the list by storing a new list head
@@ -1069,28 +1073,28 @@ runtime·dropm(void)
 static M*
 lockextra(bool nilokay)
 {
-	M *mp;
+	uintptr mpx;
 	void (*yield)(void);
 
 	for(;;) {
-		mp = runtime·atomicloadp(&runtime·extram);
-		if(mp == MLOCKED) {
+		mpx = runtime·atomicloaduintptr((uintptr*)&runtime·extram);
+		if(mpx == MLOCKED) {
 			yield = runtime·osyield;
 			yield();
 			continue;
 		}
-		if(mp == nil && !nilokay) {
+		if(mpx == 0 && !nilokay) {
 			runtime·usleep(1);
 			continue;
 		}
-		if(!runtime·casp(&runtime·extram, mp, MLOCKED)) {
+		if(!runtime·casuintptr((uintptr*)&runtime·extram, mpx, MLOCKED)) {
 			yield = runtime·osyield;
 			yield();
 			continue;
 		}
 		break;
 	}
-	return mp;
+	return (M*)mpx;
 }
 
 #pragma textflag NOSPLIT
@@ -1915,6 +1919,7 @@ exitsyscallfast(void)
 
 	// Freezetheworld sets stopwait but does not retake P's.
 	if(runtime·sched.stopwait) {
+		g->m->mcache = nil; 
 		g->m->p = nil;
 		return false;
 	}
@@ -1927,6 +1932,7 @@ exitsyscallfast(void)
 		return true;
 	}
 	// Try to get any other idle P.
+	g->m->mcache = nil;
 	g->m->p = nil;
 	if(runtime·sched.pidle) {
 		fn = exitsyscallfast_pidle;
@@ -2122,7 +2128,7 @@ runtime·newproc(int32 siz, FuncVal* fn, ...)
 	byte *argp;
 	void (*mfn)(void);
 
-	if(thechar == '5')
+	if(thechar == '5' || thechar == '9')
 		argp = (byte*)(&fn+2);  // skip caller's saved LR
 	else
 		argp = (byte*)(&fn+1);
@@ -2182,7 +2188,7 @@ runtime·newproc1(FuncVal *fn, byte *argp, int32 narg, int32 nret, void *callerp
 	sp -= 4*sizeof(uintreg); // extra space in case of reads slightly beyond frame
 	sp -= siz;
 	runtime·memmove(sp, argp, narg);
-	if(thechar == '5') {
+	if(thechar == '5' || thechar == '9') {
 		// caller's LR
 		sp -= sizeof(void*);
 		*(void**)sp = nil;
@@ -2615,6 +2621,8 @@ runtime·setcpuprofilerate_m(void)
 P *runtime·newP(void);
 
 // Change number of processors.  The world is stopped, sched is locked.
+// gcworkbufs are not being modified by either the GC or 
+// the write barrier code.
 static void
 procresize(int32 new)
 {

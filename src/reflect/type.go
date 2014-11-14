@@ -1533,12 +1533,8 @@ func (gc *gcProg) appendProg(t *rtype) {
 			gc.appendProg(e)
 		}
 	case Interface:
-		gc.appendWord(bitsMultiWord)
-		if t.NumMethod() == 0 {
-			gc.appendWord(bitsEface)
-		} else {
-			gc.appendWord(bitsIface)
-		}
+		gc.appendWord(bitsPointer)
+		gc.appendWord(bitsPointer)
 	case Struct:
 		c := t.NumField()
 		for i := 0; i < c; i++ {

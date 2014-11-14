@@ -106,6 +106,16 @@ func recovery_m(*g)
 func mcacheRefill_m()
 func largeAlloc_m()
 func gc_m()
+func gcscan_m()
+func gcmark_m()
+func gccheckmark_m()
+func gccheckmarkenable_m()
+func gccheckmarkdisable_m()
+func gcinstallmarkwb_m()
+func gcinstalloffwb_m()
+func gcmarknewobject_m()
+func gcmarkwb_m()
+func finishsweep_m()
 func scavenge_m()
 func setFinalizer_m()
 func removeFinalizer_m()
@@ -202,9 +212,6 @@ func write(fd uintptr, p unsafe.Pointer, n int32) int32
 
 //go:noescape
 func cas(ptr *uint32, old, new uint32) bool
-
-//go:noescape
-func casp(ptr *unsafe.Pointer, old, new unsafe.Pointer) bool
 
 //go:noescape
 func casuintptr(ptr *uintptr, old, new uintptr) bool

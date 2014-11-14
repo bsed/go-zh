@@ -45,8 +45,12 @@ enum {
 	// If you change these, also change scanblock.
 	// scanblock does "if(bits == BitsScalar || bits == BitsDead)" as "if(bits <= BitsScalar)".
 	BitsDead	= 0,
-	BitsScalar	= 1,
-	BitsPointer	= 2,
+	BitsScalar	= 1,                                // 01
+	BitsPointer	= 2,                                // 10
+	BitsCheckMarkXor = 1,                               // 10
+	BitsScalarMarked = BitsScalar ^ BitsCheckMarkXor,   // 00
+	BitsPointerMarked = BitsPointer ^ BitsCheckMarkXor, // 11
+
 	BitsMultiWord	= 3,
 	// BitsMultiWord will be set for the first word of a multi-word item.
 	// When it is set, one of the following will be set for the second word.
@@ -56,7 +60,7 @@ enum {
 	BitsEface	= 3,
 
 	// 64 bytes cover objects of size 1024/512 on 64/32 bits, respectively.
-	MaxGCMask	= 64,
+	MaxGCMask	= 65536, // TODO(rsc): change back to 64
 };
 
 // Bits in per-word bitmap.
