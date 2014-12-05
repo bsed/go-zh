@@ -162,7 +162,8 @@ esac
 # Race detector only supported on Linux, FreeBSD and OS X,
 # and only on amd64, and only when cgo is enabled.
 # Delayed until here so we know whether to try external linking.
-case "$GOHOSTOS-$GOOS-$GOARCH-$CGO_ENABLED" in
+# DISABLED until we get garbage collection working.
+case "$GOHOSTOS-$GOOS-$GOARCH-$CGO_ENABLED-XXX-DISABLED" in
 linux-linux-amd64-1 | freebsd-freebsd-amd64-1 | darwin-darwin-amd64-1)
 	echo
 	echo '# Testing race detector.'
